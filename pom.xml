@@ -5,13 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>iti</groupId>
-    <artifactId>fitness</artifactId>
+    <artifactId>nutrientsCalculator</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>foodCalculatorCore</module>
     </modules>
-
 
     <dependencies>
         <dependency>
@@ -50,7 +49,5 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.35</version>
         </dependency>
-
     </dependencies>
-
 </project>
