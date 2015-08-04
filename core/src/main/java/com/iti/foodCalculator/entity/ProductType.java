@@ -1,6 +1,6 @@
 package com.iti.foodCalculator.entity;
 
-public enum ProductCategory {
+public enum ProductType {
     SUPPLEMENT,
     NON_SUPPLEMENT
 }

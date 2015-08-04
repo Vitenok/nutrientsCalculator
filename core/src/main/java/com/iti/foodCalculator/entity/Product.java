@@ -1,25 +1,41 @@
 package com.iti.foodCalculator.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
-/**
- * Created by Vitek on 20/06/2015.
- */
+
 @Entity
-public class Product {
+@Table
+@NamedQueries(value = {
+        @NamedQuery(name = "Product.getAllProducts", query = "select p from Product as p"),
+})
+public class Product implements Serializable {
     private int id;
-    private String itemCode;
     private String itemName;
     private double kCal;
     private double proteins;
     private double fats;
     private double carbs;
+    private String productType;
+
+
+    public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
+
+    public Product() {
+    }
+
+    public Product(String name, double kcal, double protein, double fat, double carb, String productType) {
+        this.itemName = name;
+        this.kCal = kcal;
+        this.proteins = protein;
+        this.fats = fat;
+        this.carbs = carb;
+        this.productType = productType;
+    }
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -28,15 +44,6 @@ public class Product {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "itemCode")
-    public String getItemCode() {
-        return itemCode;
-    }
-
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
-    }
 
     @Basic
     @Column(name = "ItemName")
@@ -88,6 +95,16 @@ public class Product {
         this.carbs = carbs;
     }
 
+    @Basic
+    @Column(name = "productType")
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,8 +117,8 @@ public class Product {
         if (id != product.id) return false;
         if (Double.compare(product.kCal, kCal) != 0) return false;
         if (Double.compare(product.proteins, proteins) != 0) return false;
-        if (itemCode != null ? !itemCode.equals(product.itemCode) : product.itemCode != null) return false;
-        if (itemName != null ? !itemName.equals(product.itemName) : product.itemName != null) return false;
+        if (!itemName.equals(product.itemName)) return false;
+        if (productType != product.productType) return false;
 
         return true;
     }
@@ -111,8 +128,7 @@ public class Product {
         int result;
         long temp;
         result = id;
-        result = 31 * result + (itemCode != null ? itemCode.hashCode() : 0);
-        result = 31 * result + (itemName != null ? itemName.hashCode() : 0);
+        result = 31 * result + itemName.hashCode();
         temp = Double.doubleToLongBits(kCal);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(proteins);
@@ -121,6 +137,9 @@ public class Product {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(carbs);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + productType.hashCode();
         return result;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.iti.foodCalculator.entity;
 
+// Represents amount of food after calculation
 public class AmountItem {
     private String name;
     private double amount;

@@ -3,7 +3,6 @@
 
     <persistence-unit name="NewPersistenceUnit">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>com.iti.foodCalculator.entity.FoodItem</class>
         <class>com.iti.foodCalculator.entity.Product</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1:3306/food_composition"/>

@@ -2,7 +2,7 @@ package com.iti.foodCalculator.service;
 
 import com.iti.foodCalculator.entity.AmountItem;
 import com.iti.foodCalculator.entity.DailyMacroelementsInput;
-import com.iti.foodCalculator.entity.FoodItem;
+import com.iti.foodCalculator.entity.Product;
 import com.iti.foodCalculator.entity.SupplementItem;
 import org.apache.commons.math3.linear.*;
 
@@ -11,7 +11,8 @@ import java.util.List;
 
 public class ProductWeightCalculatorService {
 
-    public List<AmountItem> calculateWeightOfProducts(List<FoodItem> products, List<SupplementItem> supplements, DailyMacroelementsInput dailyMacroelementsDistribution) {
+    // TODO: results are < 0 --> suggest another food item with lacking macroelement; recalculate and ask for acceptance
+    public List<AmountItem> calculateWeightOfProducts(List<Product> products, List<SupplementItem> supplements, DailyMacroelementsInput dailyMacroelementsDistribution) {
         RealVector constants;
 
         if (supplements.size() == 0) {
@@ -28,7 +29,7 @@ public class ProductWeightCalculatorService {
         List<AmountItem> amountItems = new ArrayList<AmountItem>();
         for (int i = 0; i < solution.length; i++) {
             solution[i] = Math.round((solution[i] * 100));
-            AmountItem amountItem = new AmountItem(products.get(i).getName(), solution[i]);
+            AmountItem amountItem = new AmountItem(products.get(i).getItemName(), solution[i]);
             amountItems.add(amountItem);
         }
         return amountItems;
@@ -56,7 +57,7 @@ public class ProductWeightCalculatorService {
         return macroelementsInput;
     }
 
-    RealMatrix transformToCoefficientsMatrix(List<FoodItem> chosenProducts) {
+    RealMatrix transformToCoefficientsMatrix(List<Product> chosenProducts) {
         int size = chosenProducts.size();
 
         double proteins[] = new double[size];
@@ -64,9 +65,9 @@ public class ProductWeightCalculatorService {
         double carbs[] = new double[size];
 
         for (int i = 0; i < chosenProducts.size(); i++) {
-            proteins[i] = chosenProducts.get(i).getProtein();
-            fats[i] = chosenProducts.get(i).getFat();
-            carbs[i] = chosenProducts.get(i).getCarb();
+            proteins[i] = chosenProducts.get(i).getProteins();
+            fats[i] = chosenProducts.get(i).getFats();
+            carbs[i] = chosenProducts.get(i).getCarbs();
         }
         return new Array2DRowRealMatrix(new double[][]{proteins, fats, carbs}, false);
     }

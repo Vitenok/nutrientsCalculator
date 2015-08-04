@@ -2,7 +2,7 @@ package com.iti.foodCalculator.service;
 
 import com.iti.foodCalculator.entity.AmountItem;
 import com.iti.foodCalculator.entity.DailyMacroelementsInput;
-import com.iti.foodCalculator.entity.FoodItem;
+import com.iti.foodCalculator.entity.Product;
 import com.iti.foodCalculator.entity.SupplementItem;
 import com.iti.foodCalculator.service.ProductWeightCalculatorService;
 import junit.framework.TestCase;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ProductWeightCalculatorServiceTest extends TestCase {
     ProductWeightCalculatorService foodCalculatorService;
-    List<FoodItem> foodItemList;
+    List<Product> productList;
     List<SupplementItem> supplementsList;
     RealMatrix coefficients;
     DailyMacroelementsInput dailyMacroelementsInput;
@@ -27,31 +27,35 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         super.setUp();
 
         this.foodCalculatorService = new ProductWeightCalculatorService();
-        this.foodItemList = new ArrayList<FoodItem>();
+        this.productList = new ArrayList<Product>();
         this.supplementsList = new ArrayList<SupplementItem>();
         this.dailyMacroelementsInput = new DailyMacroelementsInput(0.0, 150, 25, 125);
 
 
-        FoodItem foodItem1 = new FoodItem("1", "Pangasius", 0.0, 14.9, 0.7, 0.0);
-        FoodItem foodItem2 = new FoodItem("2", "Bokhvete", 0.0, 7.1, 2, 60.4);
-        FoodItem foodItem3 = new FoodItem("3", "Kesam", 0.0, 12, 1, 4.3);
-        FoodItem foodItem4 = new FoodItem("4", "Oil", 0.0, 0.2, 98, 0.0);
+        Product product1 = new Product("1", "Pangasius", 0.0, 14.9, 0.7, 0.0);
+//        Product product2 = new Product("2", "Bokhvete", 0.0, 7.1, 2, 60.4);
+        Product product3 = new Product("3", "Kesam", 0.0, 12, 1, 4.3);
+        Product product4 = new Product("4", "Oil", 0.0, 0.2, 98, 0.0);
 
-        foodItemList.add(foodItem1);
-        foodItemList.add(foodItem2);
-        foodItemList.add(foodItem3);
-        foodItemList.add(foodItem4);
+        productList.add(product1);
+//        productList.add(product2);
+        productList.add(product3);
+        productList.add(product4);
 
         coefficients = new Array2DRowRealMatrix(new double[][]{
-                {14.9, 7.1, 12, 0.2},
-                {0.7, 2, 1, 98},
-                {0, 60.4, 4.3, 0}},
+                {14.9,  12, 0.2},
+                {0.7,  1, 98},
+                {0,  4.3, 0}},
                 false);
+//        {14.9, 7.1, 12, 0.2},
+//                {0.7, 2, 1, 98},
+//                {0, 60.4, 4.3, 0}},
+//                false);
     }
 
     public void testTransformToCoefficientsMatrix() throws Exception {
 
-        RealMatrix matrix = foodCalculatorService.transformToCoefficientsMatrix(foodItemList);
+        RealMatrix matrix = foodCalculatorService.transformToCoefficientsMatrix(productList);
 
         assertEquals(coefficients, matrix);
     }
@@ -64,8 +68,8 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         assertEquals(dummyConstants, constants);
     }
 
-    public void testCalculateWeightOfFoodItemsWithNoSupplements() {
-        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(foodItemList, supplementsList, dailyMacroelementsInput);
+    public void testCalculateWeightOfProductsWithNoSupplements() {
+        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(productList, supplementsList, dailyMacroelementsInput);
 
         assertNotNull(solution);
         assertEquals(4, solution.size());
@@ -79,13 +83,13 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         assertEquals("Oil", solution.get(3).getName());
     }
 
-    public void testCalculateWeightOfFoodItemsWithSupplements() {
+    public void testCalculateWeightOfProductsWithSupplements() {
         SupplementItem supplementItem1 = new SupplementItem("id", "Whey Protein", 0.0, 10, 2.5, 1);
         SupplementItem supplementItem2 = new SupplementItem("id", "Whey Protein", 0.0, 15, 2.5, 1);
         supplementsList.add(supplementItem1);
         supplementsList.add(supplementItem2);
 
-        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(foodItemList, supplementsList, dailyMacroelementsInput);
+        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(productList, supplementsList, dailyMacroelementsInput);
 
         assertNotNull(solution);
         assertEquals(4, solution.size());

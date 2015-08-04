@@ -1,6 +1,8 @@
 package com.iti.foodCalculator.utlity.reader;
 
-import com.iti.foodCalculator.entity.FoodItem;
+import com.iti.foodCalculator.entity.Category;
+import com.iti.foodCalculator.entity.Product;
+import com.iti.foodCalculator.entity.ProductType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -9,20 +11,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class XLSReader {
     public static void main(String[] args) {
         XLSReader reader = new XLSReader();
-        reader.readXlsFileToList();
-
+        reader.readXlsFileToList().size();
     }
 
-    public List<FoodItem> readXlsFileToList() {
-        List<FoodItem> foodItemsList = new ArrayList<FoodItem>();
+    public List<Product> readXlsFileToList() {
+        List<Product> productsList = new ArrayList<Product>();
+        Set<Category> categories = new HashSet<Category>();
         try {
+//            String fileName = getClass().getClassLoader().getResource("The+Norwegian+Food+Compostion+Table+2014.ods.xlsx").getFile();
+//            FileInputStream file = new FileInputStream(new File(fileName));
+            //TODO:
             FileInputStream file = new FileInputStream(new File("E:\\eclipse\\workspace\\nutrientsCalculator\\core\\src\\main\\resources\\The+Norwegian+Food+Compostion+Table+2014.ods.xlsx"));
 
             //Get the workbook instance for XLS file
@@ -31,33 +34,68 @@ public class XLSReader {
             //Get first sheet from the workbook
             XSSFSheet sheet = workbook.getSheetAt(0);
 
-            //Iterate through each rows from first sheet
-            Iterator<Row> rowIterator = sheet.iterator();
-            while (rowIterator.hasNext()) {
+            Category root = new Category("Food", null);
+            Category parent = root;
+            int level = 0;
+            int newLevel;
+
+            for (Iterator<Row> rowIterator = sheet.rowIterator(); rowIterator.hasNext(); ) {
                 Row row = rowIterator.next();
-                if (row.getRowNum() >= 7) {
-                    if (row.getLastCellNum() <= 2 || isInvalidStyle(row.getCell(0))) {
-                        rowIterator.remove();
+
+                if (row.getRowNum() > 4 && row.getCell(1).toString().length() != 0) {
+                    if (isValidCategoryRow(row)) { // valid = text is bold
+                        row.getCell(0).setCellType(Cell.CELL_TYPE_STRING); // because some of them are in numeric format
+
+                        newLevel = getCurrentLevel(row.getCell(0).getStringCellValue());
+                        String name = row.getCell(1).getStringCellValue();
+
+                        //System.out.println(new String(new char[newLevel]).replace("\0", "\t") + name);
+                        if (newLevel > level) { // child
+                            parent = parent.getChildren().get(parent.getChildren().size() - 1);
+                            level = newLevel;
+                        } else if (newLevel < level) { // new parent for other nodes
+                            for (int i = 0; i < level - newLevel; i++) {
+                                parent = parent.getParent();
+                            }
+                            level = newLevel;
+                        }
+                        parent.getChildren().add(new Category(name, parent));
                     } else {
-                        String id = getStringValueFromCell(row.getCell(0));
-                        String name = getStringValueFromCell(row.getCell(1));
-                        Double kcal = getDoubleValueFromCell(row.getCell(8));
-                        Double protein = getDoubleValueFromCell(row.getCell(32));
-                        Double fat = getDoubleValueFromCell(row.getCell(10));
-                        Double carb = getDoubleValueFromCell(row.getCell(22));
-
-                        FoodItem foodItem = new FoodItem(id, name, kcal, protein, fat, carb);
-
-                        foodItemsList.add(foodItem);
+                        Category c = parent.getChildren().get(parent.getChildren().size() - 1);
+                        c.getProducts().add(extractProduct(row));
+                        productsList.add(extractProduct(row));
+                        categories.add(c);
+                        //root.getProducts().add(extractProduct(row));
                     }
                 }
+
             }
             file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(foodItemsList.size());
-        return foodItemsList;
+        return productsList;
+    }
+
+    private int getCurrentLevel(String cell) {
+        // 46 is number for '.' in ASCII table
+        return cell.endsWith("0") ? 0 : (int) cell.chars().parallel().filter(c -> ((char) c) == 46).count();
+    }
+
+    private boolean isValidCategoryRow(Row row) {
+        return row.getSheet().getWorkbook().getFontAt(row.getCell(0).getCellStyle().getFontIndex()).getBold();
+    }
+
+    private Product extractProduct(Row row) {
+//        String id = getStringValueFromCell(row.getCell(0));
+        String name = getStringValueFromCell(row.getCell(1));
+        Double kcal = getDoubleValueFromCell(row.getCell(8));
+        Double protein = getDoubleValueFromCell(row.getCell(32));
+        Double fat = getDoubleValueFromCell(row.getCell(10));
+        Double carb = getDoubleValueFromCell(row.getCell(22));
+        String productType = String.valueOf(ProductType.NON_SUPPLEMENT);
+
+        return new Product(name, kcal, protein, fat, carb, productType);
     }
 
     private String getStringValueFromCell(Cell cell) {
@@ -85,12 +123,8 @@ public class XLSReader {
         return val;
     }
 
-    private boolean isInvalidStyle(Cell cell) {
+    private boolean isValidStyle(Cell cell) {
         short fontIndex = cell.getCellStyle().getFontIndex();
-        if (fontIndex == 5 || fontIndex == 0 || fontIndex == 7) {
-            return true;
-        } else {
-            return false;
-        }
+        return !(fontIndex == 5 || fontIndex == 0 || fontIndex == 7);
     }
 }
