@@ -4,11 +4,15 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
-        <servlet>
-            <servlet-name>prods</servlet-name>
-            <servlet-class>CalculatorServlet</servlet-class>
-            <load-on-startup>0</load-on-startup>
-        </servlet>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>list.html</welcome-file>
+    </welcome-file-list>
+    <servlet>
+        <servlet-name>prods</servlet-name>
+        <servlet-class>CalculatorServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
 
 
     <servlet-mapping>
