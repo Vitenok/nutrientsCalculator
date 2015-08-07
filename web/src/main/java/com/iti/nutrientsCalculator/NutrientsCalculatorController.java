@@ -1,10 +1,14 @@
 package com.iti.nutrientsCalculator;
 
+import com.iti.foodCalculator.entity.AmountItem;
+import com.iti.foodCalculator.entity.CalculationInputDomainModel;
 import com.iti.foodCalculator.entity.Product;
+import com.iti.foodCalculator.service.ProductWeightCalculatorService;
 import com.iti.foodCalculator.utlity.reader.XLSReader;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,10 +23,17 @@ public class NutrientsCalculatorController {
         return "index";
     }
 
-    @RequestMapping(value = "/populateFoodItems", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/populateFoodItems.web", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody
     List<Product> populateProducts() {
 
         return new XLSReader().readXlsFileToList();
+    }
+
+    @RequestMapping(value = "/calculate.web", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public @ResponseBody List<AmountItem> populateCalculation(@RequestBody final CalculationInputDomainModel calculationInputDomainModel){
+        
+        List<AmountItem> amountItems = new ProductWeightCalculatorService().calculateWeightOfProducts(calculationInputDomainModel);
+        return amountItems;
     }
 }

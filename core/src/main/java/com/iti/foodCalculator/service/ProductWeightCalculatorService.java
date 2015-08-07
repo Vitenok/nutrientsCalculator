@@ -1,9 +1,6 @@
 package com.iti.foodCalculator.service;
 
-import com.iti.foodCalculator.entity.AmountItem;
-import com.iti.foodCalculator.entity.DailyMacroelementsInput;
-import com.iti.foodCalculator.entity.Product;
-import com.iti.foodCalculator.entity.SupplementItem;
+import com.iti.foodCalculator.entity.*;
 import org.apache.commons.math3.linear.*;
 
 import java.util.ArrayList;
@@ -12,7 +9,11 @@ import java.util.List;
 public class ProductWeightCalculatorService {
 
     // TODO: results are < 0 --> suggest another food item with lacking macroelement; recalculate and ask for acceptance
-    public List<AmountItem> calculateWeightOfProducts(List<Product> products, List<SupplementItem> supplements, DailyMacroelementsInput dailyMacroelementsDistribution) {
+    public List<AmountItem> calculateWeightOfProducts(CalculationInputDomainModel model) {
+        List<Product> products = model.getProducts();
+        List<SupplementItem> supplements= model.getSupplementItems();
+        DailyMacroelementsInput dailyMacroelementsDistribution = model.getDailyMacroelementsInput();
+
         RealVector constants;
 
         if (supplements.size() == 0) {
