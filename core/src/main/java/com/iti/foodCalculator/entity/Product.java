@@ -1,14 +1,19 @@
 package com.iti.foodCalculator.entity;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 
-@Entity
-@Table
-@NamedQueries(value = {
-        @NamedQuery(name = "Product.getAllProducts", query = "select p from Product as p"),
-})
+//@Entity
+//@Table
+//@NamedQueries(value = {
+//        @NamedQuery(name = "Product.getAllProducts", query = "select p from Product as p"),
+//})
+@XmlRootElement
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Product implements Serializable {
     private int id;
     private String itemName;
@@ -19,7 +24,7 @@ public class Product implements Serializable {
     private String productType;
 
 
-    public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
+//    public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
 
     public Product() {
     }
@@ -33,9 +38,9 @@ public class Product implements Serializable {
         this.productType = productType;
     }
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -45,8 +50,8 @@ public class Product implements Serializable {
     }
 
 
-    @Basic
-    @Column(name = "ItemName")
+//    @Basic
+//    @Column(name = "ItemName")
     public String getItemName() {
         return itemName;
     }
@@ -55,8 +60,8 @@ public class Product implements Serializable {
         this.itemName = itemName;
     }
 
-    @Basic
-    @Column(name = "kCal")
+//    @Basic
+//    @Column(name = "kCal")
     public double getkCal() {
         return kCal;
     }
@@ -64,9 +69,9 @@ public class Product implements Serializable {
     public void setkCal(double kCal) {
         this.kCal = kCal;
     }
-
-    @Basic
-    @Column(name = "Proteins")
+//
+//    @Basic
+//    @Column(name = "Proteins")
     public double getProteins() {
         return proteins;
     }
@@ -75,8 +80,8 @@ public class Product implements Serializable {
         this.proteins = proteins;
     }
 
-    @Basic
-    @Column(name = "Fats")
+//    @Basic
+//    @Column(name = "Fats")
     public double getFats() {
         return fats;
     }
@@ -85,8 +90,8 @@ public class Product implements Serializable {
         this.fats = fats;
     }
 
-    @Basic
-    @Column(name = "Carbs")
+//    @Basic
+//    @Column(name = "Carbs")
     public double getCarbs() {
         return carbs;
     }
@@ -95,8 +100,8 @@ public class Product implements Serializable {
         this.carbs = carbs;
     }
 
-    @Basic
-    @Column(name = "productType")
+//    @Basic
+//    @Column(name = "productType")
     public String getProductType() {
         return productType;
     }
