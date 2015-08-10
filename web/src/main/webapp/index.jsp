@@ -8,7 +8,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" type="text/css" href="styles/app.css">
+        <link rel="stylesheet" type="text/css" href="styles/test.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
@@ -84,8 +84,8 @@
                             <td class="col-md-3">{{product.itemName}}</td>
                             <td class="col-md-2">{{product.proteins}}</td>
                             <td class="col-md-2">{{product.fats}}</td>
-                            <td class="col-md-2">{{product.kCal}}</td>
                             <td class="col-md-2">{{product.carbs}}</td>
+                            <td class="col-md-2">{{product.kCal}}</td>
                             <td class="col-md-1">
                                 <div class="checkbox">
                                     <label>
@@ -100,8 +100,17 @@
                 </div>
             </div>
             <div class="col-md-7">
+                <table >
+                    <tbody>
+                        <tr class="full-width">
+                            <td class="col-md-11"><h4>You've selected:</h4></td>
+                            <td class="col-md-1">
+                                <button type="button" class="btn btn-default btn-sm" ng-show="!isDisabledButton" ng-click="clearSelection()">Clear all</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <h4>You've selected:</h4>
                 <div class="well">
                     <div ng-show="isDisabledButton">
                         You didn't select anything yet
@@ -205,6 +214,16 @@
                                 });
                     }
                 }
+            };
+
+            $scope.clearSelection = function(){
+                $scope.selectedArr.forEach(function(entry) {
+                    entry['checked'] = false;
+                });
+                $scope.selectedArr = [];
+                $scope.isDisabledButton = true;
+                $scope.isClicked = false;
+                $scope.menu = [];
             }
         });
     </script>
