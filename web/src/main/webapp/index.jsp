@@ -34,13 +34,11 @@
             }
             .table-fixed thead {
                 width: 97%;
-                font-size: 15px;
             }
             .table-fixed tbody {
                 height:  90%;
                 overflow-y: auto;
                 width: 100%;
-                font-size: 13px;
             }
             .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
                 display: block;
@@ -49,7 +47,12 @@
                 float: left;
                 border-bottom-width: 0;
             }
-
+            .table-small-font tbody{
+                font-size: 13px;
+            }
+            .table-small-font thead{
+                font-size: 15px;
+            }
         </style>
     </head>
 
@@ -106,7 +109,7 @@
                 </div>
                 <div class="" data-ng-init="getProductsDataFromServer()">
 
-                    <table class="table table-hover  table-fixed">
+                    <table class="table table-hover  table-fixed table-small-font">
                         <thead>
                         <th  class="col-md-3">Product name</th>
                         <th  class="col-md-2">Proteins</th>
@@ -148,19 +151,26 @@
                 </div>
 
                 <div>
-                    <button type="button" class="btn btn-info btn-lg centered " ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()">
+                    <button type="button" class="btn btn-info btn-lg centered" ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()">
                         Calculate
                     </button>
                 </div>
-                <h4>Your menu looks like:</h4>
-                <div class="well">
-                    {{menu}}
-
-                    <ul>
-                        <li>One: 100gr</li>
-                        <li>Two: 100gr</li>
-                        <li>Three: 100gr</li>
-                    </ul>
+                <div ng-show="isClicked">
+                    <h4>Your menu looks like:</h4>
+                    <div class="well">
+                        <table class="table table-hover table-small-font">
+                            <thead>
+                                <th class="col-md-8">Name</th>
+                                <th class="col-md-4">Amount</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="menuItem in menu">
+                                <td class="col-md-8">{{menuItem.name}}: </td>
+                                <td  class="col-md-4">{{menuItem.amount}} gr</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -196,7 +206,7 @@
 
             // Calculate menu
             $scope.calculateMenu = function(){
-//                //TODO:
+                $scope.isClicked = false;
 
                 // Deep copy
                 var selectedArrClone = jQuery.extend(true, [], $scope.selectedArr);
@@ -225,8 +235,10 @@
                     }}).
                         success(function(data, status, headers, config){
                             $scope.menu = data;
+                            $scope.isClicked = true;
                         }).
                         error(function(data, status, headers, config){
+                            $scope.isClicked = false;
                         });
             }
         });
