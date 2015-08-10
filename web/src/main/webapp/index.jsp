@@ -13,12 +13,14 @@
         <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
         <%--<link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">--%>
 
+        <%-- Custom styles--%>
         <link rel="stylesheet" type="text/css" href="styles/test.css">
+
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-        <%--<script type="text/javascript" src="scripts/nutrientsCalculator.js"></script>--%>
-        <%--<script type="text/javascript" src="scripts/nutrientsCalcCtrl.js"></script>--%>
+        <%-- Custom scripts--%>
+        <script type="text/javascript" src="scripts/nutrientsCalculator.js"></script>
 
     </head>
 
@@ -151,86 +153,86 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-        var app = angular.module('nutrientsCalc', []);
+    <%--<script type="text/javascript">--%>
+        <%--var app = angular.module('nutrientsCalc', []);--%>
 
-        app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
-            $scope.selected = {};
-            $scope.isDisabledButton = true;
+        <%--app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){--%>
+            <%--$scope.selected = {};--%>
+            <%--$scope.isDisabledButton = true;--%>
 
-            // Fetch data
-            $scope.getProductsDataFromServer = function(){
-                $http({method: 'GET', url: 'populateFoodItems.web'}).
-                        success(function(data, status, headers, config){
-                            $scope.products = data;
-                        }).
-                        error(function(data, status, headers, config){
-                        });
-            };
+            <%--// Fetch data--%>
+            <%--$scope.getProductsDataFromServer = function(){--%>
+                <%--$http({method: 'GET', url: 'populateFoodItems.web'}).--%>
+                        <%--success(function(data, status, headers, config){--%>
+                            <%--$scope.products = data;--%>
+                        <%--}).--%>
+                        <%--error(function(data, status, headers, config){--%>
+                        <%--});--%>
+            <%--};--%>
 
-            // Filter checked elements
-            $scope.getSelected = function() {
-                $scope.selectedArr = $filter('filter')($scope.products, {checked: true});
-                if ($scope.selectedArr.length == 'undefined' || $scope.selectedArr.length == 0){
-                    $scope.isDisabledButton = true;
-                } else {
-                    $scope.isDisabledButton = false;
-                }
-                return $scope.selectedArr;
-            };
+            <%--// Filter checked elements--%>
+            <%--$scope.getSelected = function() {--%>
+                <%--$scope.selectedArr = $filter('filter')($scope.products, {checked: true});--%>
+                <%--if ($scope.selectedArr.length == 'undefined' || $scope.selectedArr.length == 0){--%>
+                    <%--$scope.isDisabledButton = true;--%>
+                <%--} else {--%>
+                    <%--$scope.isDisabledButton = false;--%>
+                <%--}--%>
+                <%--return $scope.selectedArr;--%>
+            <%--};--%>
 
-            // Calculate menu
-            $scope.calculateMenu = function(){
-                $scope.isClicked = false;
+            <%--// Calculate menu--%>
+            <%--$scope.calculateMenu = function(){--%>
+                <%--$scope.isClicked = false;--%>
 
-                if ($scope.selectedArr !== undefined){
-                    if ($scope.selectedArr.length > 0){
-                        // Deep copy
-                        var selectedArrClone = jQuery.extend(true, [], $scope.selectedArr);
+                <%--if ($scope.selectedArr !== undefined){--%>
+                    <%--if ($scope.selectedArr.length > 0){--%>
+                        <%--// Deep copy--%>
+                        <%--var selectedArrClone = jQuery.extend(true, [], $scope.selectedArr);--%>
 
-                        selectedArrClone.forEach(function(entry) {
-                            delete entry['$$hashKey'];
-                            delete entry['checked'];
-                        });
-                        var dataJson = JSON.stringify({
-                            products: selectedArrClone,
-                            supplementItems: [],
-                            dailyMacroelementsInput: {
-                                kcal: 0,
-                                protein: 120,
-                                carb: 120,
-                                fat: 26.6
-                            }
-                        });
+                        <%--selectedArrClone.forEach(function(entry) {--%>
+                            <%--delete entry['$$hashKey'];--%>
+                            <%--delete entry['checked'];--%>
+                        <%--});--%>
+                        <%--var dataJson = JSON.stringify({--%>
+                            <%--products: selectedArrClone,--%>
+                            <%--supplementItems: [],--%>
+                            <%--dailyMacroelementsInput: {--%>
+                                <%--kcal: 0,--%>
+                                <%--protein: 120,--%>
+                                <%--carb: 120,--%>
+                                <%--fat: 26.6--%>
+                            <%--}--%>
+                        <%--});--%>
 
-                        $http({
-                            method: 'POST',
-                            url: 'calculate.web',
-                            data: dataJson,
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }}).
-                                success(function(data, status, headers, config){
-                                    $scope.menu = data;
-                                    $scope.isClicked = true;
-                                }).
-                                error(function(data, status, headers, config){
-                                    $scope.isClicked = false;
-                                });
-                    }
-                }
-            };
+                        <%--$http({--%>
+                            <%--method: 'POST',--%>
+                            <%--url: 'calculate.web',--%>
+                            <%--data: dataJson,--%>
+                            <%--headers: {--%>
+                                <%--'Content-Type': 'application/json'--%>
+                            <%--}}).--%>
+                                <%--success(function(data, status, headers, config){--%>
+                                    <%--$scope.menu = data;--%>
+                                    <%--$scope.isClicked = true;--%>
+                                <%--}).--%>
+                                <%--error(function(data, status, headers, config){--%>
+                                    <%--$scope.isClicked = false;--%>
+                                <%--});--%>
+                    <%--}--%>
+                <%--}--%>
+            <%--};--%>
 
-            $scope.clearSelection = function(){
-                $scope.selectedArr.forEach(function(entry) {
-                    entry['checked'] = false;
-                });
-                $scope.selectedArr = [];
-                $scope.isDisabledButton = true;
-                $scope.isClicked = false;
-                $scope.menu = [];
-            }
-        });
-    </script>
+            <%--$scope.clearSelection = function(){--%>
+                <%--$scope.selectedArr.forEach(function(entry) {--%>
+                    <%--entry['checked'] = false;--%>
+                <%--});--%>
+                <%--$scope.selectedArr = [];--%>
+                <%--$scope.isDisabledButton = true;--%>
+                <%--$scope.isClicked = false;--%>
+                <%--$scope.menu = [];--%>
+            <%--}--%>
+        <%--});--%>
+    <%--</script>--%>
     </body>
 </html>
