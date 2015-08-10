@@ -1,9 +1,5 @@
 package com.iti.foodCalculator.entity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 
@@ -12,8 +8,7 @@ import java.io.Serializable;
 //@NamedQueries(value = {
 //        @NamedQuery(name = "Product.getAllProducts", query = "select p from Product as p"),
 //})
-@XmlRootElement
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+
 public class Product implements Serializable {
     private int id;
     private String itemName;

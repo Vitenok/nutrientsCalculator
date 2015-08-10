@@ -1,11 +1,15 @@
 package com.iti.foodCalculator.entity;
 
-public class DailyMacroelementsInput {
+import java.io.Serializable;
+
+public class DailyMacroelementsInput implements Serializable{
     private double kcal;
     private double protein;
     private double fat;
     private double carb;
 
+    // Required default constructor
+    public DailyMacroelementsInput(){}
 
     public DailyMacroelementsInput(double kcal, double protein, double fat, double carb) {
         this.kcal = kcal;

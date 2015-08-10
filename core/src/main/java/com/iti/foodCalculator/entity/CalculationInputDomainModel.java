@@ -1,14 +1,10 @@
 package com.iti.foodCalculator.entity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
 
-@XmlRootElement
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-public class CalculationInputDomainModel implements Serializable{
+// Java class representing JSON from client
+public class CalculationInputDomainModel implements Serializable {
 
     private List<Product> products;
     private List<SupplementItem> supplementItems;

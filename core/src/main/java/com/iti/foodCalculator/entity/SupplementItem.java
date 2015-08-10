@@ -1,6 +1,8 @@
 package com.iti.foodCalculator.entity;
 
-public class SupplementItem {
+import java.io.Serializable;
+
+public class SupplementItem implements Serializable {
     private String id;
     private String name;
     private double kcal;

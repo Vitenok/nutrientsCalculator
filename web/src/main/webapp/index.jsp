@@ -196,10 +196,19 @@
 
             // Calculate menu
             $scope.calculateMenu = function(){
+//                //TODO:
+
+                // Deep copy
+                var selectedArrClone = jQuery.extend(true, [], $scope.selectedArr);
+
+                selectedArrClone.forEach(function(entry) {
+                    delete entry['$$hashKey'];
+                    delete entry['checked'];
+                });
                 var dataJson = JSON.stringify({
-                    products: $scope.selectedArr,
-                    supplements: [],
-                    distribution: {
+                    products: selectedArrClone,
+                    supplementItems: [],
+                    dailyMacroelementsInput: {
                         kcal: 0,
                         protein: 120,
                         carb: 120,
@@ -207,7 +216,13 @@
                     }
                 });
 
-                $http({method: 'POST', url: 'calculate.web', data: dataJson}).
+                $http({
+                    method: 'POST',
+                    url: 'calculate.web',
+                    data: dataJson,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }}).
                         success(function(data, status, headers, config){
                             $scope.menu = data;
                         }).
