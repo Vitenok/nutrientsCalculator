@@ -120,8 +120,8 @@
                     <div ng-show="isDisabledButton">
                         You didn't select anything yet
                     </div>
-                    <ul ng-repeat="select in selectedArr">
-                        <li>{{select.itemName}}</li>
+                    <ul  class="list-group">
+                        <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.itemName}}<span class="glyphicon glyphicon-trash pull-right" aria-hidden="true" ng-click="removeThisItem()"></span></li>
                     </ul>
                 </div>
 
