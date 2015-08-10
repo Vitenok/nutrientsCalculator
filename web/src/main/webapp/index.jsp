@@ -15,45 +15,6 @@
         <%--<script type="text/javascript" src="scripts/nutrientsCalculator.js"></script>--%>
         <%--<script type="text/javascript" src="scripts/nutrientsCalcCtrl.js"></script>--%>
 
-        <style type="text/css">
-            .margin-bottom-20 {
-                margin-bottom: 20px !important;
-            }
-
-            .margin-top-10{
-                margin-top: 10px;
-            }
-            .centered {
-                display: block;
-                margin-right: auto;
-                margin-left: auto;
-            }
-            .table-fixed{
-                border: solid #E4D6D6 1px;
-                height:  60%;
-            }
-            .table-fixed thead {
-                width: 97%;
-            }
-            .table-fixed tbody {
-                height:  90%;
-                overflow-y: auto;
-                width: 100%;
-            }
-            .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
-                display: block;
-            }
-            .table-fixed tbody td, .table-fixed thead > tr> th {
-                float: left;
-                border-bottom-width: 0;
-            }
-            .table-small-font tbody{
-                font-size: 13px;
-            }
-            .table-small-font thead{
-                font-size: 15px;
-            }
-        </style>
     </head>
 
     <body>
@@ -208,38 +169,42 @@
             $scope.calculateMenu = function(){
                 $scope.isClicked = false;
 
-                // Deep copy
-                var selectedArrClone = jQuery.extend(true, [], $scope.selectedArr);
+                if ($scope.selectedArr !== undefined){
+                    if ($scope.selectedArr.length > 0){
+                        // Deep copy
+                        var selectedArrClone = jQuery.extend(true, [], $scope.selectedArr);
 
-                selectedArrClone.forEach(function(entry) {
-                    delete entry['$$hashKey'];
-                    delete entry['checked'];
-                });
-                var dataJson = JSON.stringify({
-                    products: selectedArrClone,
-                    supplementItems: [],
-                    dailyMacroelementsInput: {
-                        kcal: 0,
-                        protein: 120,
-                        carb: 120,
-                        fat: 26.6
-                    }
-                });
-
-                $http({
-                    method: 'POST',
-                    url: 'calculate.web',
-                    data: dataJson,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }}).
-                        success(function(data, status, headers, config){
-                            $scope.menu = data;
-                            $scope.isClicked = true;
-                        }).
-                        error(function(data, status, headers, config){
-                            $scope.isClicked = false;
+                        selectedArrClone.forEach(function(entry) {
+                            delete entry['$$hashKey'];
+                            delete entry['checked'];
                         });
+                        var dataJson = JSON.stringify({
+                            products: selectedArrClone,
+                            supplementItems: [],
+                            dailyMacroelementsInput: {
+                                kcal: 0,
+                                protein: 120,
+                                carb: 120,
+                                fat: 26.6
+                            }
+                        });
+
+                        $http({
+                            method: 'POST',
+                            url: 'calculate.web',
+                            data: dataJson,
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }}).
+                                success(function(data, status, headers, config){
+                                    $scope.menu = data;
+                                    $scope.isClicked = true;
+                                }).
+                                error(function(data, status, headers, config){
+                                    $scope.isClicked = false;
+                                });
+                    }
+                }
             }
         });
     </script>
