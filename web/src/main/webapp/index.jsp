@@ -6,8 +6,13 @@
     <head>
         <title>Diet planner</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">--%>
+        <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">--%>
+
+        <%-- Themes from https://bootswatch.com/--%>
+        <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+        <%--<link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">--%>
+
         <link rel="stylesheet" type="text/css" href="styles/test.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +24,7 @@
 
     <body>
     <div class="container margin-top-10">
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-inverse">
             <div class="container-fluid">
 
                 <div class="navbar-header">
@@ -121,7 +126,7 @@
                 </div>
 
                 <div>
-                    <button type="button" class="btn btn-info btn-lg centered" ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()">
+                    <button type="button" class="btn btn-primary btn-lg centered" ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()">
                         Calculate
                     </button>
                 </div>
