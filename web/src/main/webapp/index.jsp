@@ -65,7 +65,7 @@
                     <form class="form-horizontal">
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="text" class="form-control" placeholder="Search food item...">
+                                <input type="text" class="form-control" placeholder="Search food item..." ng-model="search">
                             </div>
                         </div>
                     </form>
@@ -85,7 +85,7 @@
                         <th  class="col-md-1"></th>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="product in products">
+                        <tr data-ng-repeat="product in products | filter:search">
                             <td class="col-md-3">{{product.itemName}}</td>
                             <td class="col-md-2">{{product.proteins}}</td>
                             <td class="col-md-2">{{product.fats}}</td>
