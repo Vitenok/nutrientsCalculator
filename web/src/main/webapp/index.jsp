@@ -5,6 +5,7 @@
 <html  data-ng-app="nutrientsCalc">
     <head>
         <title>Diet planner</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">--%>
         <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">--%>
@@ -13,20 +14,19 @@
         <link rel="stylesheet" href="https://bootswatch.com/paper/bootstrap.min.css">
         <%--<link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">--%>
 
-        <%-- Custom styles--%>
-        <link rel="stylesheet" type="text/css" href="styles/test.css">
-
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+        <%-- Custom styles--%>
+        <link rel="stylesheet" type="text/css" href="styles/app.css">
+
         <%-- Custom scripts--%>
         <script type="text/javascript" src="scripts/nutrientsCalculator.js"></script>
-
     </head>
 
     <body>
     <div class="container margin-top-10">
-        <nav class="navbar navbar-inverse">
+        <nav class="navbar navbar-default">
             <div class="container-fluid">
 
                 <div class="navbar-header">
@@ -37,6 +37,11 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Diet planner</a></li>
+                        <li><a href="#">Prepare your dish</a></li>
+                        <li><a href="#">Your daily calorie intake</a></li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">About</a></li>
                         <li><a href="#">Useful info</a></li>
@@ -45,11 +50,6 @@
                 </div>
             </div>
         </nav>
-        <ul class="nav nav-tabs margin-bottom-20">
-            <li role="presentation" class="active"><a href="#">Diet planner</a></li>
-            <li role="presentation"><a href="#">Prepare your dish</a></li>
-            <li role="presentation"><a href="#">Calculate macronutrients need</a></li>
-        </ul>
 
         <div data-ng-controller="nutrientsCalcCtrl">
             <div class="col-md-5" >
@@ -57,18 +57,18 @@
                     <form class="form-horizontal" name="caloriesForm">
                         <div class="form-group" ng-class="{ 'has-error' : caloriesForm.caloriesInput.$invalid }">
                             <div class="col-md-12">
-                                <input type="number"  name="caloriesInput" class="form-control" placeholder="Type your daily calories intake" ng-model="intake" min="800" required>
+                                <input type="number" name="caloriesInput" class="form-control" placeholder="Type your daily calories intake" ng-model="intake" min="800" required>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <div class="alert alert-danger"  ng-show="caloriesForm.caloriesInput.$error.required">
+                <div class="alert alert-danger" ng-show="caloriesForm.caloriesInput.$error.required">
                    This is required field
                 </div>
 
                 <div class="alert alert-danger"  ng-show="caloriesForm.caloriesInput.$error.min">
-                    This is unhealthy amount of calories. We set minimum to 800 cKal, but you probably shouldn't cut your calorie intake that much.
+                    This is unhealthy amount of calories. We set minimum to 800 cKal, but you probably shouldn't cut your calorie intake even that much.
                 </div>
 
                 <div>
@@ -131,12 +131,12 @@
                         You didn't select anything yet
                     </div>
                     <ul  class="list-group">
-                        <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.itemName}}<span class="glyphicon glyphicon-trash pull-right" aria-hidden="true" ng-click="removeThisItem()"></span></li>
+                        <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.itemName}}<span class="glyphicon glyphicon-trash pull-right " ng-click="removeThisItem(select)"></span></li>
                     </ul>
                 </div>
 
                 <div>
-                    <button type="button" class="btn btn-primary btn-lg centered" ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()">
+                    <button type="button" class="btn btn-danger btn-lg centered" ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()" ng-disabled="isDisabledButton">
                         Calculate
                     </button>
                 </div>

@@ -17,7 +17,7 @@
     width: 97%;
 }
 .table-fixed tbody {
-    height:  80%;
+    height:  92%;
     overflow-y: auto;
     width: 100%;
 }
@@ -33,4 +33,7 @@
 }
 .full-width {
     width: 100%;
+}
+.glyphicon {
+    cursor: pointer;
 }

@@ -4,6 +4,27 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
     $scope.selected = {};
     $scope.isDisabledButton = true;
     $scope.intake = 1200;
+    $scope.isValidCalorieInput = true;
+
+    $scope.$watch('intake', function(newVal, oldVal){
+        if (newVal === undefined || newVal == null || newVal < 800 ){
+            $scope.isValidCalorieInput = false;
+            $scope.isDisabledButton = true;
+        } else {
+            if ($scope.selectedArr.length > 0){
+                $scope.isDisabledButton = false;
+                $scope.isValidCalorieInput = true;
+            }
+        }
+    }, true);
+
+    $scope.$watch('selectedArr', function(newVal, oldVal){
+        if ($scope.isValidCalorieInput && $scope.selectedArr.length > 0 ){
+            $scope.isDisabledButton = false;
+        } else {
+            $scope.isDisabledButton = true;
+        }
+    }, true);
 
     // Fetch data
     $scope.getProductsDataFromServer = function(){
@@ -29,6 +50,9 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
     // Calculate menu
     $scope.calculateMenu = function(){
         $scope.isClicked = false;
+        var proteins = $scope.intake * 0.4 / 4;
+        var carbs = $scope.intake * 0.4 / 4;
+        var fats = $scope.intake * 0.2 / 9;
 
         if ($scope.selectedArr !== undefined){
             if ($scope.selectedArr.length > 0){
@@ -42,12 +66,11 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
                 var dataJson = JSON.stringify({
                     products: selectedArrClone,
                     supplementItems: [],
-//                    $scope.intake
                     dailyMacroelementsInput: {
-                        kcal: 0,
-                        protein: 120,
-                        carb: 120,
-                        fat: 26.6
+                        kcal: $scope.intake,
+                        protein: proteins,
+                        carb: carbs,
+                        fat: fats
                     }
                 });
 
@@ -77,5 +100,25 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
         $scope.isDisabledButton = true;
         $scope.isClicked = false;
         $scope.menu = [];
+    };
+
+    $scope.removeThisItem = function(selected){
+        for (var i = 0; i < $scope.selectedArr.length; i++) {
+            if ($scope.selectedArr[i].itemName === selected.itemName) {
+                $scope.selectedArr[i]['checked'] = false;
+                var removedObject = $scope.selectedArr.splice(i, 1);
+                removedObject = null;
+                break;
+            }
+        }
+
+        if ($scope.selectedArr != undefined ){
+            if ($scope.selectedArr.length > 0){
+            }else {
+                $scope.isDisabledButton = true;
+                $scope.isClicked = false;
+                $scope.menu = [];
+            }
+        }
     }
 });
