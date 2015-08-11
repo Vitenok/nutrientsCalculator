@@ -10,7 +10,7 @@
         <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">--%>
 
         <%-- Themes from https://bootswatch.com/--%>
-        <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+        <link rel="stylesheet" href="https://bootswatch.com/paper/bootstrap.min.css">
         <%--<link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">--%>
 
         <%-- Custom styles--%>
@@ -54,20 +54,23 @@
         <div data-ng-controller="nutrientsCalcCtrl">
             <div class="col-md-5" >
                 <div>
-                    <form class="form-horizontal">
-                        <div class="form-group">
+                    <form class="form-horizontal" name="caloriesForm">
+                        <div class="form-group" ng-class="{ 'has-error' : caloriesForm.caloriesInput.$invalid }">
                             <div class="col-md-12">
-                                <input type="number" class="form-control" placeholder="Type your daily calories intake" ng-model="intake" min="800" required>
+                                <input type="number"  name="caloriesInput" class="form-control" placeholder="Type your daily calories intake" ng-model="intake" min="800" required>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div role="alert">
-                    <span class="error" ng-show="intakeForm.input.$error.required">
-                      Required!</span>
-                    <span class="error" ng-show="intakeForm.input.$error.number">
-                      Not valid number!</span>
+
+                <div class="alert alert-danger"  ng-show="caloriesForm.caloriesInput.$error.required">
+                   This is required field
                 </div>
+
+                <div class="alert alert-danger"  ng-show="caloriesForm.caloriesInput.$error.min">
+                    This is unhealthy amount of calories. We set minimum to 800 cKal, but you probably shouldn't cut your calorie intake that much.
+                </div>
+
                 <div>
                     <form class="form-horizontal">
                         <div class="form-group">
