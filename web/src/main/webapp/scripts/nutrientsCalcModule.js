@@ -3,7 +3,7 @@ var app = angular.module('nutrientsCalc', []);
 app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
     $scope.selected = {};
     $scope.isDisabledButton = true;
-    $scope.intake = 1200;
+    $scope.intake = {};
 
     // Fetch data
     $scope.getProductsDataFromServer = function(){
