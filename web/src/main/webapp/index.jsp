@@ -145,13 +145,29 @@
                     <div class="well">
                         <table class="table table-hover table-small-font">
                             <thead>
-                                <th class="col-md-8">Name</th>
-                                <th class="col-md-4">Amount</th>
+                                <th class="col-md-7">Name</th>
+                                <th class="col-md-1">Amount</th>
+                                <th class="col-md-1">Protein</th>
+                                <th class="col-md-1">Fat</th>
+                                <th class="col-md-1">Carb</th>
+                                <th class="col-md-1">kCal</th>
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="menuItem in menu">
-                                <td class="col-md-8">{{menuItem.name}}: </td>
-                                <td  class="col-md-4">{{menuItem.amount}} gr</td>
+                                <td class="col-md-7">{{menuItem.name}}: </td>
+                                <td  class="col-md-1"><b>{{menuItem.amount}} gr</b></td>
+                                <td  class="col-md-1">{{menuItem.totalProtein}} gr</td>
+                                <td  class="col-md-1">{{menuItem.totalFat}} gr</td>
+                                <td  class="col-md-1">{{menuItem.totalCarb}} gr</td>
+                                <td  class="col-md-1">{{menuItem.totalCalories}} kCal</td>
+                            </tr>
+                            <tr class="bold">
+                                    <td class="col-md-7">Total:</td>
+                                    <td class="col-md-1"></td>
+                                    <td class="col-md-1"> {{totals.protein}} gr</td>
+                                    <td class="col-md-1"> {{totals.fat}} gr</td>
+                                    <td class="col-md-1">{{totals.carbs}} gr</td>
+                                    <td class="col-md-1"> {{totals.kCal}} kCal</td>
                             </tr>
                             </tbody>
                         </table>

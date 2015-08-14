@@ -14,79 +14,142 @@ import java.util.List;
 
 public class ProductWeightCalculatorServiceTest extends TestCase {
     ProductWeightCalculatorService foodCalculatorService;
-    List<Product> productList;
+    List<Product> invalidProductList;
+    List<Product> validProductList;
     List<SupplementItem> supplementsList;
     RealMatrix coefficients;
     DailyMacroelementsInput dailyMacroelementsInput;
     CalculationInputDomainModel calculationInputDomainModel;
+    CalculationInputDomainModel invalidCalculationInputDomainModel;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
         this.foodCalculatorService = new ProductWeightCalculatorService();
-        this.productList = new ArrayList<Product>();
+        this.validProductList = new ArrayList<Product>();
+        this.invalidProductList = new ArrayList<Product>();
         this.supplementsList = new ArrayList<SupplementItem>();
-        this.dailyMacroelementsInput = new DailyMacroelementsInput(1200, 120, 26.6, 120);
+        double prot = 1200 * 0.4 / 4;
+        double fat = 1200 * 0.2 / 9;
+        double carb = 1200 * 0.4 / 4;
+        this.dailyMacroelementsInput = new DailyMacroelementsInput(1200, prot, fat, carb);
+        //this.dailyMacroelementsInput = new DailyMacroelementsInput(1200, 120, 26.6, 120);
 
-//public Product(String name, double kcal, double protein, double fat, double carb, String productType) {
-        Product product1 = new Product("Eggwhite", 42.0, 10.2, 0, 0.4, "123");
-        Product product2 = new Product("Chick", 104.0, 23.8, 1, 0.0, "123");
-        Product product3 = new Product("beef", 133, 21.1, 5.4, 0, "123");
-        Product product4 = new Product("rice", 364, 9.4, 3, 72.8, "123");
-        Product product5 = new Product("bread", 226, 9.8, 3.8, 35.2, "123");
+        Product product1 = new Product("Egg white, raw", 42.0, 10.2, 0, 0.4, "123");
+        Product product2 = new Product("Chicken, breast, meat only, raw", 104.0, 23.8, 1, 0.0, "123");
+        Product product3 = new Product("Beef, minced meat, max 6 % fat, raw", 133, 21.1, 5.4, 0, "123");
+        Product product4 = new Product("Rice, brown, long-grain, dry", 364, 9.4, 3, 72.8, "123");
+        Product product5 = new Product("Bread, wholemeal with extra fiber (75-100 %), unspecified, industry made", 226, 9.8, 3.8, 35.2, "123");
+        Product product6 = new Product("Cheese, hard, Cheddar", 395, 25.7, 32.3, 0.3, "123");
 
-        productList.add(product1);
-        productList.add(product2);
-        productList.add(product3);
-        productList.add(product4);
-        productList.add(product5);
+        // For invalid output
+        Product product7 = new Product("Oil, olive", 892, 0.2, 99, 0, "123");
+
+        // Valid input
+        validProductList.add(product1);
+        validProductList.add(product2);
+        validProductList.add(product3);
+        validProductList.add(product4);
+        validProductList.add(product5);
+        validProductList.add(product6);
+
+        // Invalid input
+        invalidProductList.add(product1);
+        invalidProductList.add(product2);
+        invalidProductList.add(product3);
+        invalidProductList.add(product4);
+        invalidProductList.add(product5);
+        invalidProductList.add(product6);
+        invalidProductList.add(product7);
 
         coefficients = new Array2DRowRealMatrix(new double[][]{
-                {10.2, 23.8, 21.1, 9.4, 9.8},
-                {0, 1, 5.4, 3, 3.8},
-                {0.4, 0, 0, 72.8, 35.2}},
+                {10.2, 23.8, 21.1, 9.4, 9.8, 25.7}, // Proetins
+                {0, 1, 5.4, 3, 3.8, 32.3}, // Fats
+                {0.4, 0, 0, 72.8, 35.2, 0.3}}, // Carbs
                 false);
 
+        // Valid
         calculationInputDomainModel = new CalculationInputDomainModel();
-        calculationInputDomainModel.setProducts(productList);
+        calculationInputDomainModel.setProducts(validProductList);
         calculationInputDomainModel.setSupplementItems(new ArrayList<SupplementItem>());
         calculationInputDomainModel.setDailyMacroelementsInput(dailyMacroelementsInput);
 
+        // Invalid
+        invalidCalculationInputDomainModel = new CalculationInputDomainModel();
+        invalidCalculationInputDomainModel.setProducts(invalidProductList);
+        invalidCalculationInputDomainModel.setSupplementItems(new ArrayList<>());
+        invalidCalculationInputDomainModel.setDailyMacroelementsInput(dailyMacroelementsInput);
+    }
+
+
+    public void testMatrix() {
+        List sol = foodCalculatorService.calculateSolutionMatrix(calculationInputDomainModel);
+        for (int i = 0; i < sol.size(); i++) {
+            System.out.println(i + ": " + sol.get(i));
+        }
     }
 
     public void testTransformToCoefficientsMatrix() throws Exception {
-
-        RealMatrix matrix = foodCalculatorService.transformToCoefficientsMatrix(productList);
-
+        RealMatrix matrix = foodCalculatorService.transformToCoefficientsMatrix(validProductList);
         assertEquals(coefficients, matrix);
     }
 
-    public void testTransformToConstantsVector() {
-        RealVector dummyConstants = new ArrayRealVector(new double[]{150, 25, 125}, false);
-        RealVector constants = foodCalculatorService.transformToConstantsVector(dailyMacroelementsInput);
-
-        assertNotNull(constants);
-        assertEquals(dummyConstants, constants);
-    }
 
     public void testCalculateWeightOfProductsWithNoSupplements() {
         List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(calculationInputDomainModel);
+        List<Double> amounts = new ArrayList<>();
+        amounts.add(solution.get(0).getAmount());
+        amounts.add(solution.get(1).getAmount());
+        amounts.add(solution.get(2).getAmount());
+        amounts.add(solution.get(3).getAmount());
+        amounts.add(solution.get(4).getAmount());
+        amounts.add(solution.get(5).getAmount());
+
         System.out.println(solution.get(0).getAmount());
         System.out.println(solution.get(1).getAmount());
         System.out.println(solution.get(2).getAmount());
         System.out.println(solution.get(3).getAmount());
         System.out.println(solution.get(4).getAmount());
-
-        // TODO:
-        // Problem: there is less calories in the solution then needed (~964 vs 1200)
-        // 1. Calculate macronutrients in solution
-        // 2. Suggest product which can fill this gap
-
-        // TODO:
-        // Problem: Solution may contain numbers < 0; Removing products does not influence others' amount ==> remove them from calculation
-
+        System.out.println(solution.get(5).getAmount());
     }
+
+    public void testThatProblematicFoodItemDoesNotChangeSolution() {
+        List<AmountItem> originalSolution = foodCalculatorService.calculateWeightOfProducts(calculationInputDomainModel);
+        List<AmountItem> problematicSolution = foodCalculatorService.calculateWeightOfProducts(invalidCalculationInputDomainModel);
+
+        assertNotNull(originalSolution);
+        assertNotNull(problematicSolution);
+
+        assertEquals(originalSolution.get(0).getAmount(), problematicSolution.get(0).getAmount());
+    }
+}
+
+/*    public void testCalculateWeightOfProductsWithNoSupplementsOneProduct() {
+        CalculationInputDomainModel singleModel = new CalculationInputDomainModel();
+        List<Product> singleList = new ArrayList<Product>();
+        singleList.add(productList.get(0));
+        singleList.add(productList.get(4));
+
+        singleModel.setProducts(singleList);
+        singleModel.setSupplementItems(new ArrayList<SupplementItem>());
+        singleModel.setDailyMacroelementsInput(dailyMacroelementsInput);
+
+        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(singleModel);
+
+        List<Double> amounts = new ArrayList<>();
+        amounts.add(solution.get(0).getAmount());
+        amounts.add(solution.get(1).getAmount());
+
+        List<Double> nutrients = foodCalculatorService.calculateNutrientValues(singleList, amounts);
+        for (int i = 0; i < nutrients.size(); i++) {
+            System.out.println(i + ": " + nutrients.get(i));
+        }
+        System.out.println("");
+        System.out.println(solution.get(0).getAmount());
+        System.out.println(solution.get(1).getAmount());
+    }
+*/
 
 //    public void testCalculateWeightOfProductsWithSupplements() {
 //        SupplementItem supplementItem1 = new SupplementItem("id", "Whey Protein", 0.0, 10, 2.5, 1);
@@ -121,4 +184,4 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
 //        assertEquals(dummyDailyMacroelementsInput.getFat(), macroelementsInput.getFat());
 //        assertEquals(dummyDailyMacroelementsInput.getCarb(), macroelementsInput.getCarb());
 //    }
-}
+//}

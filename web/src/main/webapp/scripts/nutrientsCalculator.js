@@ -11,7 +11,7 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
             $scope.isValidCalorieInput = false;
             $scope.isDisabledButton = true;
         } else {
-            if ($scope.selectedArr.length > 0){
+            if ($scope.selectedArr !== undefined && $scope.selectedArr.length > 0){
                 $scope.isDisabledButton = false;
                 $scope.isValidCalorieInput = true;
             }
@@ -19,7 +19,7 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
     }, true);
 
     $scope.$watch('selectedArr', function(newVal, oldVal){
-        if ($scope.isValidCalorieInput && $scope.selectedArr.length > 0 ){
+        if ($scope.selectedArr !== undefined && $scope.isValidCalorieInput && $scope.selectedArr.length > 0 ){
             $scope.isDisabledButton = false;
         } else {
             $scope.isDisabledButton = true;
@@ -54,6 +54,11 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
         var carbs = $scope.intake * 0.4 / 4;
         var fats = $scope.intake * 0.2 / 9;
 
+        var totalProtein = 0;
+        var totalFat = 0;
+        var totalCarb = 0;
+        var totalCalories = 0;
+
         if ($scope.selectedArr !== undefined){
             if ($scope.selectedArr.length > 0){
                 // Deep copy
@@ -84,6 +89,21 @@ app.controller('nutrientsCalcCtrl', function($scope, $http, $filter){
                     success(function(data, status, headers, config){
                         $scope.menu = data;
                         $scope.isClicked = true;
+
+                        // TODO: calculate totals per day in menu;
+                        $scope.menu.forEach(function(entry){
+                            totalProtein += Number(entry.totalProtein);
+                            totalFat += Number(entry.totalFat);
+                            totalCarb += Number(entry.totalCarb);
+                            totalCalories += Number(entry.totalCalories);
+                        });
+
+                        $scope.totals ={
+                            protein: totalProtein,
+                            fat: totalFat,
+                            carbs: totalCarb,
+                            kCal: totalCalories
+                        }
                     }).
                     error(function(data, status, headers, config){
                         $scope.isClicked = false;
