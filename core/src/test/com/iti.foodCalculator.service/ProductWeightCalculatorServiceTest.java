@@ -82,7 +82,6 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         invalidCalculationInputDomainModel.setDailyMacroelementsInput(dailyMacroelementsInput);
     }
 
-
     public void testMatrix() {
         List sol = foodCalculatorService.calculateSolutionMatrix(calculationInputDomainModel);
         for (int i = 0; i < sol.size(); i++) {

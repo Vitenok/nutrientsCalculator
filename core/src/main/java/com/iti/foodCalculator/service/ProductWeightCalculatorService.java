@@ -68,23 +68,44 @@ public class ProductWeightCalculatorService {
     }
 
     public List<AmountItem> calculateWeightOfProducts(CalculationInputDomainModel model) {
-        List<Double> solutions = calculateSolutionMatrix(model);
+        Double initCaloriesMax = model.getDailyMacroelementsInput().getKcal();
+        Double initProtein = model.getDailyMacroelementsInput().getProtein();
+        Double initFats = model.getDailyMacroelementsInput().getFat();
+        Double initCarbs = model.getDailyMacroelementsInput().getCarb();
 
-        List<AmountItem> amountItems = new ArrayList<>();
+        List<Double> solutions = calculateSolutionMatrix(model);
+        List<AmountItem> amountItems = new ArrayList<AmountItem>();
+
+        double totalActualCalories = 0;
+        double totalActualFat = 0;
+        double totalActualCarb = 0;
 
         for (int i = 0; i < solutions.size(); i++) {
             Map nutrients = calculateNutrientValue(products.get(i), Math.round(solutions.get(i)));
             AmountItem amountItem = new AmountItem(products.get(i).getItemName(), Math.round(solutions.get(i)), (double) nutrients.get("Protein"), (double) nutrients.get("Fat"), (double) nutrients.get("Carb"), (double) nutrients.get("Calories"));
             amountItems.add(amountItem);
+
+            totalActualCalories += amountItem.getTotalProtein() * 4 + amountItem.getTotalFat() * 9 + amountItem.getTotalCarb() * 4;
+            totalActualFat += amountItem.getTotalFat();
+            totalActualCarb += amountItem.getTotalCarb();
         }
-        return amountItems;
+
+        // Recalculate if calories, fats, or carbs are > than in user input
+        if (totalActualCalories > initCaloriesMax || totalActualFat > initFats || totalActualCarb > initCarbs) {
+            model.setDailyMacroelementsInput(new DailyMacroelementsInput(initCaloriesMax - 50, initProtein, initFats, initCarbs));
+            return calculateWeightOfProducts(model);
+        } else {
+            return amountItems;
+        }
     }
 
     Map<String, Double> calculateNutrientValue(Product product, double amount) {
         double totalProtein = (double) Math.round(product.getProteins() * amount / 100);
         double totalFat = Math.round(product.getFats() * amount / 100);
         double totalCarb = Math.round(product.getCarbs() * amount / 100);
-        double totalCal = Math.round(product.getkCal() * amount / 100);
+
+        // for some products calories are wrong in the DB. Solution: recalculate total kCal self :(
+        double totalCal = totalProtein * 4 + totalFat * 9 + totalCarb * 4;
 
         Map<String, Double> map = new HashMap<String, Double>();
         map.put("Protein", totalProtein);
