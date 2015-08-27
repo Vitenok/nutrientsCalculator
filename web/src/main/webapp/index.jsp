@@ -16,6 +16,7 @@
 
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-cookies.min.js"></script>
 
         <%-- Custom styles--%>
         <link rel="stylesheet" type="text/css" href="styles/app.css">
@@ -118,7 +119,7 @@
                 <table >
                     <tbody>
                         <tr class="full-width">
-                            <td class="col-md-11"><h4>You've selected:</h4></td>
+                            <td class="col-md-11"><h5>You've selected:</h5></td>
                             <td class="col-md-1">
                                 <button type="button" class="btn btn-default btn-sm" ng-show="!isDisabledButton" ng-click="clearSelection()">Clear all</button>
                             </td>
@@ -135,14 +136,48 @@
                     </ul>
                 </div>
 
+                <div ng-show="!isDisabledButton" class="panel panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <legend>Fill this form if you're going to use supplements:</legend>
+                                <div class="form-group">
+                                    <label for="supplement-name" class="col-lg-3 control-label">Supplement's name</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="supplement-name" placeholder="Type here supplement's name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="proteins" class="col-lg-3 control-label">Proteins:</label>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" id="proteins" placeholder="Type amount of proteins per 1 portion in grams">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fats" class="col-lg-3 control-label">Fats:</label>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" id="fats" placeholder="Type amount of fats per 1 portion in grams">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="carbs" class="col-lg-3 control-label">Carbs:</label>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" id="carbs" placeholder="Type amount of carbohydrates per 1 portion in grams">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
                 <div>
                     <button type="button" class="btn btn-danger btn-lg centered" ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()" ng-disabled="isDisabledButton">
                         Calculate
                     </button>
                 </div>
-                <div ng-show="isClicked">
-                    <h4>Your menu looks like:</h4>
-                    <div class="well">
+                <h5 ng-show="isClicked">Your menu looks like:</h5>
+                <div ng-show="isClicked" class="panel panel-default">
+                    <div class="panel-body">
                         <table class="table table-hover table-small-font">
                             <thead>
                                 <th class="col-md-7">Name</th>
@@ -153,22 +188,22 @@
                                 <th class="col-md-1">kCal</th>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="menuItem in menu">
-                                <td class="col-md-7">{{menuItem.name}}: </td>
-                                <td  class="col-md-1"><b>{{menuItem.amount}} gr</b></td>
-                                <td  class="col-md-1">{{menuItem.totalProtein}} gr</td>
-                                <td  class="col-md-1">{{menuItem.totalFat}} gr</td>
-                                <td  class="col-md-1">{{menuItem.totalCarb}} gr</td>
-                                <td  class="col-md-1">{{menuItem.totalCalories}} kCal</td>
-                            </tr>
-                            <tr class="bold">
-                                    <td class="col-md-7">Total:</td>
-                                    <td class="col-md-1"></td>
-                                    <td class="col-md-1"> {{totals.protein}} gr</td>
-                                    <td class="col-md-1"> {{totals.fat}} gr</td>
-                                    <td class="col-md-1">{{totals.carbs}} gr</td>
-                                    <td class="col-md-1"> {{totals.kCal}} kCal</td>
-                            </tr>
+                                <tr data-ng-repeat="menuItem in menu">
+                                    <td class="col-md-7">{{menuItem.name}}: </td>
+                                    <td  class="col-md-1"><b>{{menuItem.amount}} gr</b></td>
+                                    <td  class="col-md-1">{{menuItem.totalProtein}} gr</td>
+                                    <td  class="col-md-1">{{menuItem.totalFat}} gr</td>
+                                    <td  class="col-md-1">{{menuItem.totalCarb}} gr</td>
+                                    <td  class="col-md-1">{{menuItem.totalCalories}} kCal</td>
+                                </tr>
+                                <tr class=" bold" >
+                                        <td class="col-md-7">Total:</td>
+                                        <td class="col-md-1"></td>
+                                        <td class="col-md-1"> {{totals.protein}} gr</td>
+                                        <td class="col-md-1"> {{totals.fat}} gr</td>
+                                        <td class="col-md-1">{{totals.carbs}} gr</td>
+                                        <td class="col-md-1"> {{totals.kCal}} kCal</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
