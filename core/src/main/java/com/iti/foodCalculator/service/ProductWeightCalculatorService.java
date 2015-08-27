@@ -101,7 +101,7 @@ public class ProductWeightCalculatorService {
         }
 
         // Recalculate if calories, fats, or carbs are > than in user's input
-        if (totalActualFat > initFats && amountItems.size() > 1) {
+        if (totalActualFat > initFats * 1.15 && amountItems.size() > 1) {
             List<Product> initProds = model.getProducts();
 
 
