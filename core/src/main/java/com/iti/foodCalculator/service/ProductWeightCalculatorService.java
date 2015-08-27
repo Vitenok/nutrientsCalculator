@@ -48,8 +48,16 @@ public class ProductWeightCalculatorService {
             solutionIterator.set(currentSolution * 100);
 
             if (currentSolution < 0) {
+                // TODO 1: There might be more coeff-s < 0. Do not remove all of them in 1 cycle; Remove 1 and recalculate.
+                // TODO: or
+                // TODO 2(probably better but more complex because aquations amount increase in geometr. progression): Find all coeff-s < 0; Create parallel equations without corresponding products and choose best solution ( if n elements<0 were found, => n equations);
                 products.remove(n);
                 solutionIterator.remove();
+                CalculationInputDomainModel calculationInputDomainModelUpdate = new CalculationInputDomainModel();
+                calculationInputDomainModelUpdate.setProducts(products);
+                calculationInputDomainModelUpdate.setSupplementItems(supplements);
+                calculationInputDomainModelUpdate.setDailyMacroelementsInput(dailyMacroelementsDistribution);
+                return calculateSolutionMatrix(calculationInputDomainModelUpdate);
             } else {
                 n++;
             }
@@ -77,6 +85,7 @@ public class ProductWeightCalculatorService {
         List<AmountItem> amountItems = new ArrayList<AmountItem>();
 
         double totalActualCalories = 0;
+        double totalActualProtein = 0;
         double totalActualFat = 0;
         double totalActualCarb = 0;
 
@@ -86,15 +95,65 @@ public class ProductWeightCalculatorService {
             amountItems.add(amountItem);
 
             totalActualCalories += amountItem.getTotalProtein() * 4 + amountItem.getTotalFat() * 9 + amountItem.getTotalCarb() * 4;
+            totalActualProtein += amountItem.getTotalProtein();
             totalActualFat += amountItem.getTotalFat();
             totalActualCarb += amountItem.getTotalCarb();
         }
 
-        // Recalculate if calories, fats, or carbs are > than in user input
-        if (totalActualCalories > initCaloriesMax || totalActualFat > initFats || totalActualCarb > initCarbs) {
+        // Recalculate if calories, fats, or carbs are > than in user's input
+        if (totalActualFat > initFats && amountItems.size() > 1) {
+            List<Product> initProds = model.getProducts();
+
+
+            Collections.sort(initProds, new Comparator<Product>() {
+                @Override
+                public int compare(Product o1, Product o2) {
+                    return Double.compare(o1.getFats(), o2.getFats());
+                }
+            });
+
+            initProds.remove(initProds.size() - 1);
+            model.setProducts(initProds);
+
+
+            System.out.println("In if fats:");
+            System.out.println("totalActualCalories: " + totalActualCalories);
+            System.out.println("totalActualProtein: " + totalActualProtein);
+            System.out.println("totalActualFat: " + totalActualFat);
+            System.out.println("totalActualCarb: " + totalActualCarb);
+            System.out.println("");
             model.setDailyMacroelementsInput(new DailyMacroelementsInput(initCaloriesMax - 50, initProtein, initFats, initCarbs));
             return calculateWeightOfProducts(model);
+        } else if (totalActualFat > initFats && amountItems.size() == 1) {
+            AmountItem amountItem = amountItems.get(0);
+
+            // Recalculate amount of single element based on daily input
+            double oldAmount = amountItem.getAmount();
+            double oldProt = amountItem.getTotalProtein();
+            double oldCarb = amountItem.getTotalCarb();
+            double oldFat = amountItem.getTotalFat();
+
+            double updatedAmount = oldAmount * model.getDailyMacroelementsInput().getFat() / oldFat;
+
+            double updatedFat = model.getDailyMacroelementsInput().getFat();
+            double updatedProtein = updatedAmount * oldProt / oldAmount;
+            double updatedCarb = updatedAmount * oldCarb / oldAmount;
+            double updatedCalories = updatedFat * 9 + updatedCarb * 4 + updatedProtein * 4;
+
+            amountItems.get(0).setAmount(Math.round(updatedAmount));
+            amountItems.get(0).setTotalCalories(Math.round(updatedCalories));
+            amountItems.get(0).setTotalCarb(Math.round(updatedCarb));
+            amountItems.get(0).setTotalFat(Math.round(updatedFat));
+            amountItems.get(0).setTotalProtein(Math.round(updatedProtein));
+            return amountItems;
         } else {
+            System.out.println("In else:");
+            System.out.println("totalActualCalories: " + totalActualCalories);
+            System.out.println("totalActualProtein: " + totalActualProtein);
+            System.out.println("totalActualFat: " + totalActualFat);
+            System.out.println("totalActualCarb: " + totalActualCarb);
+            System.out.println("prods: " + model.getProducts().get(0).getItemName());
+            System.out.println("");
             return amountItems;
         }
     }

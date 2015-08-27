@@ -21,6 +21,10 @@ public class AmountItem {
         return totalCarb;
     }
 
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
     public void setTotalCarb(double totalCarb) {
         this.totalCarb = totalCarb;
     }

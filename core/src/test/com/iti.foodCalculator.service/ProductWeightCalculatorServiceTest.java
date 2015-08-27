@@ -1,12 +1,9 @@
 package com.iti.foodCalculator.service;
 
 import com.iti.foodCalculator.entity.*;
-import com.iti.foodCalculator.service.ProductWeightCalculatorService;
 import junit.framework.TestCase;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.RealVector;
 import org.junit.Before;
 
 import java.util.ArrayList;
@@ -15,12 +12,14 @@ import java.util.List;
 public class ProductWeightCalculatorServiceTest extends TestCase {
     ProductWeightCalculatorService foodCalculatorService;
     List<Product> invalidProductList;
+    List<Product> semiValidProductList;
     List<Product> validProductList;
     List<SupplementItem> supplementsList;
     RealMatrix coefficients;
     DailyMacroelementsInput dailyMacroelementsInput;
     CalculationInputDomainModel calculationInputDomainModel;
     CalculationInputDomainModel invalidCalculationInputDomainModel;
+    CalculationInputDomainModel semiValidCalculationInputDomainModel;
 
     @Before
     public void setUp() throws Exception {
@@ -29,6 +28,7 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         this.foodCalculatorService = new ProductWeightCalculatorService();
         this.validProductList = new ArrayList<Product>();
         this.invalidProductList = new ArrayList<Product>();
+        this.semiValidProductList = new ArrayList<Product>();
         this.supplementsList = new ArrayList<SupplementItem>();
         double prot = 1200 * 0.4 / 4;
         double fat = 1200 * 0.2 / 9;
@@ -46,6 +46,9 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         // For invalid output
         Product product7 = new Product("Oil, olive", 892, 0.2, 99, 0, "123");
 
+        //  Non-fittable
+        Product product8 = new Product("Bread, 1/3 wholemeal flour, water, home made", 236, 8.4, 1.3, 45.5, "123");
+
         // Valid input
         validProductList.add(product1);
         validProductList.add(product2);
@@ -54,14 +57,13 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         validProductList.add(product5);
         validProductList.add(product6);
 
-        // Invalid input
+        // Invalid multiple input when solution returns  < 0
         invalidProductList.add(product1);
         invalidProductList.add(product2);
         invalidProductList.add(product3);
         invalidProductList.add(product4);
         invalidProductList.add(product5);
         invalidProductList.add(product6);
-        invalidProductList.add(product7);
 
         coefficients = new Array2DRowRealMatrix(new double[][]{
                 {10.2, 23.8, 21.1, 9.4, 9.8, 25.7}, // Proetins
@@ -94,6 +96,40 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         assertEquals(coefficients, matrix);
     }
 
+    // Non-fittable
+    public void testSemiValidProductList() {
+        // Product list which can not be fitted in macronutrients vector
+        Product product9 = new Product("Beef, rib, cube roll, raw", 200, 20.5, 13.1, 0, "123");
+        Product product10 = new Product("Casserole, beef (10 % fat), potatoes and vegetables", 95, 9.3, 4.3, 4.4, "123");
+        Product product11 = new Product("Bread, semi wholemeal (25-50 %), type Yoghurtbrød", 222, 8.3, 1.5, 41.7, "123");
+
+        semiValidProductList.add(product9);
+        semiValidProductList.add(product10);
+        semiValidProductList.add(product11);
+
+        List<Product> referenceList = new ArrayList<Product>();
+        referenceList.add(product10);
+        referenceList.add(product11);
+
+        CalculationInputDomainModel refModel = new CalculationInputDomainModel();
+        refModel.setProducts(referenceList);
+        refModel.setDailyMacroelementsInput(dailyMacroelementsInput);
+        refModel.setSupplementItems(new ArrayList<>());
+
+        // 1 product
+        semiValidCalculationInputDomainModel = new CalculationInputDomainModel();
+        semiValidCalculationInputDomainModel.setProducts(semiValidProductList);
+        semiValidCalculationInputDomainModel.setSupplementItems(new ArrayList<>());
+        semiValidCalculationInputDomainModel.setDailyMacroelementsInput(dailyMacroelementsInput);
+
+        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(semiValidCalculationInputDomainModel);
+        List<AmountItem> refSolution = foodCalculatorService.calculateWeightOfProducts(refModel);
+
+        assertNotNull(solution);
+        assertNotNull(refSolution);
+
+        assertEquals(solution.get(0).getAmount(), refSolution.get(0).getAmount());
+    }
 
     public void testCalculateWeightOfProductsWithNoSupplements() {
         List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(calculationInputDomainModel);
@@ -104,13 +140,6 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         amounts.add(solution.get(3).getAmount());
         amounts.add(solution.get(4).getAmount());
         amounts.add(solution.get(5).getAmount());
-
-        System.out.println(solution.get(0).getAmount());
-        System.out.println(solution.get(1).getAmount());
-        System.out.println(solution.get(2).getAmount());
-        System.out.println(solution.get(3).getAmount());
-        System.out.println(solution.get(4).getAmount());
-        System.out.println(solution.get(5).getAmount());
     }
 
     public void testThatProblematicFoodItemDoesNotChangeSolution() {

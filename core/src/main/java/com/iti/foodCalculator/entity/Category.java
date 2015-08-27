@@ -5,27 +5,27 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table
+//@Entity
+//@Table
 public class Category implements Serializable {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @Column
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "parent_id")
+//    @OneToMany
+//    @JoinColumn(name = "parent_id")
     private List<Category> children;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany
-    @JoinColumn(name = "parent_id")
+//    @OneToMany
+//    @JoinColumn(name = "parent_id")
     private List<Product> product;
 
     public Category() {
