@@ -165,6 +165,12 @@
                                         <input type="number" class="form-control" id="carbs" placeholder="Type amount of carbohydrates per 1 portion in grams">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-9">
+                                        <button type="submit" class="btn btn-danger right">Add</button>
+                                    </div>
+                                </div>
                             </fieldset>
                         </form>
                     </div>
