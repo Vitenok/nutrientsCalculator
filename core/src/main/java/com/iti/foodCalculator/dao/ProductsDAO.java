@@ -9,8 +9,9 @@ public class ProductsDAO extends GenericDAO<Product> {
         super(Product.class);
     }
 
-//    public List<Product> getAllFoodItems() {
-//        return super.findResultList(Product.GET_ALL_PRODUCTS, null);
-//    }
+    @Override
+    public List<Product> findAll() {
+        return super.findResultList(Product.GET_ALL_PRODUCTS, null);
+    }
 
 }

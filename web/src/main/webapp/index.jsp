@@ -135,46 +135,46 @@
                         <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.itemName}}<span class="glyphicon glyphicon-trash pull-right " ng-click="removeThisItem(select)"></span></li>
                     </ul>
                 </div>
-
-                <div ng-show="!isDisabledButton" class="panel panel-default">
-                    <div class="panel-body">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <legend>Fill this form if you're going to use supplements:</legend>
-                                <div class="form-group">
-                                    <label for="supplement-name" class="col-lg-3 control-label">Supplement's name</label>
-                                    <div class="col-lg-9">
-                                        <input type="text" class="form-control" id="supplement-name" placeholder="Type here supplement's name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="proteins" class="col-lg-3 control-label">Proteins:</label>
-                                    <div class="col-lg-9">
-                                        <input type="number" class="form-control" id="proteins" placeholder="Type amount of proteins per 1 portion in grams">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="fats" class="col-lg-3 control-label">Fats:</label>
-                                    <div class="col-lg-9">
-                                        <input type="number" class="form-control" id="fats" placeholder="Type amount of fats per 1 portion in grams">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="carbs" class="col-lg-3 control-label">Carbs:</label>
-                                    <div class="col-lg-9">
-                                        <input type="number" class="form-control" id="carbs" placeholder="Type amount of carbohydrates per 1 portion in grams">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-lg-3"></div>
-                                    <div class="col-lg-9">
-                                        <button type="submit" class="btn btn-danger right">Add</button>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
+<%--TODO: add supplements form--%>
+                <%--<div ng-show="!isDisabledButton" class="panel panel-default">--%>
+                    <%--<div class="panel-body">--%>
+                        <%--<form class="form-horizontal">--%>
+                            <%--<fieldset>--%>
+                                <%--<legend>Fill this form if you're going to use supplements:</legend>--%>
+                                <%--<div class="form-group">--%>
+                                    <%--<label for="supplement-name" class="col-lg-3 control-label">Supplement's name</label>--%>
+                                    <%--<div class="col-lg-9">--%>
+                                        <%--<input type="text" class="form-control" id="supplement-name" placeholder="Type here supplement's name">--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group">--%>
+                                    <%--<label for="proteins" class="col-lg-3 control-label">Proteins:</label>--%>
+                                    <%--<div class="col-lg-9">--%>
+                                        <%--<input type="number" class="form-control" id="proteins" placeholder="Type amount of proteins per 1 portion in grams">--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group">--%>
+                                    <%--<label for="fats" class="col-lg-3 control-label">Fats:</label>--%>
+                                    <%--<div class="col-lg-9">--%>
+                                        <%--<input type="number" class="form-control" id="fats" placeholder="Type amount of fats per 1 portion in grams">--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group">--%>
+                                    <%--<label for="carbs" class="col-lg-3 control-label">Carbs:</label>--%>
+                                    <%--<div class="col-lg-9">--%>
+                                        <%--<input type="number" class="form-control" id="carbs" placeholder="Type amount of carbohydrates per 1 portion in grams">--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group">--%>
+                                    <%--<div class="col-lg-3"></div>--%>
+                                    <%--<div class="col-lg-9">--%>
+                                        <%--<button type="submit" class="btn btn-danger right">Add</button>--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                            <%--</fieldset>--%>
+                        <%--</form>--%>
+                    <%--</div>--%>
+                <%--</div>--%>
 
                 <div>
                     <button type="button" class="btn btn-danger btn-lg centered" ng-class="{disabled: isDisabledButton}" ng-click="calculateMenu()" ng-disabled="isDisabledButton">

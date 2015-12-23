@@ -1,32 +1,33 @@
 package com.iti.foodCalculator.entity;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
-//@Table
+@Entity
 public class Category implements Serializable {
-//    @Id
-//    @Column
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
-//    @Column(nullable = false)
     private String name;
 
-//    @OneToMany
-//    @JoinColumn(name = "parent_id")
-    private List<Category> children;
-
-//    @ManyToOne(fetch=FetchType.LAZY)
-//    @JoinColumn(name = "parent_id")
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JsonBackReference
     private Category parent;
 
-//    @OneToMany
-//    @JoinColumn(name = "parent_id")
-    private List<Product> product;
+    @OneToMany(mappedBy="parent")
+    @JsonManagedReference
+    private List<Category> children;
+
+
+    @OneToMany
+    @JoinColumn(name="id")
+    private List<Product> products;
 
     public Category() {
     }
@@ -34,6 +35,14 @@ public class Category implements Serializable {
     public Category(String name, Category parent) {
         this.name = name;
         this.parent = parent;
+    }
+
+    public List<Product> getProduct() {
+        return products;
+    }
+
+    public void setProduct(List<Product> products) {
+        this.products = products;
     }
 
     public Integer getId() {
@@ -71,25 +80,23 @@ public class Category implements Serializable {
         this.parent = parent;
     }
 
-    public List<Product> getProducts() {
-        if (product == null) {
-            product = new ArrayList<>();
-        }
-        return product;
-    }
+//    public List<Product> getProducts() {
+//        if (product == null) {
+//            product = new ArrayList<>();
+//        }
+//        return product;
+//    }
+//
+//    public void setProducts(List<Product> product) {
+//        this.product = product == null ? new ArrayList<Product>() : product;
+//    }
 
-    public void setProducts(List<Product> product) {
-        this.product = product == null ? new ArrayList<Product>() : product;
-    }
 
-    @ManyToOne(optional = false)
-    private Category categories;
-
-    public Category getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Category categories) {
-        this.categories = categories;
-    }
+//    public Category getCategories() {
+//        return categories;
+//    }
+//
+//    public void setCategories(Category categories) {
+//        this.categories = categories;
+//    }
 }

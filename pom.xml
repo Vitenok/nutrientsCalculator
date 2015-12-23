@@ -46,11 +46,6 @@
             <version>9.3.2.v20150730</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>9.3.2.v20150730</version>
-        </dependency>
-        <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jsp-2.1-glassfish</artifactId>
             <version>2.1.v20100127</version>
@@ -70,6 +65,7 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.12</version>
         </dependency>
+        <!--Hibernate-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -80,6 +76,7 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.3.10.Final</version>
         </dependency>
+        <!--DB-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -147,5 +144,17 @@
             <version>0.8.1</version>
             <scope>test</scope>
         </dependency>
+        <!--ORM-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${SpringVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${SpringVersion}</version>
+        </dependency>
+
     </dependencies>
 </project>

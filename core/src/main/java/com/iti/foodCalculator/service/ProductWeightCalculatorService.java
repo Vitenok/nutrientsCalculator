@@ -9,7 +9,6 @@ public class ProductWeightCalculatorService {
     private List<Product> products;
     List<SupplementItem> supplements;
     DailyMacroelementsInput dailyMacroelementsDistribution;
-    int x = 0;
 
     List<Double> calculateSolutionMatrix(CalculationInputDomainModel model) {
 
@@ -76,6 +75,8 @@ public class ProductWeightCalculatorService {
     }
 
     public List<AmountItem> calculateWeightOfProducts(CalculationInputDomainModel model) {
+
+
         Double initCaloriesMax = model.getDailyMacroelementsInput().getKcal();
         Double initProtein = model.getDailyMacroelementsInput().getProtein();
         Double initFats = model.getDailyMacroelementsInput().getFat();
@@ -93,7 +94,6 @@ public class ProductWeightCalculatorService {
             Map nutrients = calculateNutrientValue(products.get(i), Math.round(solutions.get(i)));
             AmountItem amountItem = new AmountItem(products.get(i).getItemName(), Math.round(solutions.get(i)), (double) nutrients.get("Protein"), (double) nutrients.get("Fat"), (double) nutrients.get("Carb"), (double) nutrients.get("Calories"));
             amountItems.add(amountItem);
-
             totalActualCalories += amountItem.getTotalProtein() * 4 + amountItem.getTotalFat() * 9 + amountItem.getTotalCarb() * 4;
             totalActualProtein += amountItem.getTotalProtein();
             totalActualFat += amountItem.getTotalFat();
@@ -115,13 +115,6 @@ public class ProductWeightCalculatorService {
             initProds.remove(initProds.size() - 1);
             model.setProducts(initProds);
 
-
-            System.out.println("In if fats:");
-            System.out.println("totalActualCalories: " + totalActualCalories);
-            System.out.println("totalActualProtein: " + totalActualProtein);
-            System.out.println("totalActualFat: " + totalActualFat);
-            System.out.println("totalActualCarb: " + totalActualCarb);
-            System.out.println("");
             model.setDailyMacroelementsInput(new DailyMacroelementsInput(initCaloriesMax - 50, initProtein, initFats, initCarbs));
             return calculateWeightOfProducts(model);
         } else if (totalActualFat > initFats && amountItems.size() == 1) {
@@ -145,17 +138,26 @@ public class ProductWeightCalculatorService {
             amountItems.get(0).setTotalCarb(Math.round(updatedCarb));
             amountItems.get(0).setTotalFat(Math.round(updatedFat));
             amountItems.get(0).setTotalProtein(Math.round(updatedProtein));
+            amountItems.addAll(convertFromSupplementToAmountItem(model));
             return amountItems;
         } else {
-            System.out.println("In else:");
-            System.out.println("totalActualCalories: " + totalActualCalories);
-            System.out.println("totalActualProtein: " + totalActualProtein);
-            System.out.println("totalActualFat: " + totalActualFat);
-            System.out.println("totalActualCarb: " + totalActualCarb);
-            System.out.println("prods: " + model.getProducts().get(0).getItemName());
-            System.out.println("");
+            amountItems.addAll(convertFromSupplementToAmountItem(model));
             return amountItems;
         }
+    }
+
+    private static List<AmountItem> convertFromSupplementToAmountItem(CalculationInputDomainModel model) {
+        List<AmountItem> supplements = new ArrayList<AmountItem>();
+        List<SupplementItem> supplementItems = model.getSupplementItems();
+
+        if (supplementItems != null) {
+            for (int i = 0; i < supplementItems.size(); i++) {
+                SupplementItem si = supplementItems.get(i);
+                AmountItem am = new AmountItem(si.getName(), si.getWeight(), si.getProtein(), si.getFat(), si.getCarb(), si.getKcal());
+                supplements.add(am);
+            }
+        }
+        return supplements;
     }
 
     Map<String, Double> calculateNutrientValue(Product product, double amount) {

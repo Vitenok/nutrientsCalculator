@@ -9,28 +9,45 @@
     margin-right: auto;
     margin-left: auto;
 }
-.table-fixed{
-    border: solid #E4D6D6 1px;
-    height:  55%;
-}
-.table-fixed thead {
-    width: 97%;
-}
-.table-fixed tbody {
-    height:  87.5%;
-    overflow-y: auto;
+
+.table-fixed-header {
     width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.19);
+    table-layout : fixed;
 }
-.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+
+.table-fixed-header thead, tbody, tr, td, th { display: block; }
+
+.table-fixed-header tr:after {
+    content: ' ';
     display: block;
+    visibility: hidden;
+    clear: both;
 }
-.table-fixed tbody td, .table-fixed thead > tr> th {
+
+.table-fixed-header thead th {
+    height: 30px;
+}
+
+.table-fixed-header tbody {
+    height: 120px;
+    overflow-y: auto;
+}
+
+.table-fixed-header tbody td {
     float: left;
-    border-bottom-width: 0;
+    text-align: left;
+
 }
+
+.left-aligned {
+    text-align: left;
+}
+
 .table-small-font tbody{
     font-size: 13px;
 }
+
 .full-width {
     width: 100%;
 }
@@ -48,4 +65,29 @@ input[type=number]::-webkit-outer-spin-button {
 
 .right {
     float: right;
+}
+
+.transparent-background {
+    text-align: left;;
+    background-color: rgba(0, 0, 0, 0);
+}
+label, select {
+    display: inline-block;
+    /*width: 100%;*/
+}
+
+label {
+    width: 100%;
+    text-align: left;
+}
+
+select{
+    height: 34px;
+    float: left;
+    width: 100%;
+}
+
+.small {
+    padding: 7px 20px!important;
+    margin-top: 20px ;
 }

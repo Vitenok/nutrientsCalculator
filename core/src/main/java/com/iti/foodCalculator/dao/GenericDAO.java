@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 abstract class GenericDAO<T> implements Serializable {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("parking");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("food_composition");
     private static EntityManager em = emf.createEntityManager();
     private Class<T> entityClass;
 

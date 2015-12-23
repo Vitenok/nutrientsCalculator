@@ -3,25 +3,23 @@ package com.iti.foodCalculator.entity;
 import java.io.Serializable;
 
 public class SupplementItem implements Serializable {
-    private String id;
     private String name;
     private double kcal;
     private double protein;
     private double fat;
     private double carb;
+    private double weight;
+
+    public SupplementItem(){}
 
 
-    public SupplementItem(String id, String name, double kcal, double protein, double fat, double carb) {
-        this.id = id;
+    public SupplementItem(String name, double kcal, double protein, double fat, double carb, double weight) {
         this.name = name;
         this.kcal = kcal;
         this.protein = protein;
         this.fat = fat;
         this.carb = carb;
-    }
-
-    public String getId() {
-        return id;
+        this.weight = weight;
     }
 
     public String getName() {
@@ -42,5 +40,13 @@ public class SupplementItem implements Serializable {
 
     public double getCarb() {
         return carb;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

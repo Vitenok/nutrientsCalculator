@@ -4,7 +4,9 @@ import com.iti.foodCalculator.entity.AmountItem;
 import com.iti.foodCalculator.entity.CalculationInputDomainModel;
 import com.iti.foodCalculator.entity.Product;
 import com.iti.foodCalculator.service.ProductWeightCalculatorService;
+import com.iti.foodCalculator.service.ProductsService;
 import com.iti.foodCalculator.utlity.reader.XLSReader;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +24,14 @@ import java.util.List;
 public class NutrientsCalculatorController {
     @RequestMapping(value = "/start.web", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
-
         return "index";
     }
 
     @RequestMapping(value = "/populateFoodItems.web", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody
     List<Product> populateProducts() {
-        return new XLSReader().readXlsFileToList();
+//        return new XLSReader().readXlsFileToList();
+        return new ProductsService().getAllProducts();
     }
 
     @RequestMapping(value = "/calculate.web", method = RequestMethod.POST)

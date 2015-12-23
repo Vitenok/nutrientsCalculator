@@ -1,15 +1,22 @@
 package com.iti.foodCalculator.entity;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 
-//@Entity
-//@Table
-//@NamedQueries(value = {
-//        @NamedQuery(name = "Product.getAllProducts", query = "select p from Product as p"),
-//})
+@Entity
+@Table(name = "product")
+@NamedQueries(value = {
+        @NamedQuery(name = "Product.getAllProducts", query = "select p from Product as p"),
+})
 
 public class Product implements Serializable {
+        public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
     private String itemName;
     private double kCal;
@@ -18,24 +25,23 @@ public class Product implements Serializable {
     private double carbs;
     private String productType;
 
-
-//    public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Product() {
     }
 
-    public Product(String name, double kcal, double protein, double fat, double carb, String productType) {
+    public Product(String name, double kcal, double protein, double fat, double carb, String productType, Category category) {
         this.itemName = name;
         this.kCal = kcal;
         this.proteins = protein;
         this.fats = fat;
         this.carbs = carb;
         this.productType = productType;
+        this.category = category;
     }
 
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -44,9 +50,6 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-
-//    @Basic
-//    @Column(name = "ItemName")
     public String getItemName() {
         return itemName;
     }
@@ -55,8 +58,6 @@ public class Product implements Serializable {
         this.itemName = itemName;
     }
 
-//    @Basic
-//    @Column(name = "kCal")
     public double getkCal() {
         return kCal;
     }
@@ -64,9 +65,7 @@ public class Product implements Serializable {
     public void setkCal(double kCal) {
         this.kCal = kCal;
     }
-//
-//    @Basic
-//    @Column(name = "Proteins")
+
     public double getProteins() {
         return proteins;
     }
@@ -75,8 +74,6 @@ public class Product implements Serializable {
         this.proteins = proteins;
     }
 
-//    @Basic
-//    @Column(name = "Fats")
     public double getFats() {
         return fats;
     }
@@ -85,8 +82,6 @@ public class Product implements Serializable {
         this.fats = fats;
     }
 
-//    @Basic
-//    @Column(name = "Carbs")
     public double getCarbs() {
         return carbs;
     }
@@ -95,8 +90,6 @@ public class Product implements Serializable {
         this.carbs = carbs;
     }
 
-//    @Basic
-//    @Column(name = "productType")
     public String getProductType() {
         return productType;
     }
@@ -105,10 +98,18 @@ public class Product implements Serializable {
         this.productType = productType;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Product)) return false;
 
         Product product = (Product) o;
 
@@ -117,8 +118,9 @@ public class Product implements Serializable {
         if (id != product.id) return false;
         if (Double.compare(product.kCal, kCal) != 0) return false;
         if (Double.compare(product.proteins, proteins) != 0) return false;
+        if (!category.equals(product.category)) return false;
         if (!itemName.equals(product.itemName)) return false;
-        if (productType != product.productType) return false;
+        if (!productType.equals(product.productType)) return false;
 
         return true;
     }
@@ -138,8 +140,7 @@ public class Product implements Serializable {
         temp = Double.doubleToLongBits(carbs);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + productType.hashCode();
+        result = 31 * result + category.hashCode();
         return result;
     }
-
-
 }

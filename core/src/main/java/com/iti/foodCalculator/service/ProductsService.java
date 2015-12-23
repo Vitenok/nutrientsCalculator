@@ -9,7 +9,7 @@ import java.util.List;
 public class ProductsService {
     private ProductsDAO productsDAO = new ProductsDAO();
 
-    public List<Product> findAllProducts(){
+    public List<Product> getAllProducts(){
         productsDAO.beginTransaction();
         List<Product> productList = productsDAO.findAll();
         productsDAO.closeTransaction();

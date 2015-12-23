@@ -62,8 +62,11 @@ public class XLSReader {
                         parent.getChildren().add(new Category(name, parent));
                     } else {
                         Category c = parent.getChildren().get(parent.getChildren().size() - 1);
-                        c.getProducts().add(extractProduct(row));
-                        productsList.add(extractProduct(row));
+//                        c.getProducts().add(extractProduct(row));
+                        Product currentProduct = extractProduct(row);
+                        currentProduct.setCategory(c);
+//                        currentProduct.setCategoryName(c.getName());
+                        productsList.add(currentProduct);
                         categories.add(c);
                         //root.getProducts().add(extractProduct(row));
                     }
@@ -94,8 +97,10 @@ public class XLSReader {
         Double fat = getDoubleValueFromCell(row.getCell(10));
         Double carb = getDoubleValueFromCell(row.getCell(22));
         String productType = String.valueOf(ProductType.NON_SUPPLEMENT);
+        //TODO
+        Category category = null;
 
-        return new Product(name, kcal, protein, fat, carb, productType);
+        return new Product(name, kcal, protein, fat, carb, productType, category);
     }
 
     private String getStringValueFromCell(Cell cell) {
