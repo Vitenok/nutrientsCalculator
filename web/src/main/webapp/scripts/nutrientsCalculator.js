@@ -1,4 +1,4 @@
-var app = angular.module('nutrientsCalc', []);
+var app = angular.module('nutrientsCalc', ['ui.slider']);
 
 app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
     $scope.selected = {};
@@ -48,13 +48,53 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
         return $scope.selectedArr;
     };
 
+    $scope.position = {
+        floor: 0,
+        ceiling: 100,
+        firstKnob: 40,
+        secondKnob: 60
+    };
+
+    $scope.proteinRange = $scope.position.firstKnob;
+    $scope.carbohydrateRange = $scope.position.ceiling - $scope.position.secondKnob;
+    $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
+
+    $scope.transformCarbAndProteinFromPercentToGr = function (val) {
+        return Math.round(val / 100 / 4);
+    };
+
+    $scope.transformFatFromPercentToGr = function (val) {
+        return Math.round(val / 100 / 9);
+    };
+    $scope.$watch('position.firstKnob', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            $scope.proteinRange = $scope.position.firstKnob;
+            $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
+
+            $scope.proteinsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
+            $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+        }
+
+    }, true);
+
+    $scope.$watch('position.secondKnob', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            $scope.carbohydrateRange = $scope.position.ceiling - $scope.position.secondKnob;
+            $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
+
+            $scope.carbsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
+            $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+        }
+    }, true);
+
+
+    $scope.proteinsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
+    $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+    $scope.carbsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
+
     // Calculate menu
     $scope.calculateMenu = function () {
         $scope.isClicked = false;
-        var proteins = $scope.intake * 0.4 / 4;
-        var carbs = $scope.intake * 0.4 / 4;
-        var fats = $scope.intake * 0.2 / 9;
-
 
         var totalProtein = 0;
         var totalFat = 0;
@@ -70,14 +110,15 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
                     delete entry['$$hashKey'];
                     delete entry['checked'];
                 });
+
                 var dataJson = angular.toJson({
                     products: selectedArrClone,
                     supplementItems: $scope.supplementItems,
                     dailyMacroelementsInput: {
                         kcal: $scope.intake,
-                        protein: proteins,
-                        carb: carbs,
-                        fat: fats
+                        protein: $scope.proteinsIntske,
+                        carb: $scope.carbsIntske,
+                        fat: $scope.fatsIntske
                     }
                 });
 
@@ -173,4 +214,6 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
         $scope.suppl = false;
         $scope.supplement = {};
     };
+
+
 });
