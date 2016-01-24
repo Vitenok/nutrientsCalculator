@@ -56,6 +56,7 @@
     <!-- Custom scripts-->
     <script type="text/javascript" src="scripts/nutrientsCalculator.js"></script>
     <script type="text/javascript" src="scripts/slider.js"></script>
+    <script type="text/javascript" src="js/fb.login.js"></script>
 </head>
 <body>
 <div class="">
@@ -85,6 +86,7 @@
                 <li><a href="#tf-works" class="page-scroll">Advices</a></li>
                 <!--<li><a href="#tf-testimonials" class="page-scroll">About us</a></li>-->
                 <li><a href="#tf-contact" class="page-scroll">Contact</a></li>
+                <li><fb:login-button scope="public_profile" onlogin="checkLoginState();" auto_logout_link="true"/></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
