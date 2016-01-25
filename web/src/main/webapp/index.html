@@ -7,6 +7,7 @@
     <!--[if IE]>
     <meta http-equiv="x-ua-compatible" content="IE=9"/><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-signin-client_id" content="518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com">
     <title>Spirit - Diet planner</title>
 
 
@@ -57,6 +58,8 @@
     <script type="text/javascript" src="scripts/nutrientsCalculator.js"></script>
     <script type="text/javascript" src="scripts/slider.js"></script>
     <script type="text/javascript" src="js/fb.login.js"></script>
+    <script type="text/javascript" src="js/google.login.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
 <div class="">
@@ -87,6 +90,8 @@
                 <!--<li><a href="#tf-testimonials" class="page-scroll">About us</a></li>-->
                 <li><a href="#tf-contact" class="page-scroll">Contact</a></li>
                 <li><fb:login-button scope="public_profile" onlogin="checkLoginState();" auto_logout_link="true"/></li>
+                <li><div id="gLogin" class="g-signin2" data-onsuccess="onSignIn" /></li>
+                <li><div><a id="gLogout" href="#" onclick="signOut();">Sign out</a></div></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
