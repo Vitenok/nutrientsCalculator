@@ -1,7 +1,5 @@
 package com.iti.foodCalculator.entity;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,10 +11,10 @@ import java.io.Serializable;
 })
 
 public class Product implements Serializable {
-        public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
+    public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String itemName;
     private double kCal;
@@ -25,7 +23,7 @@ public class Product implements Serializable {
     private double carbs;
     private String productType;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
 

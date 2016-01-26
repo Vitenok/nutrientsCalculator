@@ -1,7 +1,7 @@
 package com.iti.foodCalculator.entity;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,22 +11,22 @@ import java.util.List;
 @Entity
 public class Category implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Category parent;
 
-    @OneToMany(mappedBy="parent")
+    @OneToMany(mappedBy = "parent")
     @JsonManagedReference
     private List<Category> children;
 
 
     @OneToMany
-    @JoinColumn(name="id")
+    @JoinColumn(name = "id")
     private List<Product> products;
 
     public Category() {

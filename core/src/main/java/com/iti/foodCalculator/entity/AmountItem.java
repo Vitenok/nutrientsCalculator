@@ -1,13 +1,22 @@
 package com.iti.foodCalculator.entity;
 
 // Represents amount of food after calculation
-public class                    AmountItem {
+public class AmountItem {
     private String name;
     private double amount;
     private double totalProtein;
     private double totalFat;
     private double totalCarb;
     private double totalCalories;
+
+    public AmountItem(String name, double amount, double prot, double fat, double carb, double cal) {
+        this.name = name;
+        this.amount = amount;
+        this.totalProtein = prot;
+        this.totalFat = fat;
+        this.totalCarb = carb;
+        this.totalCalories = cal;
+    }
 
     public double getTotalCalories() {
         return totalCalories;
@@ -19,10 +28,6 @@ public class                    AmountItem {
 
     public double getTotalCarb() {
         return totalCarb;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 
     public void setTotalCarb(double totalCarb) {
@@ -54,12 +59,7 @@ public class                    AmountItem {
         return amount;
     }
 
-    public AmountItem(String name, double amount, double prot, double fat, double carb, double cal) {
-        this.name = name;
+    public void setAmount(double amount) {
         this.amount = amount;
-        this.totalProtein = prot;
-        this.totalFat = fat;
-        this.totalCarb = carb;
-        this.totalCalories = cal;
     }
 }

@@ -1,7 +1,5 @@
 package com.iti.foodCalculator.dao;
 
-import org.apache.poi.ss.formula.functions.T;
-
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
@@ -12,6 +10,11 @@ abstract class GenericDAO<T> implements Serializable {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("food_composition");
     private static EntityManager em = emf.createEntityManager();
     private Class<T> entityClass;
+
+    public GenericDAO(Class<T> entityClass) {
+        this.entityClass = entityClass;
+
+    }
 
     public void beginTransaction() {
         em = emf.createEntityManager();
@@ -42,11 +45,6 @@ abstract class GenericDAO<T> implements Serializable {
     public void joinTransaction() {
         em = emf.createEntityManager();
         em.joinTransaction();
-    }
-
-    public GenericDAO(Class<T> entityClass) {
-        this.entityClass = entityClass;
-
     }
 
     public void save(T entity) {

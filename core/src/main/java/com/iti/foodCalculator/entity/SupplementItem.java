@@ -10,7 +10,8 @@ public class SupplementItem implements Serializable {
     private double carb;
     private double weight;
 
-    public SupplementItem(){}
+    public SupplementItem() {
+    }
 
 
     public SupplementItem(String name, double kcal, double protein, double fat, double carb, double weight) {

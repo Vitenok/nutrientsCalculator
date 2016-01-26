@@ -1,0 +1,101 @@
+.margin-bottom-20 {
+    margin-bottom: 20px !important;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.centered {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.table-fixed-header {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.19);
+    table-layout: fixed;
+}
+
+.table-fixed-header thead, tbody, tr, td, th {
+    display: block;
+}
+
+.table-fixed-header tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.table-fixed-header thead th {
+    height: 30px;
+}
+
+.table-fixed-header tbody {
+    height: 120px;
+    overflow-y: auto;
+}
+
+.table-fixed-header tbody td {
+    float: left;
+    text-align: left;
+
+}
+
+.left-aligned {
+    text-align: left;
+}
+
+.table-small-font tbody {
+    font-size: 13px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.glyphicon {
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.right {
+    float: right;
+}
+
+.transparent-background {
+    text-align: left;;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+label, select {
+    display: inline-block;
+    /*width: 100%;*/
+}
+
+label {
+    width: 100%;
+    text-align: left;
+}
+
+select {
+    height: 34px;
+    float: left;
+    width: 100%;
+}
+
+.small {
+    padding: 7px 20px !important;
+    margin-top: 20px;
+}

@@ -6,9 +6,23 @@ import org.apache.commons.math3.linear.*;
 import java.util.*;
 
 public class ProductWeightCalculatorService {
-    private List<Product> products;
     List<SupplementItem> supplements;
     DailyMacroelementsInput dailyMacroelementsDistribution;
+    private List<Product> products;
+
+    private static List<AmountItem> convertFromSupplementToAmountItem(CalculationInputDomainModel model) {
+        List<AmountItem> supplements = new ArrayList<AmountItem>();
+        List<SupplementItem> supplementItems = model.getSupplementItems();
+
+        if (supplementItems != null) {
+            for (int i = 0; i < supplementItems.size(); i++) {
+                SupplementItem si = supplementItems.get(i);
+                AmountItem am = new AmountItem(si.getName(), si.getWeight(), si.getProtein(), si.getFat(), si.getCarb(), si.getKcal());
+                supplements.add(am);
+            }
+        }
+        return supplements;
+    }
 
     List<Double> calculateSolutionMatrix(CalculationInputDomainModel model) {
 
@@ -144,20 +158,6 @@ public class ProductWeightCalculatorService {
             amountItems.addAll(convertFromSupplementToAmountItem(model));
             return amountItems;
         }
-    }
-
-    private static List<AmountItem> convertFromSupplementToAmountItem(CalculationInputDomainModel model) {
-        List<AmountItem> supplements = new ArrayList<AmountItem>();
-        List<SupplementItem> supplementItems = model.getSupplementItems();
-
-        if (supplementItems != null) {
-            for (int i = 0; i < supplementItems.size(); i++) {
-                SupplementItem si = supplementItems.get(i);
-                AmountItem am = new AmountItem(si.getName(), si.getWeight(), si.getProtein(), si.getFat(), si.getCarb(), si.getKcal());
-                supplements.add(am);
-            }
-        }
-        return supplements;
     }
 
     Map<String, Double> calculateNutrientValue(Product product, double amount) {
