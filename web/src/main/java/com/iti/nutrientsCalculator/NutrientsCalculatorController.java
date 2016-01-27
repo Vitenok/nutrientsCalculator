@@ -32,16 +32,12 @@ public class NutrientsCalculatorController {
 
     @Cacheable("products")
     @RequestMapping(value = "/populateFoodItems", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public
-    @ResponseBody
-    List<Product> populateProducts() {
+    public @ResponseBody List<Product> populateProducts() {
         return productsService.getAllProducts();
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    List<AmountItem> populateCalculation(@RequestBody CalculationInputDomainModel calculationInputDomainModel) {
+    public @ResponseBody List<AmountItem> populateCalculation(@RequestBody CalculationInputDomainModel calculationInputDomainModel) {
         return productWeightCalculatorService.calculateWeightOfProducts(calculationInputDomainModel);
     }
 }

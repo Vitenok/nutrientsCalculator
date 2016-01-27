@@ -36,18 +36,18 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         this.dailyMacroelementsInput = new DailyMacroelementsInput(1200, prot, fat, carb);
         //this.dailyMacroelementsInput = new DailyMacroelementsInput(1200, 120, 26.6, 120);
 
-        Product product1 = new Product("Egg white, raw", 42.0, 10.2, 0, 0.4, "123");
-        Product product2 = new Product("Chicken, breast, meat only, raw", 104.0, 23.8, 1, 0.0, "123");
-        Product product3 = new Product("Beef, minced meat, max 6 % fat, raw", 133, 21.1, 5.4, 0, "123");
-        Product product4 = new Product("Rice, brown, long-grain, dry", 364, 9.4, 3, 72.8, "123");
-        Product product5 = new Product("Bread, wholemeal with extra fiber (75-100 %), unspecified, industry made", 226, 9.8, 3.8, 35.2, "123");
-        Product product6 = new Product("Cheese, hard, Cheddar", 395, 25.7, 32.3, 0.3, "123");
+        Product product1 = new Product("Egg white, raw", 42.0, 10.2, 0, 0.4);
+        Product product2 = new Product("Chicken, breast, meat only, raw", 104.0, 23.8, 1, 0.0);
+        Product product3 = new Product("Beef, minced meat, max 6 % fat, raw", 133, 21.1, 5.4, 0);
+        Product product4 = new Product("Rice, brown, long-grain, dry", 364, 9.4, 3, 72.8);
+        Product product5 = new Product("Bread, wholemeal with extra fiber (75-100 %), unspecified, industry made", 226, 9.8, 3.8, 35.2);
+        Product product6 = new Product("Cheese, hard, Cheddar", 395, 25.7, 32.3, 0.3);
 
         // For invalid output
-        Product product7 = new Product("Oil, olive", 892, 0.2, 99, 0, "123");
+        Product product7 = new Product("Oil, olive", 892, 0.2, 99, 0);
 
         //  Non-fittable
-        Product product8 = new Product("Bread, 1/3 wholemeal flour, water, home made", 236, 8.4, 1.3, 45.5, "123");
+        Product product8 = new Product("Bread, 1/3 wholemeal flour, water, home made", 236, 8.4, 1.3, 45.5);
 
         // Valid input
         validProductList.add(product1);
@@ -64,6 +64,8 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         invalidProductList.add(product4);
         invalidProductList.add(product5);
         invalidProductList.add(product6);
+//        invalidProductList.add(product7);
+//        invalidProductList.add(product8);
 
         coefficients = new Array2DRowRealMatrix(new double[][]{
                 {10.2, 23.8, 21.1, 9.4, 9.8, 25.7}, // Proetins
@@ -99,9 +101,9 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
     // Non-fittable
     public void testSemiValidProductList() {
         // Product list which can not be fitted in macronutrients vector
-        Product product9 = new Product("Beef, rib, cube roll, raw", 200, 20.5, 13.1, 0, "123");
-        Product product10 = new Product("Casserole, beef (10 % fat), potatoes and vegetables", 95, 9.3, 4.3, 4.4, "123");
-        Product product11 = new Product("Bread, semi wholemeal (25-50 %), type Yoghurtbrød", 222, 8.3, 1.5, 41.7, "123");
+        Product product9 = new Product("Beef, rib, cube roll, raw", 200, 20.5, 13.1, 0);
+        Product product10 = new Product("Casserole, beef (10 % fat), potatoes and vegetables", 95, 9.3, 4.3, 4.4);
+        Product product11 = new Product("Bread, semi wholemeal (25-50 %), type Yoghurtbrød", 222, 8.3, 1.5, 41.7);
 
         semiValidProductList.add(product9);
         semiValidProductList.add(product10);
