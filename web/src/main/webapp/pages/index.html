@@ -349,10 +349,10 @@
                                 </thead>
                                 <tbody>
                                 <tr data-ng-repeat="product in products | filter:search">
-                                    <td class="col-md-3">{{product.itemName}}</td>
-                                    <td class="col-md-2">{{product.proteins}}</td>
-                                    <td class="col-md-2">{{product.fats}}</td>
-                                    <td class="col-md-2">{{product.carbs}}</td>
+                                    <td class="col-md-3">{{product.name}}</td>
+                                    <td class="col-md-2">{{product.protein}}</td>
+                                    <td class="col-md-2">{{product.fat}}</td>
+                                    <td class="col-md-2">{{product.carbo}}</td>
                                     <td class="col-md-2">{{product.kCal}}</td>
                                     <td class="col-md-1">
                                         <div class="checkbox">
@@ -386,7 +386,7 @@
                                 You didn't select anything yet
                             </div>
                             <ul class="list-group">
-                                <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.itemName}}<span
+                                <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.name}}<span
                                         class="glyphicon glyphicon-trash pull-right "
                                         ng-click="removeThisItem(select)"></span>
                                 </li>

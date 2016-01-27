@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "category")
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,9 +25,7 @@ public class Category implements Serializable {
     @JsonManagedReference
     private List<Category> children;
 
-
     @OneToMany
-    @JoinColumn(name = "id")
     private List<Product> products;
 
     public Category() {
@@ -63,7 +62,7 @@ public class Category implements Serializable {
 
     public List<Category> getChildren() {
         if (children == null) {
-            children = new ArrayList<Category>();
+            children = new ArrayList<>();
         }
         return children;
     }
@@ -80,23 +79,4 @@ public class Category implements Serializable {
         this.parent = parent;
     }
 
-//    public List<Product> getProducts() {
-//        if (product == null) {
-//            product = new ArrayList<>();
-//        }
-//        return product;
-//    }
-//
-//    public void setProducts(List<Product> product) {
-//        this.product = product == null ? new ArrayList<Product>() : product;
-//    }
-
-
-//    public Category getCategories() {
-//        return categories;
-//    }
-//
-//    public void setCategories(Category categories) {
-//        this.categories = categories;
-//    }
 }

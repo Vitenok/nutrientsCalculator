@@ -106,7 +106,7 @@ public class ProductWeightCalculatorService {
 
         for (int i = 0; i < solutions.size(); i++) {
             Map nutrients = calculateNutrientValue(products.get(i), Math.round(solutions.get(i)));
-            AmountItem amountItem = new AmountItem(products.get(i).getItemName(), Math.round(solutions.get(i)), (double) nutrients.get("Protein"), (double) nutrients.get("Fat"), (double) nutrients.get("Carb"), (double) nutrients.get("Calories"));
+            AmountItem amountItem = new AmountItem(products.get(i).getName(), Math.round(solutions.get(i)), (double) nutrients.get("Protein"), (double) nutrients.get("Fat"), (double) nutrients.get("Carb"), (double) nutrients.get("Calories"));
             amountItems.add(amountItem);
             totalActualCalories += amountItem.getTotalProtein() * 4 + amountItem.getTotalFat() * 9 + amountItem.getTotalCarb() * 4;
             totalActualProtein += amountItem.getTotalProtein();
@@ -122,7 +122,7 @@ public class ProductWeightCalculatorService {
             Collections.sort(initProds, new Comparator<Product>() {
                 @Override
                 public int compare(Product o1, Product o2) {
-                    return Double.compare(o1.getFats(), o2.getFats());
+                    return Double.compare(o1.getFat(), o2.getFat());
                 }
             });
 
@@ -161,9 +161,9 @@ public class ProductWeightCalculatorService {
     }
 
     Map<String, Double> calculateNutrientValue(Product product, double amount) {
-        double totalProtein = (double) Math.round(product.getProteins() * amount / 100);
-        double totalFat = Math.round(product.getFats() * amount / 100);
-        double totalCarb = Math.round(product.getCarbs() * amount / 100);
+        double totalProtein = (double) Math.round(product.getProtein() * amount / 100);
+        double totalFat = Math.round(product.getFat() * amount / 100);
+        double totalCarb = Math.round(product.getCarbo() * amount / 100);
 
         // for some products calories are wrong in the DB. Solution: recalculate total kCal self :(
         double totalCal = totalProtein * 4 + totalFat * 9 + totalCarb * 4;
@@ -207,9 +207,9 @@ public class ProductWeightCalculatorService {
         double carbs[] = new double[size];
 
         for (int i = 0; i < chosenProducts.size(); i++) {
-            proteins[i] = chosenProducts.get(i).getProteins();
-            fats[i] = chosenProducts.get(i).getFats();
-            carbs[i] = chosenProducts.get(i).getCarbs();
+            proteins[i] = chosenProducts.get(i).getProtein();
+            fats[i] = chosenProducts.get(i).getFat();
+            carbs[i] = chosenProducts.get(i).getCarbo();
         }
         return new Array2DRowRealMatrix(new double[][]{proteins, fats, carbs}, false);
     }

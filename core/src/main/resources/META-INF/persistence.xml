@@ -5,17 +5,17 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>com.iti.foodCalculator.entity.Product</class>
         <class>com.iti.foodCalculator.entity.Category</class>
-        <!--<class>com.iti.foodCalculator.entity.TestEntity</class>-->
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1:3306/food_composition"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="root"/>
-            <property name="hibernate.archive.autodetection" value="class"/>
             <!--
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hbm2ddl.auto" value="create"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
             -->
         </properties>
     </persistence-unit>

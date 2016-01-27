@@ -13,11 +13,9 @@ abstract class GenericDAO<T> implements Serializable {
 
     public GenericDAO(Class<T> entityClass) {
         this.entityClass = entityClass;
-
     }
 
     public void beginTransaction() {
-        em = emf.createEntityManager();
         em.getTransaction().begin();
     }
 
@@ -43,12 +41,19 @@ abstract class GenericDAO<T> implements Serializable {
     }
 
     public void joinTransaction() {
-        em = emf.createEntityManager();
         em.joinTransaction();
     }
 
     public void save(T entity) {
         em.persist(entity);
+    }
+
+    public void saveAll(List<T> entities) {
+        em.getTransaction().begin();
+        for (T entity : entities) {
+            em.persist(entity);
+        }
+        em.getTransaction().commit();
     }
 
     public void delete(T entity) {
@@ -84,6 +89,7 @@ abstract class GenericDAO<T> implements Serializable {
 
         } catch (NoResultException e) {
             System.out.println("No result found for named query: " + namedQuery);
+            e.printStackTrace();
         } catch (Exception e) {
             System.out.println("Error while running query: " + e.getMessage());
             e.printStackTrace();
