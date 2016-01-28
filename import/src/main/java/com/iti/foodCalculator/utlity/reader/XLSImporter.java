@@ -26,7 +26,7 @@ public class XLSImporter {
 
     public List<Product> readXlsFileToList() {
 
-        List<Product> productsList = new ArrayList<Product>();
+        List<Product> productsList = new ArrayList<>();
         try {
             String fileName = getClass().getClassLoader().getResource("NorwegianFoodComposition/TheNorwegianFoodCompostionTable2015.xlsx").getFile();
             FileInputStream file = new FileInputStream(new File(fileName));
@@ -36,8 +36,7 @@ public class XLSImporter {
             //Get first sheet from the workbook
             XSSFSheet sheet = workbook.getSheetAt(0);
 
-            Category root = new Category("Food", null);
-            Category parent = root;
+            Category parent = new Category("Food", null);
 
             int level = 0;
             int newLevel;
