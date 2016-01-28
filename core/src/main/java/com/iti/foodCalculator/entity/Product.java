@@ -5,12 +5,13 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "product")
 @NamedQueries(value = {
         @NamedQuery(name = Product.GET_ALL_PRODUCTS, query = "select p from Product as p"),
+        @NamedQuery(name = Product.GET__PRODUCT_BY_NAME, query = "select p from Product as p where p.name = :name")
 })
 public class Product implements Serializable {
     public static final String GET_ALL_PRODUCTS = "Product.getAllProducts";
+    public static final String GET__PRODUCT_BY_NAME = "Product.getProductByName";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
