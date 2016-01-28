@@ -6,6 +6,10 @@ function onSignIn(googleUser) {
     console.log('Name: ' + profile.getName());
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail());
+
+    var req = new XMLHttpRequest();
+    req.open("GET", "loginUser?name="+profile.getName()+"&socialNetwork=GOOGLE&token="+profile.getId());
+    req.send();
     /**
      * More - see here https://developers.google.com/identity/sign-in/web/sign-in
      */

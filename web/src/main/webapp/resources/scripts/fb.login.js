@@ -20,6 +20,9 @@ function checkLoginState() {
         if (response.status === 'connected') {
             FB.api('/me', function (response) {
                 console.log(response.name + ' (id:' + response.id + ') logged in');
+                var req = new XMLHttpRequest();
+                req.open("GET", "loginUser?name="+response.name+"&socialNetwork=FACEBOOK&token="+response.id);
+                req.send();
                 /**
                  * picture - GET /v2.5/{user-id}/picture HTTP/1.1 against Host: graph.facebook.com
                  */
