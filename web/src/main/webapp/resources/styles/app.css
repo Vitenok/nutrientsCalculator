@@ -34,7 +34,7 @@
 }
 
 .table-fixed-header tbody {
-    height: 120px;
+    height: 220px;
     overflow-y: auto;
 }
 

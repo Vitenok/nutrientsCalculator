@@ -13,9 +13,9 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
                 $scope.isValidCalorieInput = false;
                 $scope.isDisabledButton = true;
 
-                $scope.proteinsIntske = 0.0;
-                $scope.fatsIntske = 0.0;
-                $scope.carbsIntske = 0.0;
+                $scope.proteinsIntake = 0.0;
+                $scope.fatsIntake = 0.0;
+                $scope.carbsIntake = 0.0;
 
                 $scope.showMinimumCalorieAlert = true;
             } else {
@@ -27,9 +27,9 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
                 }
             }
         } else {
-            $scope.proteinsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
-            $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
-            $scope.carbsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
+            $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
+            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+            $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
         }
     }, true);
 
@@ -87,8 +87,8 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
             $scope.proteinRange = $scope.position.firstKnob;
             $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
 
-            $scope.proteinsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
-            $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+            $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
+            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
         }
 
     }, true);
@@ -98,15 +98,15 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
             $scope.carbohydrateRange = $scope.position.ceiling - $scope.position.secondKnob;
             $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
 
-            $scope.carbsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
-            $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+            $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
+            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
         }
     }, true);
 
 
-    $scope.proteinsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
-    $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
-    $scope.carbsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
+    $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
+    $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+    $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
 
     // Calculate menu
     $scope.calculateMenu = function () {
@@ -132,9 +132,9 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
                     supplementItems: $scope.supplementItems,
                     dailyMacroelementsInput: {
                         kcal: $scope.intake,
-                        protein: $scope.proteinsIntske,
-                        carb: $scope.carbsIntske,
-                        fat: $scope.fatsIntske
+                        protein: $scope.proteinsIntake,
+                        carb: $scope.carbsIntake,
+                        fat: $scope.fatsIntake
                     }
                 });
 
