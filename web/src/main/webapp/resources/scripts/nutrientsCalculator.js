@@ -8,14 +8,28 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
     $scope.isValidCalorieInput = true;
 
     $scope.$watch('intake', function (newVal, oldVal) {
-        if (newVal === undefined || newVal == null || newVal < 800) {
-            $scope.isValidCalorieInput = false;
-            $scope.isDisabledButton = true;
-        } else {
-            if ($scope.selectedArr !== undefined && $scope.selectedArr.length > 0) {
-                $scope.isDisabledButton = false;
-                $scope.isValidCalorieInput = true;
+        if (newVal !== undefined || newVal !== null) {
+            if (newVal < 40) {
+                $scope.isValidCalorieInput = false;
+                $scope.isDisabledButton = true;
+
+                $scope.proteinsIntske = 0.0;
+                $scope.fatsIntske = 0.0;
+                $scope.carbsIntske = 0.0;
+
+                $scope.showMinimumCalorieAlert = true;
+            } else {
+                $scope.showMinimumCalorieAlert = false;
+
+                if ($scope.selectedArr !== undefined && $scope.selectedArr.length > 0) {
+                    $scope.isDisabledButton = false;
+                    $scope.isValidCalorieInput = true;
+                }
             }
+        } else {
+            $scope.proteinsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
+            $scope.fatsIntske = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
+            $scope.carbsIntske = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
         }
     }, true);
 

@@ -75,474 +75,480 @@
 </head>
 <body>
 <div class="">
-    <!-- Navigation
-    ==========================================-->
-    <nav id="tf-menu" class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Spirit</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#tf-home" class="page-scroll">Home</a></li>
-                    <li><a href="#tf-about" class="page-scroll">Product</a></li>
-                    <li><a href="#tf-team" class="page-scroll">Team</a></li>
-                    <li><a href="#tf-services" class="page-scroll">Personal data</a></li>
-                    <li><a href="#tf-works" class="page-scroll">Advices</a></li>
-                    <!--<li><a href="#tf-testimonials" class="page-scroll">About us</a></li>-->
-                    <li><a href="#tf-contact" class="page-scroll">Contact</a></li>
-                    <li><fb:login-button scope="public_profile" onlogin="checkLoginState();" auto_logout_link="true"/></li>
-                    <li><div id="gLogin" class="g-signin2" data-onsuccess="onSignIn" /></li>
-                    <li><div><a id="gLogout" href="#" onclick="signOut();">Sign out</a></div></li>
-                    <!--
-                    -->
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
-
-    <div data-ng-controller="nutrientsCalcCtrl">
-        <!-- Home Page
-        ==========================================-->
-        <div id="tf-home" class="text-center">
-            <div class="overlay">
-                <div class="content">
-                    <h1>Welcome to <strong><span class="color">Spirit</span></strong></h1>
-
-                    <p class="lead">We will help <strong>you</strong> achieve <strong>your goals</strong></p>
-                    <a href="#tf-about" class="fa fa-angle-down page-scroll"></a>
-                </div>
-            </div>
+<!-- Navigation
+==========================================-->
+<nav id="tf-menu" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Spirit</a>
         </div>
 
-        <!-- About Us Page
-        ==========================================-->
-        <div id="tf-about" class="text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="about-text">
-                            <div class="section-title center">
-                                <h2>Some words about <strong>our product</strong></h2>
-
-                                <div class="line">
-                                    <hr>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <p class="intro">How to use calculator</p>
-
-                            <div class="space"></div>
-                            <a href="#tf-team" class="btn tf-btn btn-default page-scroll"> Start</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#tf-home" class="page-scroll">Home</a></li>
+                <li><a href="#tf-about" class="page-scroll">Product</a></li>
+                <li><a href="#tf-team" class="page-scroll">Team</a></li>
+                <li><a href="#tf-services" class="page-scroll">Personal data</a></li>
+                <li><a href="#tf-works" class="page-scroll">Advices</a></li>
+                <!--<li><a href="#tf-testimonials" class="page-scroll">About us</a></li>-->
+                <li><a href="#tf-contact" class="page-scroll">Contact</a></li>
+                <li>
+                    <fb:login-button scope="public_profile" onlogin="checkLoginState();" auto_logout_link="true"/>
+                </li>
+                <li>
+                    <div id="gLogin" class="g-signin2" data-onsuccess="onSignIn"/>
+                </li>
+                <li>
+                    <div><a id="gLogout" href="#" onclick="signOut();">Sign out</a></div>
+                </li>
+                <!--
+                -->
+            </ul>
         </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
 
-        <!-- Intake Page
-        ==========================================-->
-        <div id="tf-team" class="text-center">
-            <div class="overlay">
-                <div class="container">
+<div data-ng-controller="nutrientsCalcCtrl">
+<!-- Home Page
+==========================================-->
+<div id="tf-home" class="text-center">
+    <div class="overlay">
+        <div class="content">
+            <h1>Welcome to <strong><span class="color">Spirit</span></strong></h1>
+
+            <p class="lead">We will help <strong>you</strong> achieve <strong>your goals</strong></p>
+            <a href="#tf-about" class="fa fa-angle-down page-scroll"></a>
+        </div>
+    </div>
+</div>
+
+<!-- About Us Page
+==========================================-->
+<div id="tf-about" class="text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="about-text">
                     <div class="section-title center">
-                        <h2>Type your data</h2>
+                        <h2>Some words about <strong>our product</strong></h2>
 
                         <div class="line">
                             <hr>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
+                    <p class="intro">How to use calculator</p>
 
-                    <div class="row">
-                        <div class="col-md-8 col-md-offset-2">
-
-                            <form class="form-horizontal" name="caloriesForm">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : caloriesForm.caloriesInput.$invalid }">
-                                    <div class="col-xs-12 col-md-2 col-md-offset-5">
-                                        Calories: <input type="number" name="caloriesInput" class="form-control"
-                                                         placeholder="Type your daily calories intake" ng-model="intake"
-                                                         min="800"
-                                                         required>
-                                    </div>
-                                </div>
-                            </form>
-                            <slider floor="0" ceiling="100" ng-model-low="position.firstKnob"
-                                    ng-model-high="position.secondKnob">
-                            </slider>
-                            <div class="col-xs-4">
-                                <p>Protein</p>
-
-                                <p>{{proteinRange}}%</p>
-
-                                <p>{{proteinsIntske}}gr</p>
-                            </div>
-                            <div class="col-xs-4">
-                                <p>Fat</p>
-
-                                <p>{{fatRange}}%</p>
-
-                                <p>{{fatsIntske}}gr</p></div>
-                            <div class="col-xs-4">
-                                <p>Carbohydrate</p>
-
-                                <p>{{carbohydrateRange}}%</p>
-
-                                <p>{{carbsIntske}}gr</p>
-                            </div>
-
-
-                            <div class="alert alert-danger" ng-show="caloriesForm.caloriesInput.$error.required">
-                                This is required field
-                            </div>
-
-                            <div class="alert alert-danger" ng-show="caloriesForm.caloriesInput.$error.min">
-                                This is unhealthy amount of calories. We set minimum to 800 cKal, but you probably
-                                shouldn't cut
-                                your calorie intake even that much.
-                            </div>
-                            <div class="space"></div>
-                            <a href="#tf-services" class="btn tf-btn btn-default page-scroll"> Next</a>
-                        </div>
-                    </div>
+                    <div class="space"></div>
+                    <a href="#tf-team" class="btn tf-btn btn-default page-scroll"> Start</a>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Supplements Section
-        ==========================================-->
-        <!--<div id="tf-works" class="text-center">-->
-        <!--<div class="container"> <!-- Container -->-->
-        <!--<div class="section-title text-center center">-->
-        <!--<h2>Supplements</h2>-->
+<!-- Intake Page
+==========================================-->
+<div id="tf-team" class="text-center">
+    <div class="overlay">
+        <div class="container">
+            <div class="section-title center">
+                <h2>Type your data</h2>
 
-        <!--<div class="line">-->
-        <!--<hr>-->
-        <!--</div>-->
-        <!--<div class="clearfix"></div>-->
-        <!--<small><em>Some input for supplement</em></small>-->
-        <!--</div>-->
-        <!---->
+                <div class="line">
+                    <hr>
+                </div>
+            </div>
 
-        <!--<div class="space"></div>-->
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
 
-        <!--</div>-->
+                    <form class="form-horizontal" name="caloriesForm">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : caloriesForm.caloriesInput.$invalid }">
+                            <div class="col-xs-12 col-md-2 col-md-offset-5">
+                                Calories: <input type="number" name="caloriesInput" class="form-control"
+                                                 placeholder="Type your daily calories intake" ng-model="intake"
+                                                 min="0"
+                                                 required>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="alert alert-danger" ng-show="caloriesForm.caloriesInput.$error.required">
+                        This is required field
+                    </div>
+
+                    <div class="alert alert-danger" ng-show="showMinimumCalorieAlert">
+                        Please enter minimum 40 kCal
+                    </div>
+
+                    <slider floor="0" ceiling="100" ng-model-low="position.firstKnob"
+                            ng-model-high="position.secondKnob">
+                    </slider>
+                    <div class="col-xs-4">
+                        <p>Protein</p>
+
+                        <p>{{proteinRange}}%</p>
+
+                        <p>{{proteinsIntske}}gr</p>
+                    </div>
+                    <div class="col-xs-4">
+                        <p>Fat</p>
+
+                        <p>{{fatRange}}%</p>
+
+                        <p>{{fatsIntske}}gr</p></div>
+                    <div class="col-xs-4">
+                        <p>Carbohydrate</p>
+
+                        <p>{{carbohydrateRange}}%</p>
+
+                        <p>{{carbsIntske}}gr</p>
+                    </div>
 
 
-        <!-- Food input Section
-        ==========================================-->
-        <div id="tf-services" class="text-center">
-            <div class="container">
+                    <div class="space"></div>
+                    <a href="#tf-services" class="btn tf-btn btn-default page-scroll"> Next</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Supplements Section
+==========================================-->
+<!--<div id="tf-works" class="text-center">-->
+<!--<div class="container"> <!-- Container -->-->
+<!--<div class="section-title text-center center">-->
+<!--<h2>Supplements</h2>-->
+
+<!--<div class="line">-->
+<!--<hr>-->
+<!--</div>-->
+<!--<div class="clearfix"></div>-->
+<!--<small><em>Some input for supplement</em></small>-->
+<!--</div>-->
+<!---->
+
+<!--<div class="space"></div>-->
+
+<!--</div>-->
+
+
+<!-- Food input Section
+==========================================-->
+<div id="tf-services" class="text-center">
+    <div class="container">
+        <div class="section-title center">
+            <h2>Choose products you would like to eat</h2>
+
+            <div class="line">
+                <hr>
+            </div>
+            <div class="clearfix"></div>
+
+            <small><em>Some advises for wise product choice</em></small>
+        </div>
+        <h3 class="intro">Are you going to use supplements?</h3>
+        <a class="btn tf-btn btn-default page-scroll" ng-click="suppl = true"> Yes </a>
+        <a href="#food-list" class="btn tf-btn btn-gray page-scroll" ng-click="clearAllSupplements()"> No </a>
+
+        <div class="space"></div>
+        <div ng-show="suppl" class="col-md-6 col-md-offset-3">
+            <form name="supplementsform"
+                  ng-submit="supplementsform.$valid && addSupplementToTheList(supplementsform)">
+                <fieldset>
+                    <div class="">
+                        <div class="form-group">
+                            <label for="supplement-name">Supplement name</label>
+                            <input type="text" class="form-control" id="supplement-name"
+                                   placeholder="Enter supplement name" required ng-model="sName">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="number" class="form-control" id="calories"
+                                   required ng-model="sCalories">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="proteins">Proteins</label>
+                            <input type="number" class="form-control" id="proteins"
+                                   required ng-model="sProteins">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="fats">Fats</label>
+                            <input type="number" class="form-control" id="fats"
+                                   required ng-model="sFats">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="carbs">Carbs</label>
+                            <input type="number" class="form-control" id="carbs"
+                                   required ng-model="sCarbs">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="sWeight">Weight</label>
+                            <input type="number" class="form-control" id="sWeight"
+                                   required ng-model="sWeight">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="add-suppl" class="btn tf-btn btn-default small" type="submit">
+                            Add
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+            <div class="space"></div>
+            <div data-ng-repeat="supplement in supplementItems">
+                Supplements: {{supplement.name}}
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="supplement in supplementItems">
+                    {{supplement.name}}
+                    {{supplement.protein}} g
+                    {{supplement.fat}} g
+                    {{supplement.carb}} g
+                    {{supplement.kCal}} kCal
+                    {{supplement.weight}} grams
+                            <span class="glyphicon glyphicon-trash pull-right "
+                                  ng-click="removeThisItem(supplement)"></span>
+                </li>
+            </ul>
+
+        </div>
+        <div class="space"></div>
+        <div class="col-md-8 col-md-offset-2" id="food-list">
+            <div class="row">
+                <div>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" placeholder="Search food item..."
+                                       ng-model="search">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="space"></div>
+            <div class="row">
+                <div class="" data-ng-init="getProductsDataFromServer()">
+                    <table class="table table-hover table-fixed-header  table-small-font">
+                        <thead>
+                        <th class="col-md-3">Product name</th>
+                        <th class="col-md-2">Proteins</th>
+                        <th class="col-md-2">Fats</th>
+                        <th class="col-md-2">Carbs</th>
+                        <th class="col-md-2">Calories</th>
+                        <th class="col-md-1"></th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="product in products | filter:search">
+                            <td class="col-md-3">{{product.name}}</td>
+                            <td class="col-md-2">{{product.protein}}</td>
+                            <td class="col-md-2">{{product.fat}}</td>
+                            <td class="col-md-2">{{product.carbo}}</td>
+                            <td class="col-md-2">{{product.kCal}}</td>
+                            <td class="col-md-1">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="product.checked"
+                                               ng-change="getSelected()">
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <table>
+                    <tbody>
+                    <tr class="full-width">
+                        <td class="col-md-11 left-aligned"><h5>You've selected:</h5></td>
+                        <td class="col-md-1">
+                            <button type="button" class="btn btn-default" ng-show="!isDisabledButton"
+                                    ng-click="clearSelection()">Clear all
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="space"></div>
+                <div>
+                    <div ng-show="isDisabledButton">
+                        You didn't select anything yet
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.name}}<span
+                                class="glyphicon glyphicon-trash pull-right "
+                                ng-click="removeThisItem(select)"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <button id="calculate-btn" type="button" class="btn tf-btn btn-red centered page-scroll"
+                        ng-class="{disabled: isDisabledButton}"
+                        ng-click="calculateMenu()" ng-disabled="isDisabledButton" ng-model="isDisabledButton">
+                    Calculate
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Result Section
+==========================================-->
+<div id="tf-clients" class="text-center">
+    <div class="overlay">
+        <div class="container">
+
+            <div class="section-title center">
+                <h2>Your daily menu looks like:</h2>
+
+                <div class="line">
+                    <hr>
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-2 transparent-background">
+                <div ng-show="isClicked" class="panel panel-default transparent-background">
+                    <div class="panel-body">
+                        <table class="table table-small-font transparent-background">
+                            <thead>
+                            <th class="col-md-7">Name</th>
+                            <th class="col-md-1">Amount</th>
+                            <th class="col-md-1">Protein</th>
+                            <th class="col-md-1">Fat</th>
+                            <th class="col-md-1">Carb</th>
+                            <th class="col-md-1">kCal</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="menuItem in menu">
+                                <td class="col-md-7">{{menuItem.name}}:</td>
+                                <td class="col-md-1"><b>{{menuItem.amount}} gr</b></td>
+                                <td class="col-md-1">{{menuItem.totalProtein}} gr</td>
+                                <td class="col-md-1">{{menuItem.totalFat}} gr</td>
+                                <td class="col-md-1">{{menuItem.totalCarb}} gr</td>
+                                <td class="col-md-1">{{menuItem.totalCalories}} kCal</td>
+                            </tr>
+                            <tr class=" bold">
+                                <td class="col-md-7">Total:</td>
+                                <td class="col-md-1"></td>
+                                <td class="col-md-1"> {{totals.protein}} gr</td>
+                                <td class="col-md-1"> {{totals.fat}} gr</td>
+                                <td class="col-md-1">{{totals.carbs}} gr</td>
+                                <td class="col-md-1"> {{totals.kCal}} kCal</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- HERE -->
+<!-- Testimonials Section
+==========================================-->
+<!--<div id="tf-testimonials" class="text-center">-->
+<!--<div class="overlay">-->
+<!--<div class="container">-->
+<!--<div class="section-title center">-->
+<!--<h2>About<strong> us</strong></h2>-->
+
+<!--<div class="line">-->
+<!--<hr>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="col-md-8 col-md-offset-2">-->
+
+<!--<div>-->
+<!--Here we are-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!-- Contact Section
+==========================================-->
+<div id="tf-contact" class="text-center">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+
                 <div class="section-title center">
-                    <h2>Choose products you would like to eat</h2>
+                    <h2>Feel free to <strong>contact us</strong></h2>
 
                     <div class="line">
                         <hr>
                     </div>
                     <div class="clearfix"></div>
-
-                    <small><em>Some advises for wise product choice</em></small>
+                    <small><em>
+                        Please contuct us if you have issues with using calculator or you have suggestions about
+                        improvements.</em></small>
                 </div>
-                <h3 class="intro">Are you going to use supplements?</h3>
-                <a class="btn tf-btn btn-default page-scroll" ng-click="suppl = true"> Yes </a>
-                <a href="#food-list" class="btn tf-btn btn-gray page-scroll" ng-click="clearAllSupplements()"> No </a>
 
-                <div class="space"></div>
-                <div ng-show="suppl" class="col-md-6 col-md-offset-3">
-                    <form name="supplementsform"
-                          ng-submit="supplementsform.$valid && addSupplementToTheList(supplementsform)">
-                        <fieldset>
-                            <div class="">
-                                <div class="form-group">
-                                    <label for="supplement-name">Supplement name</label>
-                                    <input type="text" class="form-control" id="supplement-name"
-                                           placeholder="Enter supplement name" required ng-model="sName">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="calories">Calories</label>
-                                    <input type="number" class="form-control" id="calories"
-                                           required ng-model="sCalories">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="proteins">Proteins</label>
-                                    <input type="number" class="form-control" id="proteins"
-                                           required ng-model="sProteins">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="fats">Fats</label>
-                                    <input type="number" class="form-control" id="fats"
-                                           required ng-model="sFats">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="carbs">Carbs</label>
-                                    <input type="number" class="form-control" id="carbs"
-                                           required ng-model="sCarbs">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="sWeight">Weight</label>
-                                    <input type="number" class="form-control" id="sWeight"
-                                           required ng-model="sWeight">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <button id="add-suppl" class="btn tf-btn btn-default small" type="submit">
-                                    Add
-                                </button>
-                            </div>
-                        </fieldset>
-                    </form>
-                    <div class="space"></div>
-                    <div data-ng-repeat="supplement in supplementItems">
-                        Supplements: {{supplement.name}}
-                    </div>
-
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="supplement in supplementItems">
-                            {{supplement.name}}
-                            {{supplement.protein}} g
-                            {{supplement.fat}} g
-                            {{supplement.carb}} g
-                            {{supplement.kCal}} kCal
-                            {{supplement.weight}} grams
-                            <span class="glyphicon glyphicon-trash pull-right "
-                                  ng-click="removeThisItem(supplement)"></span>
-                        </li>
-                    </ul>
-
-                </div>
-                <div class="space"></div>
-                <div class="col-md-8 col-md-offset-2" id="food-list">
+                <form>
                     <div class="row">
-                        <div>
-                            <form class="form-horizontal">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <input type="text" class="form-control" placeholder="Search food item..."
-                                               ng-model="search">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="space"></div>
-                    <div class="row">
-                        <div class="" data-ng-init="getProductsDataFromServer()">
-                            <table class="table table-hover table-fixed-header  table-small-font">
-                                <thead>
-                                <th class="col-md-3">Product name</th>
-                                <th class="col-md-2">Proteins</th>
-                                <th class="col-md-2">Fats</th>
-                                <th class="col-md-2">Carbs</th>
-                                <th class="col-md-2">Calories</th>
-                                <th class="col-md-1"></th>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="product in products | filter:search">
-                                    <td class="col-md-3">{{product.name}}</td>
-                                    <td class="col-md-2">{{product.protein}}</td>
-                                    <td class="col-md-2">{{product.fat}}</td>
-                                    <td class="col-md-2">{{product.carbo}}</td>
-                                    <td class="col-md-2">{{product.kCal}}</td>
-                                    <td class="col-md-1">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" ng-model="product.checked"
-                                                       ng-change="getSelected()">
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <table>
-                            <tbody>
-                            <tr class="full-width">
-                                <td class="col-md-11 left-aligned"><h5>You've selected:</h5></td>
-                                <td class="col-md-1">
-                                    <button type="button" class="btn btn-default" ng-show="!isDisabledButton"
-                                            ng-click="clearSelection()">Clear all
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="space"></div>
-                        <div>
-                            <div ng-show="isDisabledButton">
-                                You didn't select anything yet
-                            </div>
-                            <ul class="list-group">
-                                <li class="list-group-item" ng-repeat="select in selectedArr"> {{select.name}}<span
-                                        class="glyphicon glyphicon-trash pull-right "
-                                        ng-click="removeThisItem(select)"></span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <button id="calculate-btn" type="button" class="btn tf-btn btn-red centered page-scroll"
-                                ng-class="{disabled: isDisabledButton}"
-                                ng-click="calculateMenu()" ng-disabled="isDisabledButton" ng-model="isDisabledButton">
-                            Calculate
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Result Section
-        ==========================================-->
-        <div id="tf-clients" class="text-center">
-            <div class="overlay">
-                <div class="container">
-
-                    <div class="section-title center">
-                        <h2>Your daily menu looks like:</h2>
-
-                        <div class="line">
-                            <hr>
-                        </div>
-                    </div>
-                    <div class="col-md-8 col-md-offset-2 transparent-background">
-                        <div ng-show="isClicked" class="panel panel-default transparent-background">
-                            <div class="panel-body">
-                                <table class="table table-small-font transparent-background">
-                                    <thead>
-                                    <th class="col-md-7">Name</th>
-                                    <th class="col-md-1">Amount</th>
-                                    <th class="col-md-1">Protein</th>
-                                    <th class="col-md-1">Fat</th>
-                                    <th class="col-md-1">Carb</th>
-                                    <th class="col-md-1">kCal</th>
-                                    </thead>
-                                    <tbody>
-                                    <tr data-ng-repeat="menuItem in menu">
-                                        <td class="col-md-7">{{menuItem.name}}:</td>
-                                        <td class="col-md-1"><b>{{menuItem.amount}} gr</b></td>
-                                        <td class="col-md-1">{{menuItem.totalProtein}} gr</td>
-                                        <td class="col-md-1">{{menuItem.totalFat}} gr</td>
-                                        <td class="col-md-1">{{menuItem.totalCarb}} gr</td>
-                                        <td class="col-md-1">{{menuItem.totalCalories}} kCal</td>
-                                    </tr>
-                                    <tr class=" bold">
-                                        <td class="col-md-7">Total:</td>
-                                        <td class="col-md-1"></td>
-                                        <td class="col-md-1"> {{totals.protein}} gr</td>
-                                        <td class="col-md-1"> {{totals.fat}} gr</td>
-                                        <td class="col-md-1">{{totals.carbs}} gr</td>
-                                        <td class="col-md-1"> {{totals.kCal}} kCal</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- HERE -->
-        <!-- Testimonials Section
-        ==========================================-->
-        <!--<div id="tf-testimonials" class="text-center">-->
-        <!--<div class="overlay">-->
-        <!--<div class="container">-->
-        <!--<div class="section-title center">-->
-        <!--<h2>About<strong> us</strong></h2>-->
-
-        <!--<div class="line">-->
-        <!--<hr>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-        <!--<div class="col-md-8 col-md-offset-2">-->
-
-        <!--<div>-->
-        <!--Here we are-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-
-        <!-- Contact Section
-        ==========================================-->
-        <div id="tf-contact" class="text-center">
-            <div class="container">
-
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-
-                        <div class="section-title center">
-                            <h2>Feel free to <strong>contact us</strong></h2>
-
-                            <div class="line">
-                                <hr>
-                            </div>
-                            <div class="clearfix"></div>
-                            <small><em>
-                                Please contuct us if you have issues with using calculator or you have suggestions about
-                                improvements.</em></small>
-                        </div>
-
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1"
-                                               placeholder="Enter email">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Password</label>
-                                        <input type="password" class="form-control" id="exampleInputPassword1"
-                                               placeholder="Password">
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Message</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1"
+                                       placeholder="Enter email">
                             </div>
-
-                            <button type="submit" class="btn tf-btn btn-default">Submit</button>
-                        </form>
-
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                       placeholder="Password">
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Message</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn tf-btn btn-default">Submit</button>
+                </form>
 
             </div>
         </div>
+
     </div>
+</div>
+</div>
 </div>
 <nav id="footer">
     <div class="container">
