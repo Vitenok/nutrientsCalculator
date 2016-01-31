@@ -99,3 +99,7 @@ select {
     padding: 7px 20px !important;
     margin-top: 20px;
 }
+
+.not-rounded {
+    border-radius: 0;
+}
