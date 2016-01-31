@@ -88,18 +88,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">Spirit</a>
+            <a class="navbar-brand" href="#home">Spirit</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#tf-home" class="page-scroll">Home</a></li>
-                <li><a href="#tf-about" class="page-scroll">Product</a></li>
-                <li><a href="#tf-team" class="page-scroll">Team</a></li>
-                <li><a href="#tf-services" class="page-scroll">Personal data</a></li>
-                <li><a href="#tf-works" class="page-scroll">Advices</a></li>
-                <!--<li><a href="#tf-testimonials" class="page-scroll">About us</a></li>-->
+                <li><a href="#home" class="page-scroll">Home</a></li>
+                <li><a href="#about" class="page-scroll">Product</a></li>
+                <li><a href="#personal-data" class="page-scroll">Personal data</a></li>
+                <li><a href="#products-search" class="page-scroll">Products search</a></li>
                 <li>
                     <fb:login-button scope="public_profile" onlogin="checkLoginState();" auto_logout_link="true"/>
                 </li>
@@ -121,20 +119,20 @@
 <div data-ng-controller="nutrientsCalcCtrl">
 <!-- Home Page
 ==========================================-->
-<div id="tf-home" class="text-center">
+<div id="home" class="text-center">
     <div class="overlay">
         <div class="content">
             <h1>Welcome to <strong><span class="color">Spirit</span></strong></h1>
 
             <p class="lead">We will help <strong>you</strong> achieve <strong>your goals</strong></p>
-            <a href="#tf-about" class="fa fa-angle-down page-scroll"></a>
+            <a href="#about" class="fa fa-angle-down page-scroll"></a>
         </div>
     </div>
 </div>
 
 <!-- About Us Page
 ==========================================-->
-<div id="tf-about" class="text-center">
+<div id="about" class="text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -150,7 +148,7 @@
                     <p class="intro">How to use calculator</p>
 
                     <div class="space"></div>
-                    <a href="#tf-team" class="btn tf-btn btn-default page-scroll"> Start</a>
+                    <a href="#personal-data" class="btn tf-btn btn-default page-scroll"> Start</a>
                 </div>
             </div>
         </div>
@@ -159,11 +157,11 @@
 
 <!-- Intake Page
 ==========================================-->
-<div id="tf-team" class="text-center">
+<div id="personal-data" class="text-center">
     <div class="overlay">
         <div class="container">
             <div class="section-title center">
-                <h2>Type your data</h2>
+                <h2>Personal data</h2>
 
                 <div class="line">
                     <hr>
@@ -219,36 +217,16 @@
 
 
                     <div class="space"></div>
-                    <a href="#tf-services" class="btn tf-btn btn-default page-scroll"> Next</a>
+                    <a href="#products-search" class="btn tf-btn btn-default page-scroll"> Next</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Supplements Section
-==========================================-->
-<!--<div id="tf-works" class="text-center">-->
-<!--<div class="container"> <!-- Container -->-->
-<!--<div class="section-title text-center center">-->
-<!--<h2>Supplements</h2>-->
-
-<!--<div class="line">-->
-<!--<hr>-->
-<!--</div>-->
-<!--<div class="clearfix"></div>-->
-<!--<small><em>Some input for supplement</em></small>-->
-<!--</div>-->
-<!---->
-
-<!--<div class="space"></div>-->
-
-<!--</div>-->
-
-
 <!-- Food input Section
 ==========================================-->
-<div id="tf-services" class="text-center">
+<div id="products-search" class="text-center">
     <div class="container">
         <div class="section-title center">
             <h2>Choose products you would like to eat</h2>
@@ -422,7 +400,7 @@
 
 <!-- Result Section
 ==========================================-->
-<div id="tf-clients" class="text-center">
+<div id="tf-clients" class="text-center" ng-show="isClicked">
     <div class="overlay">
         <div class="container">
 
@@ -471,32 +449,6 @@
         </div>
     </div>
 </div>
-
-<!-- HERE -->
-<!-- Testimonials Section
-==========================================-->
-<!--<div id="tf-testimonials" class="text-center">-->
-<!--<div class="overlay">-->
-<!--<div class="container">-->
-<!--<div class="section-title center">-->
-<!--<h2>About<strong> us</strong></h2>-->
-
-<!--<div class="line">-->
-<!--<hr>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="row">-->
-<!--<div class="col-md-8 col-md-offset-2">-->
-
-<!--<div>-->
-<!--Here we are-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
 
 </div>
 </div>

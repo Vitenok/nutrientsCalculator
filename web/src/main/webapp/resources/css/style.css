@@ -147,7 +147,7 @@ ul, ol {
 }
 
 /* Home Style */
-#tf-home {
+#home {
     background: url(../img/01.jpg);
     background-size: cover;
     background-position: center;
@@ -156,7 +156,7 @@ ul, ol {
     color: #cfcfcf;
 }
 
-#tf-home .overlay {
+#home .overlay {
     background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.73) 17%, rgba(0, 0, 0, 0.66) 35%, rgba(0, 0, 0, 0.55) 62%, rgba(0, 0, 0, 0.4) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.8)), color-stop(17%, rgba(0, 0, 0, 0.73)), color-stop(35%, rgba(0, 0, 0, 0.66)), color-stop(62%, rgba(0, 0, 0, 0.55)), color-stop(100%, rgba(0, 0, 0, 0.4))); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.73) 17%, rgba(0, 0, 0, 0.66) 35%, rgba(0, 0, 0, 0.55) 62%, rgba(0, 0, 0, 0.4) 100%); /* Chrome10+,Safari5.1+ */
@@ -168,7 +168,7 @@ ul, ol {
     background-attachment: fixed;
 }
 
-#tf-home p.lead {
+#home p.lead {
     color: #e3e3e3;
 }
 
@@ -198,7 +198,7 @@ a.fa.fa-angle-down:hover {
 }
 
 /* About Section */
-#tf-about {
+#about {
     /*height: 95vh;*/
     padding: 80px 0;
 }
@@ -219,7 +219,7 @@ ul.about-list li span {
 }
 
 /* Team Section */
-#tf-team {
+#personal-data {
     background: url(../img/03.jpg);
     background-size: cover;
     background-position: center;
@@ -228,7 +228,7 @@ ul.about-list li span {
     color: #ffffff;
 }
 
-#tf-team .overlay {
+#personal-data .overlay {
     background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.73) 17%, rgba(0, 0, 0, 0.66) 35%, rgba(0, 0, 0, 0.55) 62%, rgba(0, 0, 0, 0.4) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.8)), color-stop(17%, rgba(0, 0, 0, 0.73)), color-stop(35%, rgba(0, 0, 0, 0.66)), color-stop(62%, rgba(0, 0, 0, 0.55)), color-stop(100%, rgba(0, 0, 0, 0.4))); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.73) 17%, rgba(0, 0, 0, 0.66) 35%, rgba(0, 0, 0, 0.55) 62%, rgba(0, 0, 0, 0.4) 100%); /* Chrome10+,Safari5.1+ */
@@ -286,16 +286,16 @@ img.img-circle.team-img {
     transition: all 0.5s;
 }
 
-#tf-team .item .thumbnail:hover > img.img-circle.team-img {
+#personal-data .item .thumbnail:hover > img.img-circle.team-img {
     border: 4px solid #FCAC45;
 }
 
-#tf-team .thumbnail {
+#personal-data .thumbnail {
     background: transparent;
     border: 0;
 }
 
-#tf-team .thumbnail .caption {
+#personal-data .thumbnail .caption {
     padding: 9px;
     color: #F2F2F2;
 }
@@ -326,7 +326,7 @@ img.img-circle.team-img {
 }
 
 /* Services Section */
-#tf-services {
+#products-search {
     padding: 80px 0;
 }
 
@@ -334,7 +334,7 @@ img.img-circle.team-img {
     margin-top: 40px;
 }
 
-#tf-services i.fa {
+#products-search i.fa {
     font-size: 40px;
     border: 4px solid #FCAC45;
     width: 100px;
@@ -345,12 +345,12 @@ img.img-circle.team-img {
     transition: all 0.5s;
 }
 
-#tf-services i.fa.fa-mobile {
+#products-search i.fa.fa-mobile {
     font-size: 50px;
     padding: 20px 25px;
 }
 
-#tf-services .service:hover > i.fa {
+#products-search .service:hover > i.fa {
     background: #FCAC45;
     color: #ffffff;
 }
