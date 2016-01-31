@@ -35,13 +35,17 @@ public class SimpleProductWeightCalculatorServiceTest {
         }});
         Product restriction = new Product("", 0, 1200*0.4/4, 1200*0.2/9, 1200*0.4/4);
         Map<Product, Double> productByWeight = service.calculateWeightOfProducts(products, restriction);
+        Map<Product, Double> productByWeightByNNLS = service.calculateWeightOfProductsWithNNLS(products, restriction);
 
         double calories = 0;
+        double caloriesNNLS = 0;
         for (Product p : productByWeight.keySet()) {
-            System.out.println(p.getName() + " : " + productByWeight.get(p));
+            System.out.println(p.getName() + " : " + productByWeight.get(p) + " : " + productByWeightByNNLS.get(p));
             calories=calories+(p.getProtein()*4+p.getFat()*9+p.getCarbo()*4)*(productByWeight.get(p)/100);
+            caloriesNNLS=caloriesNNLS+(p.getProtein()*4+p.getFat()*9+p.getCarbo()*4)*(productByWeightByNNLS.get(p)/100);
         }
         System.out.println("Total calories: " + calories);
+        System.out.println("Total caloriesNNLS: " + caloriesNNLS);
     }
 
     public List<Product> findProductsByName(List<String> names) {
