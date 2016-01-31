@@ -241,4 +241,19 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
             $scope.isDisabledButton = true;
         }
     }, true);
+
+    // basal metabolic rate (BMR)
+    $scope.calculateBMR = function (sex, age, weight, height) {
+        if (sex === "female") {
+            $scope.BMR = 10 * weight + 6.25 * height - 5 * age - 161;
+        }
+        if (sex === "male") {
+            $scope.BMR = 10 * weight + 6.25 * height - 5 * age + 5;
+        }
+    };
+
+    // total daily energy expenditure (TDEE)
+    $scope.calculateTDEE = function(BMR, activityCoefficient){
+        $scope.TDEE = BMR * activityCoefficient;
+    }
 });
