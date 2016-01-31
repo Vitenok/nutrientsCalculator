@@ -7,40 +7,6 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
     $scope.intake = 1200;
     $scope.isValidCalorieInput = true;
 
-    $scope.$watch('intake', function (newVal, oldVal) {
-        if (newVal !== undefined || newVal !== null) {
-            if (newVal < 40) {
-                $scope.isValidCalorieInput = false;
-                $scope.isDisabledButton = true;
-
-                $scope.proteinsIntake = 0.0;
-                $scope.fatsIntake = 0.0;
-                $scope.carbsIntake = 0.0;
-
-                $scope.showMinimumCalorieAlert = true;
-            } else {
-                $scope.showMinimumCalorieAlert = false;
-
-                if ($scope.selectedArr !== undefined && $scope.selectedArr.length > 0) {
-                    $scope.isDisabledButton = false;
-                    $scope.isValidCalorieInput = true;
-                }
-            }
-        } else {
-            $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
-            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
-            $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
-        }
-    }, true);
-
-    $scope.$watch('selectedArr', function (newVal, oldVal) {
-        if ($scope.selectedArr !== undefined && $scope.isValidCalorieInput && $scope.selectedArr.length > 0) {
-            $scope.isDisabledButton = false;
-        } else {
-            $scope.isDisabledButton = true;
-        }
-    }, true);
-
     // Fetch data
     $scope.getProductsDataFromServer = function () {
         $http({method: 'GET', url: 'populateFoodItems'}).
@@ -75,38 +41,26 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
     $scope.carbohydrateRange = $scope.position.ceiling - $scope.position.secondKnob;
     $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
 
-    $scope.transformCarbAndProteinFromPercentToGr = function (val) {
-        return Math.round(val / 100 / 4);
+    $scope.transformCarbAndProteinFromPercentToGr = function (intake, range) {
+        if (intake !== undefined && intake !== null) {
+            return Math.round(intake * range / 100 / 4);
+        } else {
+            return 0;
+        }
     };
 
-    $scope.transformFatFromPercentToGr = function (val) {
-        return Math.round(val / 100 / 9);
+    $scope.transformFatFromPercentToGr = function (intake, range) {
+        if (intake !== undefined && intake !== null) {
+            return Math.round(intake * range / 100 / 9);
+        } else {
+            return 0;
+        }
     };
-    $scope.$watch('position.firstKnob', function (newVal, oldVal) {
-        if (newVal != oldVal) {
-            $scope.proteinRange = $scope.position.firstKnob;
-            $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
-
-            $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
-            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
-        }
-
-    }, true);
-
-    $scope.$watch('position.secondKnob', function (newVal, oldVal) {
-        if (newVal != oldVal) {
-            $scope.carbohydrateRange = $scope.position.ceiling - $scope.position.secondKnob;
-            $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
-
-            $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
-            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
-        }
-    }, true);
 
 
-    $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.proteinRange);
-    $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake * $scope.fatRange);
-    $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake * $scope.carbohydrateRange);
+    $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.proteinRange);
+    $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake, $scope.fatRange);
+    $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.carbohydrateRange);
 
     // Calculate menu
     $scope.calculateMenu = function () {
@@ -239,5 +193,52 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
         $scope.supplement = {};
     };
 
+    $scope.$watch('intake', function (newVal, oldVal) {
+        if (newVal !== undefined || newVal !== null) {
+            if (newVal < 40) {
+                $scope.isValidCalorieInput = false;
+                $scope.isDisabledButton = true;
 
+                $scope.showMinimumCalorieAlert = true;
+            } else {
+                $scope.showMinimumCalorieAlert = false;
+
+                if ($scope.selectedArr !== undefined && $scope.selectedArr.length > 0) {
+                    $scope.isDisabledButton = false;
+                    $scope.isValidCalorieInput = true;
+                }
+            }
+        }
+        $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.proteinRange);
+        $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake, $scope.fatRange);
+        $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.carbohydrateRange);
+    }, true);
+
+    $scope.$watch('position.firstKnob', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            $scope.proteinRange = $scope.position.firstKnob;
+            $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
+
+            $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.proteinRange);
+            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake, $scope.fatRange);
+        }
+    }, true);
+
+    $scope.$watch('position.secondKnob', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            $scope.carbohydrateRange = $scope.position.ceiling - $scope.position.secondKnob;
+            $scope.fatRange = $scope.position.ceiling - ($scope.proteinRange + $scope.carbohydrateRange );
+
+            $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.carbohydrateRange);
+            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake, $scope.fatRange);
+        }
+    }, true);
+
+    $scope.$watch('selectedArr', function (newVal, oldVal) {
+        if ($scope.selectedArr !== undefined && $scope.isValidCalorieInput && $scope.selectedArr.length > 0) {
+            $scope.isDisabledButton = false;
+        } else {
+            $scope.isDisabledButton = true;
+        }
+    }, true);
 });
