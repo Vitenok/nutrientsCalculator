@@ -345,7 +345,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <input type="text" class="form-control" placeholder="Search food item..."
-                                       ng-model="search">
+                                       ng-model="searchFoodItem"  ng-model-options="{debounce: 300}">
                             </div>
                         </div>
                     </form>
@@ -364,7 +364,7 @@
                         <th class="col-md-1"></th>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="product in products | filter:search">
+                        <tr data-ng-repeat="product in products" ng-show="([product] | filter:searchFoodItem).length > 0">
                             <td class="col-md-3">{{product.name}}</td>
                             <td class="col-md-2">{{product.protein}}</td>
                             <td class="col-md-2">{{product.fat}}</td>
