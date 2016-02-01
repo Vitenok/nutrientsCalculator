@@ -95,6 +95,10 @@ select {
     width: 100%;
 }
 
+.black {
+    color: #555 !important;
+}
+
 .small {
     padding: 7px 20px !important;
     margin-top: 20px;

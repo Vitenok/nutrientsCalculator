@@ -242,18 +242,62 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $filter) {
         }
     }, true);
 
+    // Calculate calorie need
+    $scope.sex= {
+        chosenSex: "",
+        options: [
+            {name: "male", value: "male"},
+            {name: "female", value: "female"}
+        ]
+    };
+
+    $scope.activityLevel= {
+        chosenLevel: "",
+        options: [
+            {name: "< 1 hour exercise per week", value: 1.1},
+            {name: "1-3 hours exercise per week", value: 1.2},
+            {name: "4-6 hours exercise per week", value: 1.35},
+            {name: "6+ hours exercise per week", value: 1.45}
+        ]
+    };
+
+    $scope.goal= {
+        chosenGoal: "",
+        options: [
+            {name: "Maintain", value: 1},
+            {name: "Cut", value: -0.2},
+            {name: "Gain", value: 0.1}
+        ]
+    };
+
     // basal metabolic rate (BMR)
     $scope.calculateBMR = function (sex, age, weight, height) {
         if (sex === "female") {
-            $scope.BMR = 10 * weight + 6.25 * height - 5 * age - 161;
+           return $scope.BMR = 10 * weight + 6.25 * height - 5 * age - 161;
         }
         if (sex === "male") {
-            $scope.BMR = 10 * weight + 6.25 * height - 5 * age + 5;
+           return $scope.BMR = 10 * weight + 6.25 * height - 5 * age + 5;
         }
     };
 
     // total daily energy expenditure (TDEE)
-    $scope.calculateTDEE = function(BMR, activityCoefficient){
-        $scope.TDEE = BMR * activityCoefficient;
-    }
+    $scope.calculateTDEE = function (BMR, activityCoefficient) {
+        return $scope.TDEE = BMR * activityCoefficient;
+    };
+
+    $scope.$watch('[sex.chosenSex, age, userHeight, userWeight, activityLevel.chosenLevel, goal.chosenGoal]', function (newVal, oldVal) {
+        $scope.BMR =  $scope.calculateBMR($scope.sex.chosenSex.value, $scope.age, $scope.userWeight, $scope.userHeight);
+        $scope.TDEE =  $scope.calculateTDEE($scope.BMR, $scope.activityLevel.chosenLevel.value );
+
+        if($scope.goal.chosenGoal.name === "Cut"){
+           return $scope.intake =  $scope.TDEE + $scope.goal.chosenGoal.value * $scope.TDEE;
+        }
+        if($scope.goal.chosenGoal.name === "Gain"){
+           return $scope.intake =  $scope.TDEE + $scope.goal.chosenGoal.value * $scope.TDEE;
+        } if($scope.goal.chosenGoal.name === "Maintain") {
+            return $scope.intake =  $scope.TDEE;
+        }
+    }, true);
+
+    // Calculate calorie need END
 });
