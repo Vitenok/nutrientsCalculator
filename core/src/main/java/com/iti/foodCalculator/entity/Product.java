@@ -75,6 +75,12 @@ public class Product implements Serializable {
         this.carbo = carb;
     }
 
+    public Product(double protein, double carbo, double fat) {
+        this.protein = protein;
+        this.carbo = carbo;
+        this.fat = fat;
+    }
+
     public Product(String name, double ediblePart, double water, double kilojoules, double kCal, double fat, double satFat, double transFat, double muFat, double puFat, double omega3, double omega6, double cholesterol, double carbo, double starch, double monoPlusDi, double sugar, double dietaryFibre, double protein, double salt, double alcohol, double retinol, double betaCarotene, double vitaminA, double vitaminD, double vitaminE, double thiamin, double riboflavin, double niacin, double vitaminB6, double folate, double vitaminB12, double vitaminC, double calcium, double iron, double sodium, double potassium, double magnesium, double zinc, double selenium, double copper, double phosphorus, double iodine) {
         this.name = name;
         this.ediblePart = ediblePart;
@@ -119,6 +125,12 @@ public class Product implements Serializable {
         this.copper = copper;
         this.phosphorus = phosphorus;
         this.iodine = iodine;
+    }
+
+    public Product(Product product) {
+        this.protein = product.protein;
+        this.carbo = product.carbo;
+        this.fat = product.fat;
     }
 
     public int getId() {
