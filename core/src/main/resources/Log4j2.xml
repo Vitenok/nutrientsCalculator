@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n"/>
+        </Console>
+
+        <File name="File" fileName="logs/CotoCalc.log">
+            <PatternLayout pattern="%d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+
+        <Routing name="Routing">
+            <Routes pattern="$${sd:type}">
+                <Route>
+                    <RollingFile name="Rolling-${sd:type}" fileName="logs/CotoCalc.log" filePattern="target/rolling1/test1-${sd:type}.%i.log.gz">
+                        <PatternLayout pattern="%d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+                        <SizeBasedTriggeringPolicy size="100" />
+                    </RollingFile>
+                </Route>
+            </Routes>
+        </Routing>
+    </appenders>
+
+    <loggers>
+        <logger name="EventLogger" level="debug" additivity="false">
+            <AppenderRef ref="Routing"/>
+        </logger>
+        <root level="debug">
+            <appender-ref ref="Console" level="info"/>
+            <appender-ref ref="File" level="debug"/>
+        </root>
+    </loggers>
+</configuration>
