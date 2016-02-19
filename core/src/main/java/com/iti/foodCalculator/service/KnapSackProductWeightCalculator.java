@@ -1,24 +1,29 @@
 package com.iti.foodCalculator.service;
 
 import com.iti.foodCalculator.entity.Product;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service("knapSackProductWeightCalculator")
 public class KnapSackProductWeightCalculator {
 
     private static final Logger LOG = LogManager.getLogger(KnapSackProductWeightCalculator.class);
 
     private int maxMultiplier = 10;
-    private int maxTimeToSearchInSeconds = 10;
+    private int maxTimeToSearchInSeconds = 4;
+    private double epsilon = 0.9;
 
-    public KnapSackProductWeightCalculator(int maxMultiplier, int maxTimeToSearchInSeconds) {
+    public KnapSackProductWeightCalculator(int maxMultiplier, int maxTimeToSearchInSeconds, double epsilon) {
         this.maxMultiplier = maxMultiplier;
         this.maxTimeToSearchInSeconds = maxTimeToSearchInSeconds;
+        this.epsilon = epsilon;
     }
 
     public KnapSackProductWeightCalculator() {
@@ -36,48 +41,14 @@ public class KnapSackProductWeightCalculator {
 
         Map<Product, Double> result = reduceToMap(products, bestSolution.toString());
 
-        compareResultAndPrint(restriction, result);
+        if (LOG.getLevel().equals(Level.DEBUG)) {
+            compareResultAndPrint(restriction, result);
+        }
 
         return result;
     }
 
-    private void compareResultAndPrint(Product restriction, Map<Product, Double> result) {
-        double calories = 0;
-        double protein = 0;
-        double carbo = 0;
-        double fat = 0;
-        for (Product p : result.keySet()) {
-            Double pCount = result.get(p);
-            double calcCalories = round(calcCalories(p));
-            LOG.debug(p.getName() + " (PCF: " + p.getProtein() + ", " + p.getCarbo() + ", " + p.getFat() + "), kCal/100g: " + calcCalories + ", count: " + pCount);
-            protein = protein + p.getProtein()*4*pCount;
-            carbo = carbo + p.getCarbo()*4*pCount;
-            fat = fat + p.getFat()*9*pCount;
-            calories = calories + calcCalories*pCount;
-        }
-        LOG.debug("Total calories: " + round(calories));
-        LOG.debug("PCF(%): " + round(protein) + "(" + round(protein / calories) + "), " + round(carbo) + "(" + round(carbo / calories) + "), " + round(fat) + "(" + round(fat / calories) + ")");
-        LOG.debug("PCF total(%): " + round(restriction.getProtein() * 4) + "(" + round(restriction.getProtein() * 4 / restriction.getkCal()) + "), " + round(restriction.getCarbo() * 4) + "(" + round(restriction.getCarbo() * 4 / restriction.getkCal()) + "), " + round(restriction.getFat() * 9) + "(" + round(restriction.getFat() * 9 / restriction.getkCal()) + ")");
-    }
-
-    public static double round(double value) {
-        return round(value, 2);
-    }
-
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
-    }
-
-    private double calcCalories(Product product) {
-        return product.getProtein()*4+product.getFat()*9+product.getCarbo()*4;
-    }
-
-    public void calculateWeightOfProducts(List<Product> products,
+    private void calculateWeightOfProducts(List<Product> products,
                                           Product globalRestriction,
                                           Product currRestriction,
                                           String currSolution,
@@ -86,6 +57,12 @@ public class KnapSackProductWeightCalculator {
                                           int multiplier,
                                           long startTime) {
         if (System.currentTimeMillis()-startTime > maxTimeToSearchInSeconds*1000) {
+            LOG.debug("OUT OF TIME");
+            return;
+        }
+        if (solutionIsCloseEnough(bestRestriction, epsilon)) {
+            LOG.debug("SOLUTION FOUND!");
+            LOG.debug("Best Restriction is " + bestRestriction);
             return;
         }
         for (int i=0; i<products.size(); i++) {
@@ -116,6 +93,12 @@ public class KnapSackProductWeightCalculator {
         }
     }
 
+    private boolean solutionIsCloseEnough(Product bestRestriction, double epsilon) {
+        return bestRestriction.getProtein()<epsilon &&
+                bestRestriction.getCarbo()<epsilon &&
+                bestRestriction.getFat()<epsilon;
+    }
+
     private double cKalDifference(Product first, Product second) {
         return (first.getProtein() - second.getProtein() + first.getCarbo() - second.getCarbo())*4 + (first.getFat() - second.getFat())*9;
     }
@@ -144,5 +127,41 @@ public class KnapSackProductWeightCalculator {
             result.put(products.get(key), result.get(products.get(key)) + 1.0/multiplier);
         }
         return result;
+    }
+
+    private void compareResultAndPrint(Product restriction, Map<Product, Double> result) {
+        double calories = 0;
+        double protein = 0;
+        double carbo = 0;
+        double fat = 0;
+        for (Product p : result.keySet()) {
+            Double pCount = result.get(p);
+            double calcCalories = round(calcCalories(p));
+            LOG.debug(p.getName() + " (PCF: " + p.getProtein() + ", " + p.getCarbo() + ", " + p.getFat() + "), kCal/100g: " + calcCalories + ", count: " + pCount);
+            protein = protein + p.getProtein()*4*pCount;
+            carbo = carbo + p.getCarbo()*4*pCount;
+            fat = fat + p.getFat()*9*pCount;
+            calories = calories + calcCalories*pCount;
+        }
+        LOG.debug("Total calories: " + round(calories));
+        LOG.debug("PCF(%): " + round(protein) + "(" + round(protein / calories) + "), " + round(carbo) + "(" + round(carbo / calories) + "), " + round(fat) + "(" + round(fat / calories) + ")");
+        LOG.debug("PCF total(%): " + round(restriction.getProtein() * 4) + "(" + round(restriction.getProtein() * 4 / restriction.getkCal()) + "), " + round(restriction.getCarbo() * 4) + "(" + round(restriction.getCarbo() * 4 / restriction.getkCal()) + "), " + round(restriction.getFat() * 9) + "(" + round(restriction.getFat() * 9 / restriction.getkCal()) + ")");
+    }
+
+    private double round(double value) {
+        return round(value, 2);
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
+    private double calcCalories(Product product) {
+        return product.getProtein()*4+product.getFat()*9+product.getCarbo()*4;
     }
 }

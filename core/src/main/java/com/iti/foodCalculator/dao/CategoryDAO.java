@@ -1,9 +1,8 @@
 package com.iti.foodCalculator.dao;
 
-import com.iti.foodCalculator.entity.Category;
+import com.iti.foodCalculator.entity.Product;
+import org.springframework.stereotype.Repository;
 
-public class CategoryDAO extends GenericDAO<Category> {
-    public CategoryDAO() {
-        super(Category.class);
-    }
+@Repository("categoryDAO")
+public class CategoryDAO extends GenericDAO<Product> {
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="WARN">
+<configuration status="WARN" shutdownHook="disable">
     <appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n"/>
@@ -22,12 +22,13 @@
     </appenders>
 
     <loggers>
-        <logger name="EventLogger" level="debug" additivity="false">
+        <root level="debug">
+            <appender-ref ref="Console" level="debug"/>
+            <appender-ref ref="File" level="error"/>
+        </root>
+        <logger name="org.hibernate" level="debug"/>
+        <logger name="EventLogger" level="info" additivity="false">
             <AppenderRef ref="Routing"/>
         </logger>
-        <root level="debug">
-            <appender-ref ref="Console" level="info"/>
-            <appender-ref ref="File" level="debug"/>
-        </root>
     </loggers>
 </configuration>

@@ -1,99 +1,27 @@
 package com.iti.foodCalculator.dao;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaQuery;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-abstract class GenericDAO<T> implements Serializable {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("food_composition");
-    private static EntityManager em = emf.createEntityManager();
-    private Class<T> entityClass;
+import java.lang.reflect.ParameterizedType;
 
-    public GenericDAO(Class<T> entityClass) {
-        this.entityClass = entityClass;
+abstract class GenericDAO<T> {
+    private final Class<T> persistentClass;
+
+    public GenericDAO(){
+        this.persistentClass =(Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    public void beginTransaction() {
-        em.getTransaction().begin();
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    protected Session getSession(){
+        return sessionFactory.getCurrentSession();
     }
 
-    public void commit() {
-        em.getTransaction().commit();
-    }
-
-    public void rollback() {
-        em.getTransaction().rollback();
-    }
-
-    public void closeTransaction() {
-        em.close();
-    }
-
-    public void commitAndCloseTransaction() {
-        commit();
-        closeTransaction();
-    }
-
-    public void flush() {
-        em.flush();
-    }
-
-    public void joinTransaction() {
-        em.joinTransaction();
-    }
-
-    public void save(T entity) {
-        em.persist(entity);
-    }
-
-    public void saveAll(List<T> entities) {
-        em.getTransaction().begin();
-        for (T entity : entities) {
-            em.persist(entity);
-        }
-        em.getTransaction().commit();
-    }
-
-    public void delete(T entity) {
-        T entityToBeRemoved = em.merge(entity);
-
-        em.remove(entityToBeRemoved);
-    }
-
-    public T update(T entity) {
-        return em.merge(entity);
-    }
-
-    public T find(int entityID) {
-        return em.find(entityClass, entityID);
-    }
-
-
-    public T findReferenceOnly(int entityID) {
-        return em.getReference(entityClass, entityID);
-    }
-
-    public List<T> findAll() {
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(entityClass));
-        return em.createQuery(cq).getResultList();
-    }
-
-    protected List<T> findResultList(String namedQuery, Map<String, Object> parameters) {
-        List<T> resultList = null;
-        try {
-            Query query = em.createNamedQuery(namedQuery);
-            resultList = (List<T>) query.getResultList();
-
-        } catch (NoResultException e) {
-            System.out.println("No result found for named query: " + namedQuery);
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("Error while running query: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return resultList;
+    public Criteria createCriteria(){
+        return getSession().createCriteria(persistentClass);
     }
 }

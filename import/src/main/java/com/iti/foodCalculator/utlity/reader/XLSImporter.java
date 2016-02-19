@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,11 +18,12 @@ import java.util.Iterator;
 import java.util.List;
 
 public class XLSImporter {
+
     public static void main(String[] args) {
-        ProductsDAO productsDAO = new ProductsDAO();
+        ApplicationContext context = new ClassPathXmlApplicationContext("import-application-context.xml");
+        ProductsDAO dao = context.getBean("productsDAO", ProductsDAO.class);
         List<Product> products = new XLSImporter().readXlsFileToList();
-        productsDAO.saveAll(products);
-        productsDAO.closeTransaction();
+        dao.save(products);
         System.out.println("Imported successfully");
     }
 

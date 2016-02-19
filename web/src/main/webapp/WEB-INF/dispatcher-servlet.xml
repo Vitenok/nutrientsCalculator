@@ -14,12 +14,14 @@
             http://www.springframework.org/schema/cache
             http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+    <import resource="classpath:core-application-context.xml" />
+
     <context:component-scan base-package="com.iti.nutrientsCalculator"/>
 
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
 
-    <bean class="com.iti.foodCalculator.service.ProductsService" id="productsService"/>
+    <bean class="com.iti.foodCalculator.dao.ProductsDAO" id="productsDAO"/>
     <bean class="com.iti.foodCalculator.service.ProductWeightCalculatorService" id="productWeightCalculatorService"/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/pages/" p:suffix=".html"/>

@@ -1,7 +1,9 @@
 package com.iti.foodCalculator.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,15 +18,18 @@ public class Category implements Serializable {
 
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @ManyToOne
+    @JsonBackReference("parent-child")
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
-    @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+//    @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonManagedReference("parent-child")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> children;
 
     @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Product> products;
 
     public Category() {

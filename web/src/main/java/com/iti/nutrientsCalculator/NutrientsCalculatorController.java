@@ -1,11 +1,12 @@
 package com.iti.nutrientsCalculator;
 
+import com.iti.foodCalculator.dao.ProductsDAO;
 import com.iti.foodCalculator.entity.AmountItem;
 import com.iti.foodCalculator.entity.CalculationInputDomainModel;
 import com.iti.foodCalculator.entity.Product;
-import com.iti.foodCalculator.entity.User;
 import com.iti.foodCalculator.service.ProductWeightCalculatorService;
-import com.iti.foodCalculator.service.ProductsService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
@@ -17,8 +18,10 @@ import java.util.List;
 
 @Controller
 public class NutrientsCalculatorController {
+    private static final Logger LOG = LogManager.getLogger(NutrientsCalculatorController.class);
+
     @Autowired
-    ProductsService productsService;
+    ProductsDAO productsDAO;
 
     @Autowired
     ProductWeightCalculatorService productWeightCalculatorService;
@@ -36,7 +39,7 @@ public class NutrientsCalculatorController {
     @Cacheable("products")
     @RequestMapping(value = "/populateFoodItems", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody List<Product> populateProducts() {
-        return productsService.getAllProducts();
+        return productsDAO.findAll();
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
