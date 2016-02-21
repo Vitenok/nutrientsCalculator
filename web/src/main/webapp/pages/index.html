@@ -7,8 +7,8 @@
     <!--[if IE]>
     <meta http-equiv="x-ua-compatible" content="IE=9"/><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google-signin-client_id"
-          content="518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com">
+    <!--<meta name="google-signin-client_id"
+          content="518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com">-->
     <title>Spirit - Diet planner</title>
 
 
@@ -72,6 +72,7 @@
     <script type="text/javascript" src="../resources/scripts/fb.login.js"></script>
     <script type="text/javascript" src="../resources/scripts/google.login.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://connect.facebook.net/en_US/sdk.js" async defer></script>
 </head>
 <body>
 <div class="">
@@ -536,16 +537,18 @@
             <div class="modal-body">
 
                 <div>
-                    <div id="gLogin" class="g-signin2 btn tf-btn btn-default btn-lg btn-block not-rounded"
-                         data-onsuccess="onSignIn"/>
+                    <!--<div id="gLogin" class="g-signin2 btn tf-btn btn-default btn-lg btn-block not-rounded" data-onsuccess="onSignIn"/>-->
+                    <button type="button" id="gLogin" class="btn btn-default" onclick="glLogin();">Google login</button>
+                </div>
+                <div>
+                    <button type="button" id="fLogin" class="btn btn-default" onclick="fbLogin();">Facebook login</button>
                 </div>
 
-                <div class="btn tf-btn btn-default btn-lg btn-block not-rounded">
+                <!--<div class="btn tf-btn btn-default btn-lg btn-block not-rounded">
                     <fb:login-button scope="public_profile" onlogin="checkLoginState();" auto_logout_link="true"/>
-                </div>
+                </div>-->
 
-                <a href="#" class="btn tf-btn btn-default btn-lg btn-block" id="gLogout" onclick="signOut();">Sign
-                    out</a>
+                <a href="#" class="btn tf-btn btn-default btn-lg btn-block" id="logout" onclick="fbLogout();">Sign out</a>
             </div>
         </div>
     </div>

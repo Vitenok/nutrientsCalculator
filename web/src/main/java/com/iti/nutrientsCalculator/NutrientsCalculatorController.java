@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -31,15 +32,10 @@ public class NutrientsCalculatorController {
         return "index";
     }
 
-    @RequestMapping(value = "/loginUser", method = RequestMethod.GET)
-    public void loginUser(@RequestParam String name, @RequestParam String socialNetwork, @RequestParam String token) {
-        System.out.println(name+"logged in");
-    }
-
     @Cacheable("products")
     @RequestMapping(value = "/populateFoodItems", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody List<Product> populateProducts() {
-        return productsDAO.findAll();
+        return Collections.emptyList();//productsDAO.findAll();
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
