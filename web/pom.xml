@@ -12,6 +12,10 @@
     <packaging>war</packaging>
     <artifactId>web</artifactId>
 
+    <properties>
+        <tomcat.version>2.2</tomcat.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>iti</groupId>
@@ -30,12 +34,20 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.3.0.v20150612</version>
                 <configuration>
                     <scanIntervalSeconds>5</scanIntervalSeconds>
+                </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat.version}</version>
+                <configuration>
+                    <path>/</path>
                 </configuration>
             </plugin>
         </plugins>
