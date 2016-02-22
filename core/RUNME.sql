@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS user;
+CREATE TABLE user
+(
+    id INT PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    socialNetwork VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL
+);

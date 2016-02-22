@@ -21,9 +21,6 @@
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
 
-    <bean class="com.iti.foodCalculator.dao.ProductsDAO" id="productsDAO"/>
-    <bean class="com.iti.foodCalculator.service.ProductWeightCalculatorService" id="productWeightCalculatorService"/>
-
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/pages/" p:suffix=".html"/>
 
     <cache:annotation-driven/>

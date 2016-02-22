@@ -56,6 +56,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
     <!-- jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Facebook API-->
+    <script src="https://connect.facebook.net/en_US/sdk.js" async defer></script>
+    <!-- Google API -->
+    <script src="https://apis.google.com/js/platform.js?onload=glCheckLoginState" async defer></script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="text/javascript" src="../resources/js/jquery.1.11.1.js"></script>
@@ -69,10 +73,7 @@
     <!-- Custom scripts-->
     <script type="text/javascript" src="../resources/scripts/nutrientsCalculator.js"></script>
     <script type="text/javascript" src="../resources/scripts/slider.js"></script>
-    <script type="text/javascript" src="../resources/scripts/fb.login.js"></script>
-    <script type="text/javascript" src="../resources/scripts/google.login.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://connect.facebook.net/en_US/sdk.js" async defer></script>
+    <script type="text/javascript" src="../resources/scripts/socialLogin.js"></script>
 </head>
 <body>
 <div class="">
@@ -535,20 +536,14 @@
                 <h4 class="modal-title" id="signInModalLabel">Sign in</h4>
             </div>
             <div class="modal-body">
-
-                <div>
-                    <!--<div id="gLogin" class="g-signin2 btn tf-btn btn-default btn-lg btn-block not-rounded" data-onsuccess="onSignIn"/>-->
+                <span id="login">
                     <button type="button" id="gLogin" class="btn btn-default" onclick="glLogin();">Google login</button>
-                </div>
-                <div>
                     <button type="button" id="fLogin" class="btn btn-default" onclick="fbLogin();">Facebook login</button>
+                </span>
+                <div id="loggedIn">
+                    <div id="loggedInTxt"></div>
+                    <a href="#" class="btn tf-btn btn-default btn-lg btn-block" id="logout" onclick="logout();">Sign out</a>
                 </div>
-
-                <!--<div class="btn tf-btn btn-default btn-lg btn-block not-rounded">
-                    <fb:login-button scope="public_profile" onlogin="checkLoginState();" auto_logout_link="true"/>
-                </div>-->
-
-                <a href="#" class="btn tf-btn btn-default btn-lg btn-block" id="logout" onclick="fbLogout();">Sign out</a>
             </div>
         </div>
     </div>

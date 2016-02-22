@@ -2,9 +2,11 @@ package com.iti.foodCalculator.service;
 
 import com.iti.foodCalculator.entity.*;
 import org.apache.commons.math3.linear.*;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service("productWeightCalculatorService")
 public class ProductWeightCalculatorService {
     List<SupplementItem> supplements;
     DailyMacroelementsInput dailyMacroelementsDistribution;

@@ -8,16 +8,21 @@ import javax.persistence.Id;
 @Entity
 public class User {
 
-    public enum SOCIAL_NETWORK {FACEBOOK, GOOGLE};
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
-    private SOCIAL_NETWORK socialNetwork;
+    private String socialNetwork;
     private String token;
 
+    public User(String name, String socialNetwork, String token) {
+        this.name = name;
+        this.socialNetwork = socialNetwork;
+        this.token = token;
+    }
+
+    public User() {}
 
     public Integer getId() {
         return id;
@@ -35,11 +40,11 @@ public class User {
         this.name = name;
     }
 
-    public SOCIAL_NETWORK getSocialNetwork() {
+    public String getSocialNetwork() {
         return socialNetwork;
     }
 
-    public void setSocialNetwork(SOCIAL_NETWORK socialNetwork) {
+    public void setSocialNetwork(String socialNetwork) {
         this.socialNetwork = socialNetwork;
     }
 
