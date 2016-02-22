@@ -47,7 +47,6 @@ function glLogin() {
 }
 
 function getUserFromSession() {
-    document.getElementById('loggedIn').style.visibility='hidden';
     var req = new XMLHttpRequest();
     req.open("GET", "user", true);
     req.onload = function (e) {
@@ -73,8 +72,8 @@ function login(name, socialNetwork, userId) {
 
 function afterLogin(name) {
     document.getElementById('loggedInTxt').innerHTML = name;
-    document.getElementById('loggedIn').style.visibility='visible';
-    document.getElementById('login').style.visibility='hidden';
+    document.getElementById('loggedIn').style.display='';
+    document.getElementById('login').style.display='none';
 }
 
 function logout () {
@@ -82,8 +81,8 @@ function logout () {
     req.open('GET', 'logout', true);
     req.onload = function (e) {
         //document.getElementById('loggedInTxt').innerHTML = '';
-        document.getElementById('loggedIn').style.visibility='hidden';
-        document.getElementById('login').style.visibility='visible';
+        document.getElementById('loggedIn').style.display='none';
+        document.getElementById('login').style.display='';
     };
     req.onerror = function (e) {
         console.log(e);
