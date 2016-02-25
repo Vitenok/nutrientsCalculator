@@ -11,22 +11,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service("knapSackProductWeightCalculator")
-public class KnapSackProductWeightCalculator {
+@Service("productWeightCalculationService")
+public class ProductWeightCalculationService {
 
-    private static final Logger LOG = LogManager.getLogger(KnapSackProductWeightCalculator.class);
+    private static final Logger LOG = LogManager.getLogger(ProductWeightCalculationService.class);
 
     private int maxMultiplier = 10;
     private int maxTimeToSearchInSeconds = 4;
     private double epsilon = 0.9;
 
-    public KnapSackProductWeightCalculator(int maxMultiplier, int maxTimeToSearchInSeconds, double epsilon) {
+    public ProductWeightCalculationService(int maxMultiplier, int maxTimeToSearchInSeconds, double epsilon) {
         this.maxMultiplier = maxMultiplier;
         this.maxTimeToSearchInSeconds = maxTimeToSearchInSeconds;
         this.epsilon = epsilon;
     }
 
-    public KnapSackProductWeightCalculator() {
+    public ProductWeightCalculationService() {
     }
 
     public Map<Product, Double> calculateWeightOfProducts(List<Product> products, Product restriction) {
@@ -38,6 +38,11 @@ public class KnapSackProductWeightCalculator {
         long start = System.currentTimeMillis();
         calculateWeightOfProducts(products, restriction, new Product(restriction), "", new Product(restriction), bestSolution, 1, System.currentTimeMillis());
         LOG.debug("It took " + (System.currentTimeMillis() - start) + " ms to find solution: " + bestSolution);
+
+        if (bestSolution.length() == 0) {
+            LOG.info("No results found!");
+            return new HashMap<>();
+        }
 
         Map<Product, Double> result = reduceToMap(products, bestSolution.toString());
 

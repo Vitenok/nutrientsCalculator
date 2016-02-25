@@ -15,10 +15,10 @@ import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= "classpath:core-application-context.xml")
-public class KnapSackProductWeightCalculatorTest {
+public class ProductWeightCalculationServiceTest {
 
     @Autowired
-    KnapSackProductWeightCalculator service;
+    ProductWeightCalculationService service;
 
     @Autowired
     ProductsDAO dao;
