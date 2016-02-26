@@ -7,6 +7,9 @@
         <class>com.iti.foodCalculator.entity.Product</class>
         <class>com.iti.foodCalculator.entity.Category</class>
         <class>com.iti.foodCalculator.entity.User</class>
+        <class>com.iti.foodCalculator.entity.DayFoodPlan</class>
+        <class>com.iti.foodCalculator.entity.MealPlan</class>
+        <class>com.iti.foodCalculator.entity.ProductPlan</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1:3306/food_composition"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>

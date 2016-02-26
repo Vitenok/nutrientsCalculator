@@ -19,11 +19,11 @@ public class Category implements Serializable {
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonBackReference("parent-child")
+    @JsonBackReference("category")
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
-    @JsonManagedReference("parent-child")
+    @JsonManagedReference("category")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> children;
 

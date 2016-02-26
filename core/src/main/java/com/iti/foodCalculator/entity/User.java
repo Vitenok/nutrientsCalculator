@@ -1,9 +1,12 @@
 package com.iti.foodCalculator.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -15,6 +18,12 @@ public class User {
     private String name;
     private String socialNetwork;
     private String token;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference("user")
+//    @JoinColumn(name = "user_id")
+    private List<DayFoodPlan> dayFoodPlans;
 
     public User(String name, String socialNetwork, String token) {
         this.name = name;
@@ -54,6 +63,17 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<DayFoodPlan> getDayFoodPlans() {
+        if (dayFoodPlans == null) {
+            dayFoodPlans = new ArrayList<>();
+        }
+        return dayFoodPlans;
+    }
+
+    public void setDayFoodPlans(List<DayFoodPlan> dayFoodPlan) {
+        this.dayFoodPlans = dayFoodPlan;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.iti.foodCalculator.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,47 +13,85 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    @JsonIgnore
     private double ediblePart;
+    @JsonIgnore
     private double water;
+    @JsonIgnore
     private double kilojoules;
     private double kCal;
     private double fat;
+    @JsonIgnore
     private double satFat;
+    @JsonIgnore
     private double transFat;
+    @JsonIgnore
     private double muFat;
+    @JsonIgnore
     private double puFat;
+    @JsonIgnore
     private double omega3;
+    @JsonIgnore
     private double omega6;
+    @JsonIgnore
     private double cholesterol;
     private double carbo;
+    @JsonIgnore
     private double starch;
+    @JsonIgnore
     private double monoPlusDi;
+    @JsonIgnore
     private double sugar;
+    @JsonIgnore
     private double dietaryFibre;
     private double protein;
+    @JsonIgnore
     private double salt;
+    @JsonIgnore
     private double alcohol;
+    @JsonIgnore
     private double retinol;
+    @JsonIgnore
     private double betaCarotene;
+    @JsonIgnore
     private double vitaminA;
+    @JsonIgnore
     private double vitaminD;
+    @JsonIgnore
     private double vitaminE;
+    @JsonIgnore
     private double thiamin;
+    @JsonIgnore
     private double riboflavin;
+    @JsonIgnore
     private double niacin;
+    @JsonIgnore
     private double vitaminB6;
+    @JsonIgnore
     private double folate;
+    @JsonIgnore
     private double vitaminB12;
+    @JsonIgnore
     private double vitaminC;
+    @JsonIgnore
     private double calcium;
+    @JsonIgnore
     private double iron;
+    @JsonIgnore
     private double sodium;
+    @JsonIgnore
     private double potassium;
+    @JsonIgnore
     private double magnesium;
+    @JsonIgnore
     private double zinc;
+    @JsonIgnore
     private double selenium;
+    @JsonIgnore
     private double copper;
+    @JsonIgnore
     private double phosphorus;
+    @JsonIgnore
     private double iodine;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
