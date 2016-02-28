@@ -1,6 +1,10 @@
 package com.iti.foodCalculator.service;
 
 import com.iti.foodCalculator.entity.*;
+import com.iti.foodCalculator.entity.pudik.AmountItem;
+import com.iti.foodCalculator.entity.pudik.CalculationInputDomainModel;
+import com.iti.foodCalculator.entity.pudik.DailyMacroelementsInput;
+import com.iti.foodCalculator.entity.pudik.SupplementItem;
 import junit.framework.TestCase;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;

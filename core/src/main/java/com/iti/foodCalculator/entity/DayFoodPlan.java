@@ -18,14 +18,12 @@ public class DayFoodPlan {
 
     private LocalDateTime date;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id")
+    @ManyToOne
     @JsonBackReference("user")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL/*, mappedBy = "dayFoodPlan"*/)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dayFoodPlan", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
-//    @JoinColumn(name = "day_food_plan_id")
     @OrderBy("id")
     @JsonManagedReference("dayFoodPlan")
     private List<MealPlan> mealPlans;

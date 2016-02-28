@@ -27,7 +27,7 @@ public class Category implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> children;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Product> products;
 

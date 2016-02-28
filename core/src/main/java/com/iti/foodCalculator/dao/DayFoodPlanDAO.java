@@ -1,19 +1,14 @@
 package com.iti.foodCalculator.dao;
 
 import com.iti.foodCalculator.entity.DayFoodPlan;
+import com.iti.foodCalculator.entity.User;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
 @Repository("dayFoodPlanDAO")
-@Transactional
 public class DayFoodPlanDAO extends GenericDAO<DayFoodPlan> {
-
-    public void saveOrUpdate(DayFoodPlan plan) {
-        getSession().saveOrUpdate(plan);
-    }
 
     public DayFoodPlan findByUserIdAndDate(int userId, Date date){
         return (DayFoodPlan) createCriteria().
@@ -21,5 +16,12 @@ public class DayFoodPlanDAO extends GenericDAO<DayFoodPlan> {
                 add(Restrictions.eq("date", date)).
                 uniqueResult();
     }
+
+//    public void saveOrUpdate(DayFoodPlan dayFoodPlan) {
+//        User user = dayFoodPlan.getUser();
+//        if (user != null && !user.getDayFoodPlans().isEmpty()) {
+//
+//        }
+//    }
 
 }

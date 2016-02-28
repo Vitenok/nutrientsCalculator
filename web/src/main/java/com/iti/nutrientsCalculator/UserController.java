@@ -30,7 +30,7 @@ public class UserController {
             user = usersDAO.find(name, socialNetwork, token);
             if (user == null) {
                 user = new User(name, socialNetwork, token);
-                usersDAO.save(user);
+                usersDAO.saveOrUpdate(user);
             }
             session.setAttribute("user", user);
         }

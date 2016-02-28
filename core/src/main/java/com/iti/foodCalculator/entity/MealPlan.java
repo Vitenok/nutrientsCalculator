@@ -15,15 +15,12 @@ public class MealPlan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "day_food_plan_id", insertable=false, updatable=false)
+    @ManyToOne
     @JsonBackReference("dayFoodPlan")
     private DayFoodPlan dayFoodPlan;
 
-    @OneToMany(cascade = CascadeType.ALL/*, mappedBy = "mealPlan"*/)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mealPlan", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
-//    @JoinColumn(name = "meal_plan_id")
-//    @OrderBy("id")
     @JsonManagedReference("mealPlan")
     private List<ProductPlan> productPlans;
 

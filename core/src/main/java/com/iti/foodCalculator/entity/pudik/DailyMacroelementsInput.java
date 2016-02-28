@@ -1,4 +1,4 @@
-package com.iti.foodCalculator.entity;
+package com.iti.foodCalculator.entity.pudik;
 
 import java.io.Serializable;
 

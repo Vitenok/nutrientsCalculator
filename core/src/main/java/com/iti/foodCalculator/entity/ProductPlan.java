@@ -10,11 +10,10 @@ public class ProductPlan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Product product;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "meal_plan_id", insertable=false, updatable=false)
+    @ManyToOne
     @JsonBackReference("mealPlan")
     private MealPlan mealPlan;
 

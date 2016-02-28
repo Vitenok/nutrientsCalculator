@@ -1,4 +1,4 @@
-package com.iti.foodCalculator.entity;
+package com.iti.foodCalculator.entity.pudik;
 
 // Represents amount of food after calculation
 public class AmountItem {

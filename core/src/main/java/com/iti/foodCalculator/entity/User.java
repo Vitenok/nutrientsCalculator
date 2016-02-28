@@ -19,10 +19,9 @@ public class User {
     private String socialNetwork;
     private String token;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonManagedReference("user")
-//    @JoinColumn(name = "user_id")
     private List<DayFoodPlan> dayFoodPlans;
 
     public User(String name, String socialNetwork, String token) {

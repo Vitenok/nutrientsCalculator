@@ -3,10 +3,16 @@ package com.iti.foodCalculator.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
+@Transactional
+@Repository("genericDAO")
 abstract class GenericDAO<T> {
     private final Class<T> persistentClass;
 
@@ -21,7 +27,27 @@ abstract class GenericDAO<T> {
         return sessionFactory.getCurrentSession();
     }
 
-    public Criteria createCriteria(){
+    protected Criteria createCriteria(){
         return getSession().createCriteria(persistentClass);
+    }
+
+    public void saveOrUpdate(T t) {
+        getSession().saveOrUpdate(t);
+    }
+
+    public T getById(int id) {
+        return (T) createCriteria().add(Restrictions.eq("id", id)).uniqueResult();
+    }
+
+    public void delete(int id) {
+        getSession().createQuery("delete from " + persistentClass.getName() + " where id = :id").setInteger("id", id).executeUpdate();
+    }
+
+    public void delete(T t) {
+        getSession().delete(t);
+    }
+
+    public List<T> findAll() {
+        return createCriteria().list();
     }
 }
