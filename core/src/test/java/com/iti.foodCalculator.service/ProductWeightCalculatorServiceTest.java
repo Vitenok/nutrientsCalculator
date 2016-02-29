@@ -169,7 +169,7 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
         singleModel.setSupplementItems(new ArrayList<SupplementItem>());
         singleModel.setDailyMacroelementsInput(dailyMacroelementsInput);
 
-        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(singleModel);
+        List<AmountItem> solution = foodCalculatorService.calcWeight(singleModel);
 
         List<Double> amounts = new ArrayList<>();
         amounts.add(solution.get(0).getAmount());
@@ -191,7 +191,7 @@ public class ProductWeightCalculatorServiceTest extends TestCase {
 //        supplementsList.add(supplementItem1);
 //        supplementsList.add(supplementItem2);
 //
-//        List<AmountItem> solution = foodCalculatorService.calculateWeightOfProducts(productList, supplementsList, dailyMacroelementsInput);
+//        List<AmountItem> solution = foodCalculatorService.calcWeight(productList, supplementsList, dailyMacroelementsInput);
 //
 //        assertNotNull(solution);
 //        assertEquals(4, solution.size());

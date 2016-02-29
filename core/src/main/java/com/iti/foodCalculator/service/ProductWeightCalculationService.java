@@ -29,14 +29,14 @@ public class ProductWeightCalculationService {
     public ProductWeightCalculationService() {
     }
 
-    public Map<Product, Double> calculateWeightOfProducts(List<Product> products, Product restriction) {
+    public Map<Product, Double> calcWeight(List<Product> products, Product restriction) {
 
         Collections.sort(products, (o1, o2) -> Double.compare(o1.getProtein(), o2.getProtein()));
 
         StringBuilder bestSolution = new StringBuilder();
 
         long start = System.currentTimeMillis();
-        calculateWeightOfProducts(products, restriction, new Product(restriction), "", new Product(restriction), bestSolution, 1, System.currentTimeMillis());
+        calcWeight(products, restriction, new Product(restriction), "", new Product(restriction), bestSolution, 1, System.currentTimeMillis());
         LOG.debug("It took " + (System.currentTimeMillis() - start) + " ms to find solution: " + bestSolution);
 
         if (bestSolution.length() == 0) {
@@ -53,15 +53,15 @@ public class ProductWeightCalculationService {
         return result;
     }
 
-    private void calculateWeightOfProducts(List<Product> products,
-                                          Product globalRestriction,
-                                          Product currRestriction,
-                                          String currSolution,
-                                          Product bestRestriction,
-                                          StringBuilder bestSolution,
-                                          int multiplier,
-                                          long startTime) {
-        if (System.currentTimeMillis()-startTime > maxTimeToSearchInSeconds*1000) {
+    private void calcWeight(List<Product> products,
+                            Product globalRestriction,
+                            Product currRestriction,
+                            String currSolution,
+                            Product bestRestriction,
+                            StringBuilder bestSolution,
+                            int multiplier,
+                            long startTime) {
+        if (System.currentTimeMillis() - startTime > maxTimeToSearchInSeconds * 1000) {
             LOG.debug("OUT OF TIME");
             return;
         }
@@ -70,17 +70,17 @@ public class ProductWeightCalculationService {
             LOG.debug("Best Restriction is " + bestRestriction);
             return;
         }
-        for (int i=0; i<products.size(); i++) {
-            if (isMoreThen(currRestriction, products.get(i), multiplier)){
-                calculateWeightOfProducts(
-                                        products,
-                                        globalRestriction,
-                                        subtractProducts(currRestriction, products.get(i), multiplier),
-                                        currSolution+";"+i+":"+multiplier,
-                                        bestRestriction,
-                                        bestSolution,
-                                        multiplier == maxMultiplier ? multiplier : ++multiplier,
-                                        startTime);
+        for (int i = 0; i < products.size(); i++) {
+            if (isMoreThen(currRestriction, products.get(i), multiplier)) {
+                calcWeight(
+                        products,
+                        globalRestriction,
+                        subtractProducts(currRestriction, products.get(i), multiplier),
+                        currSolution + ";" + i + ":" + multiplier,
+                        bestRestriction,
+                        bestSolution,
+                        multiplier == maxMultiplier ? multiplier : ++multiplier,
+                        startTime);
             } else {
                 double v = cKalDifference(globalRestriction, currRestriction);
                 double v1 = cKalDifference(globalRestriction, bestRestriction);
@@ -89,7 +89,7 @@ public class ProductWeightCalculationService {
                     bestRestriction.setProtein(currRestriction.getProtein());
                     bestRestriction.setCarbo(currRestriction.getCarbo());
                     bestRestriction.setFat(currRestriction.getFat());
-                    if (bestSolution.length()>0) {
+                    if (bestSolution.length() > 0) {
                         bestSolution.delete(0, bestSolution.length());
                     }
                     bestSolution.append(currSolution);
@@ -99,29 +99,29 @@ public class ProductWeightCalculationService {
     }
 
     private boolean solutionIsCloseEnough(Product bestRestriction, double epsilon) {
-        return bestRestriction.getProtein()<epsilon &&
-                bestRestriction.getCarbo()<epsilon &&
-                bestRestriction.getFat()<epsilon;
+        return bestRestriction.getProtein() < epsilon &&
+                bestRestriction.getCarbo() < epsilon &&
+                bestRestriction.getFat() < epsilon;
     }
 
     private double cKalDifference(Product first, Product second) {
-        return (first.getProtein() - second.getProtein() + first.getCarbo() - second.getCarbo())*4 + (first.getFat() - second.getFat())*9;
+        return (first.getProtein() - second.getProtein() + first.getCarbo() - second.getCarbo()) * 4 + (first.getFat() - second.getFat()) * 9;
     }
 
     private Product subtractProducts(Product first, Product second, int multiplier) {
-        return new Product(first.getProtein() - second.getProtein()/multiplier, first.getCarbo() - second.getCarbo()/multiplier, first.getFat() - second.getFat()/multiplier);
+        return new Product(first.getProtein() - second.getProtein() / multiplier, first.getCarbo() - second.getCarbo() / multiplier, first.getFat() - second.getFat() / multiplier);
     }
 
     private boolean isMoreThen(Product first, Product second, int multiplier) {
-        return first.getProtein() - second.getProtein()/multiplier >= 0 &&
-                first.getCarbo() - second.getCarbo()/multiplier >= 0 &&
-                first.getFat() - second.getFat()/multiplier >= 0;
+        return first.getProtein() - second.getProtein() / multiplier >= 0 &&
+                first.getCarbo() - second.getCarbo() / multiplier >= 0 &&
+                first.getFat() - second.getFat() / multiplier >= 0;
     }
 
     private Map<Product, Double> reduceToMap(List<Product> products, String s) {
-        Map<Product, Double> result = new HashMap<Product, Double>(){{
+        Map<Product, Double> result = new HashMap<Product, Double>() {{
             for (Product p : products) {
-                put(p,0.0);
+                put(p, 0.0);
             }
         }};
         String[] split = s.substring(1).split(";", -1);
@@ -129,7 +129,7 @@ public class ProductWeightCalculationService {
             String[] keyVal = str.split(":");
             int key = Integer.valueOf(keyVal[0]);
             int multiplier = Integer.valueOf(keyVal[1]);
-            result.put(products.get(key), result.get(products.get(key)) + 1.0/multiplier);
+            result.put(products.get(key), result.get(products.get(key)) + 100 / multiplier);
         }
         return result;
     }
@@ -140,13 +140,13 @@ public class ProductWeightCalculationService {
         double carbo = 0;
         double fat = 0;
         for (Product p : result.keySet()) {
-            Double pCount = result.get(p);
+            Double weight = result.get(p);
             double calcCalories = round(calcCalories(p));
-            LOG.debug(p.getName() + " (PCF: " + p.getProtein() + ", " + p.getCarbo() + ", " + p.getFat() + "), kCal/100g: " + calcCalories + ", count: " + pCount);
-            protein = protein + p.getProtein()*4*pCount;
-            carbo = carbo + p.getCarbo()*4*pCount;
-            fat = fat + p.getFat()*9*pCount;
-            calories = calories + calcCalories*pCount;
+            LOG.debug(p.getName() + " (PCF: " + p.getProtein() + ", " + p.getCarbo() + ", " + p.getFat() + "), kCal/100g: " + calcCalories + ", weight(g): " + weight);
+            protein = protein + p.getProtein() * 4 * weight / 100;
+            carbo = carbo + p.getCarbo() * 4 * weight / 100;
+            fat = fat + p.getFat() * 9 * weight / 100;
+            calories = calories + calcCalories * weight / 100;
         }
         LOG.debug("Total calories: " + round(calories));
         LOG.debug("PCF(%): " + round(protein) + "(" + round(protein / calories) + "), " + round(carbo) + "(" + round(carbo / calories) + "), " + round(fat) + "(" + round(fat / calories) + ")");
@@ -167,6 +167,6 @@ public class ProductWeightCalculationService {
     }
 
     private double calcCalories(Product product) {
-        return product.getProtein()*4+product.getFat()*9+product.getCarbo()*4;
+        return product.getProtein() * 4 + product.getFat() * 9 + product.getCarbo() * 4;
     }
 }

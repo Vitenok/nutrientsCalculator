@@ -23,10 +23,10 @@
 
     <loggers>
         <root level="debug">
-            <appender-ref ref="Console" level="debug"/>
+            <appender-ref ref="Console" level="info"/>
             <appender-ref ref="File" level="error"/>
         </root>
-        <logger name="org.hibernate" level="debug"/>
+        <logger name="org.hibernate" level="info"/>
         <logger name="EventLogger" level="info" additivity="false">
             <AppenderRef ref="Routing"/>
         </logger>

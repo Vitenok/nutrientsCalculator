@@ -30,7 +30,13 @@ public class User {
         this.token = token;
     }
 
-    public User() {}
+    public User() {
+    }
+
+    public void addDayFoodPlan(DayFoodPlan dayFoodPlan) {
+        getDayFoodPlans().add(dayFoodPlan);
+        dayFoodPlan.setUser(this);
+    }
 
     public Integer getId() {
         return id;
@@ -96,5 +102,13 @@ public class User {
         result = 31 * result + (getSocialNetwork() != null ? getSocialNetwork().hashCode() : 0);
         result = 31 * result + (getToken() != null ? getToken().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", socialNetwork='" + socialNetwork + '\'' +
+                '}';
     }
 }

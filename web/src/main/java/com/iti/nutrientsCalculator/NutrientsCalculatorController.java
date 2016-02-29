@@ -1,9 +1,12 @@
 package com.iti.nutrientsCalculator;
 
+import com.iti.entity.DayFoodPlanRequest;
+import com.iti.foodCalculator.dao.DayFoodPlanDAO;
 import com.iti.foodCalculator.dao.ProductsDAO;
+import com.iti.foodCalculator.dao.UserDAO;
+import com.iti.foodCalculator.entity.*;
 import com.iti.foodCalculator.entity.pudik.AmountItem;
 import com.iti.foodCalculator.entity.pudik.CalculationInputDomainModel;
-import com.iti.foodCalculator.entity.Product;
 import com.iti.foodCalculator.service.ProductWeightCalculationService;
 import com.iti.foodCalculator.service.ProductWeightCalculatorService;
 import org.apache.logging.log4j.LogManager;
@@ -17,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -30,10 +33,16 @@ public class NutrientsCalculatorController {
     ProductsDAO productsDAO;
 
     @Autowired
+    UserDAO userDAO;
+
+    @Autowired
+    DayFoodPlanDAO dayFoodPlanDAO;
+
+    @Autowired
     ProductWeightCalculatorService productWeightCalculatorService;
 
     @Autowired
-    ProductWeightCalculationService productWeightCalculationService;
+    ProductWeightCalculationService calcService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String printWelcome() {
@@ -42,36 +51,58 @@ public class NutrientsCalculatorController {
 
     @Cacheable("products")
     @RequestMapping(value = "/populateFoodItems", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody List<Product> populateProducts() {
+    public
+    @ResponseBody
+    List<Product> populateProducts() {
         return productsDAO.findAll();
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
-    public @ResponseBody List<AmountItem> populateCalculation(@RequestBody CalculationInputDomainModel calculationInputDomainModel) {
+    public
+    @ResponseBody
+    List<AmountItem> populateCalculation(@RequestBody CalculationInputDomainModel calculationInputDomainModel) {
         return productWeightCalculatorService.calculateWeightOfProducts(calculationInputDomainModel);
     }
 
     @RequestMapping(value = "/calc", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String, Double>> calculate(@RequestBody List<List<Product>> productsList) {
-        if (productsList.size() < 2) {
-            return null;
+    public
+    @ResponseBody
+    List<Map<String, Double>> calculate(@RequestBody DayFoodPlanRequest dayPlan, HttpSession session) {
+
+        Map<Product, Double> productsWithWeight = calcService.calcWeight(dayPlan.getUniqueProducts(), dayPlan.getConstrains());
+
+        DayFoodPlan dayFoodPlan = FoodPlanHelper.hydrate(dayPlan, productsWithWeight);
+
+        saveDayFoodPlanIfUserExists(dayFoodPlan, (User) session.getAttribute("user"));
+
+        return FoodPlanHelper.dehydrate(dayFoodPlan);
+    }
+
+    @RequestMapping(value = "/foodPlan", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    List<Map<String, Double>> foodPlan(@RequestBody LocalDateTime date, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = userDAO.find("Petro Krasnomovets", "GOOGLE", "123123123");
+            session.setAttribute("user", user);
         }
+        DayFoodPlan dayFoodPlan = dayFoodPlanDAO.findByUserIdAndDate(user.getId(), date);
+        return FoodPlanHelper.dehydrate(dayFoodPlan);
+    }
 
-        List<Product> productsAll = productsList.stream().flatMap(l -> l.stream()).distinct().collect(Collectors.toList());
-        List<Product> productsUnique = productsAll.stream().distinct().collect(Collectors.toList());
-
-        Map<Product, Double> productsMap = productWeightCalculationService.calculateWeightOfProducts(productsUnique, productsUnique.remove(productsUnique.size() - 1));
-        //TODO: Persist productsList
-
-        productsList.remove(productsList.size()-1);
-        List<Map<String, Double>> result = new ArrayList<>();
-        for (List<Product> productList : productsList) {
-            Map<String, Double> tmpResult = new HashMap<>();
-            for (Product product : productList) {
-                tmpResult.put(product.getName(), productsMap.get(product)/ Collections.frequency(productsAll, product));
+    private DayFoodPlan saveDayFoodPlanIfUserExists(DayFoodPlan dayFoodPlan, User user) {
+        if (user != null) {
+            DayFoodPlan previousDayFoodPlan = user.getDayFoodPlans().stream().filter(d -> dayFoodPlan.getDate().toLocalDate().equals(d.getDate().toLocalDate())).findFirst().orElse(null);
+            if (previousDayFoodPlan != null) {
+                user.getDayFoodPlans().remove(previousDayFoodPlan);
             }
-            result.add(tmpResult);
+            user.addDayFoodPlan(dayFoodPlan);
+            userDAO.saveOrUpdate(user);
+            LOG.info("DayFoodPlan for user " + user + " saved successfully");
+        } else {
+            LOG.info("No users logged in. DayFoodPlan will not be saved");
         }
-        return result;
+        return dayFoodPlan;
     }
 }

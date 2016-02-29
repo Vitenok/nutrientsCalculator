@@ -22,13 +22,14 @@ public class Category implements Serializable {
     @JsonBackReference("category")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
     @JsonManagedReference("category")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> children;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference("category-products")
     private List<Product> products;
 
     public Category() {

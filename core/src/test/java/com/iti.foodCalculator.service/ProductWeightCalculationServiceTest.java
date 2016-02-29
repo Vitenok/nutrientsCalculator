@@ -37,7 +37,7 @@ public class ProductWeightCalculationServiceTest {
         Product restriction = new Product("", 600, 600*0.4/4, 600*0.2/9, 600*0.4/4);
         restriction.setCategory(new Category("testName", null));
 
-        Map<Product, Double> productByWeight = service.calculateWeightOfProducts(products, restriction);
+        Map<Product, Double> productByWeight = service.calcWeight(products, restriction);
 
     }
 }

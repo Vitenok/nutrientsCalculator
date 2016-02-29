@@ -28,6 +28,11 @@ public class DayFoodPlan {
     @JsonManagedReference("dayFoodPlan")
     private List<MealPlan> mealPlans;
 
+    public void addMealPlan(MealPlan mealPlan) {
+        getMealPlans().add(mealPlan);
+        mealPlan.setDayFoodPlan(this);
+    }
+
     public int getId() {
         return id;
     }
@@ -53,8 +58,8 @@ public class DayFoodPlan {
     }
 
     public List<MealPlan> getMealPlans() {
-        if(mealPlans==null){
-            mealPlans=new ArrayList<>();
+        if (mealPlans == null) {
+            mealPlans = new ArrayList<>();
         }
         return mealPlans;
     }

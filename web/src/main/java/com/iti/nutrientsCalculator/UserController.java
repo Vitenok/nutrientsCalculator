@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -19,7 +18,9 @@ public class UserController {
     UserDAO usersDAO;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public @ResponseBody User user(HttpSession session) {
+    public
+    @ResponseBody
+    User user(HttpSession session) {
         return (User) session.getAttribute("user");
     }
 
@@ -34,7 +35,7 @@ public class UserController {
             }
             session.setAttribute("user", user);
         }
-        System.out.println(name+"logged in from " + socialNetwork + " with user_id '" + token + "'");
+        System.out.println(name + "logged in from " + socialNetwork + " with user_id '" + token + "'");
         return "";
     }
 

@@ -1,5 +1,6 @@
 package com.iti.foodCalculator.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -95,7 +96,7 @@ public class Product implements Serializable {
     private double iodine;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @JsonBackReference("category-products")
     private Category category;
 
     public Product() {
@@ -541,7 +542,6 @@ public class Product implements Serializable {
         if (id != product.id) return false;
         if (Double.compare(product.kCal, kCal) != 0) return false;
         if (Double.compare(product.protein, protein) != 0) return false;
-        if (!category.equals(product.category)) return false;
         if (!name.equals(product.name)) return false;
 
         return true;
@@ -561,14 +561,15 @@ public class Product implements Serializable {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(carbo);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + category.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "category=" + category.getName() +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                "category=" + (category == null ? null : category.getName()) +
                 ", iodine=" + iodine +
                 ", phosphorus=" + phosphorus +
                 ", copper=" + copper +
@@ -611,8 +612,6 @@ public class Product implements Serializable {
                 ", kilojoules=" + kilojoules +
                 ", water=" + water +
                 ", ediblePart=" + ediblePart +
-                ", name='" + name + '\'' +
-                ", id=" + id +
                 '}';
     }
 }

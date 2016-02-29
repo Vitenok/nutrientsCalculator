@@ -2,7 +2,6 @@ package com.iti.foodCalculator.service;
 
 import com.iti.foodCalculator.dao.*;
 import com.iti.foodCalculator.entity.*;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -14,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -153,7 +151,7 @@ public class DataValidityTest {
 //        for (DayFoodPlan dfp : dayFoodPlans) {
 //            System.out.println(dfp.getDate() + " : " + dfp.getId());
 //        }
-        DayFoodPlan dfp = dayFoodPlanDAO.getById(1634);
+        DayFoodPlan dfp = dayFoodPlanDAO.findById(1634);
         dfp.getUser().getDayFoodPlans().remove(dfp);
         userDAO.saveOrUpdate(dfp.getUser());
 //        dayFoodPlanDAO.delete(dfp);//productPlans.get(0)
@@ -161,5 +159,12 @@ public class DataValidityTest {
 //        for (DayFoodPlan dfp : dayFoodPlans) {
 //            System.out.println(dfp.getDate() + " : " + dfp.getId());
 //        }
+    }
+
+    @Test
+    public void findDayFoodPlanTest() {
+        User user = userDAO.find("Petro Krasnomovets", "GOOGLE", "123123123");
+        DayFoodPlan dayFoodPlan = dayFoodPlanDAO.findByUserIdAndDate(user.getId(), LocalDateTime.now());
+        System.out.println(dayFoodPlan.getUser());
     }
 }

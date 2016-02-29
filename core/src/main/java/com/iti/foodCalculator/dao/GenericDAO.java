@@ -15,19 +15,18 @@ import java.util.List;
 @Repository("genericDAO")
 abstract class GenericDAO<T> {
     private final Class<T> persistentClass;
-
-    public GenericDAO(){
-        this.persistentClass =(Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
-
     @Autowired
     private SessionFactory sessionFactory;
 
-    protected Session getSession(){
+    public GenericDAO() {
+        this.persistentClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    protected Session getSession() {
         return sessionFactory.getCurrentSession();
     }
 
-    protected Criteria createCriteria(){
+    protected Criteria createCriteria() {
         return getSession().createCriteria(persistentClass);
     }
 
@@ -35,8 +34,12 @@ abstract class GenericDAO<T> {
         getSession().saveOrUpdate(t);
     }
 
-    public T getById(int id) {
+    public T findById(int id) {
         return (T) createCriteria().add(Restrictions.eq("id", id)).uniqueResult();
+    }
+
+    public List<T> findAll() {
+        return createCriteria().list();
     }
 
     public void delete(int id) {
@@ -45,9 +48,5 @@ abstract class GenericDAO<T> {
 
     public void delete(T t) {
         getSession().delete(t);
-    }
-
-    public List<T> findAll() {
-        return createCriteria().list();
     }
 }
