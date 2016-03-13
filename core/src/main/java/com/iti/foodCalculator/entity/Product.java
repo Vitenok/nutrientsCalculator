@@ -110,6 +110,15 @@ public class Product implements Serializable {
         this.carbo = carb;
     }
 
+    public Product(String name, int id, double kcal, double protein, double fat, double carb) {
+        this.name = name;
+        this.id = id;
+        this.kCal = kcal;
+        this.protein = protein;
+        this.fat = fat;
+        this.carbo = carb;
+    }
+
     public Product(double protein, double carbo, double fat) {
         this.protein = protein;
         this.carbo = carbo;
@@ -163,6 +172,7 @@ public class Product implements Serializable {
     }
 
     public Product(Product product) {
+        this.kCal = product.kCal;
         this.protein = product.protein;
         this.carbo = product.carbo;
         this.fat = product.fat;

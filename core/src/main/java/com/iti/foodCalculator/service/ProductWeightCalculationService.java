@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +15,12 @@ import java.util.Map;
 public class ProductWeightCalculationService {
 
     private static final Logger LOG = LogManager.getLogger(ProductWeightCalculationService.class);
+    public static final String KEY_VAL_DELIM = ":";
+    public static final String PAIR_DELIM = ";";
 
     private int maxMultiplier = 10;
     private int maxTimeToSearchInSeconds = 4;
-    private double epsilon = 0.9;
+    private double epsilon = 20;
 
     public ProductWeightCalculationService(int maxMultiplier, int maxTimeToSearchInSeconds, double epsilon) {
         this.maxMultiplier = maxMultiplier;
@@ -30,108 +32,68 @@ public class ProductWeightCalculationService {
     }
 
     public Map<Product, Double> calcWeight(List<Product> products, Product restriction) {
+        Map<Product, Double> result = new HashMap<>();
 
-        Collections.sort(products, (o1, o2) -> Double.compare(o1.getProtein(), o2.getProtein()));
-
-        StringBuilder bestSolution = new StringBuilder();
+        int n = 50;
+        List<String> tmpSolutions = new ArrayList<>();
 
         long start = System.currentTimeMillis();
-        calcWeight(products, restriction, new Product(restriction), "", new Product(restriction), bestSolution, 1, System.currentTimeMillis());
-        LOG.debug("It took " + (System.currentTimeMillis() - start) + " ms to find solution: " + bestSolution);
-
-        if (bestSolution.length() == 0) {
-            LOG.info("No results found!");
-            return new HashMap<>();
+        for (Product p : products) {
+            tmpSolutions = addSolution(tmpSolutions, p, n);
         }
 
-        Map<Product, Double> result = reduceToMap(products, bestSolution.toString());
-
-        if (LOG.getLevel().equals(Level.DEBUG)) {
-            compareResultAndPrint(restriction, result);
-        }
-
-        return result;
-    }
-
-    private void calcWeight(List<Product> products,
-                            Product globalRestriction,
-                            Product currRestriction,
-                            String currSolution,
-                            Product bestRestriction,
-                            StringBuilder bestSolution,
-                            int multiplier,
-                            long startTime) {
-        if (System.currentTimeMillis() - startTime > maxTimeToSearchInSeconds * 1000) {
-            LOG.debug("OUT OF TIME");
-            return;
-        }
-        if (solutionIsCloseEnough(bestRestriction, epsilon)) {
-            LOG.debug("SOLUTION FOUND!");
-            LOG.debug("Best Restriction is " + bestRestriction);
-            return;
-        }
-        for (int i = 0; i < products.size(); i++) {
-            if (isMoreThen(currRestriction, products.get(i), multiplier)) {
-                calcWeight(
-                        products,
-                        globalRestriction,
-                        subtractProducts(currRestriction, products.get(i), multiplier),
-                        currSolution + ";" + i + ":" + multiplier,
-                        bestRestriction,
-                        bestSolution,
-                        multiplier == maxMultiplier ? multiplier : ++multiplier,
-                        startTime);
-            } else {
-                double v = cKalDifference(globalRestriction, currRestriction);
-                double v1 = cKalDifference(globalRestriction, bestRestriction);
-                if (v > v1) {
-                    LOG.debug("Solution " + currSolution + " is better than existed: " + bestSolution + " for " + (v - v1) + " kCal");
-                    bestRestriction.setProtein(currRestriction.getProtein());
-                    bestRestriction.setCarbo(currRestriction.getCarbo());
-                    bestRestriction.setFat(currRestriction.getFat());
-                    if (bestSolution.length() > 0) {
-                        bestSolution.delete(0, bestSolution.length());
-                    }
-                    bestSolution.append(currSolution);
+        /**
+        double[] bestSolution = new double[]{restriction.getProtein()*4/restriction.getkCal(),
+                                             restriction.getCarbo()*4/restriction.getkCal(),
+                                             restriction.getFat()*9/restriction.getkCal()};
+        **/
+        int currSolIdx;
+        double[] currSol;
+        for (String tmpSol : tmpSolutions) {
+            String[] split = tmpSol.split(PAIR_DELIM);
+            double protein = 0;
+            double carbo = 0;
+            double fat = 0;
+            for (String str : split) {
+                String[] keyVal = str.split(KEY_VAL_DELIM);
+                Product p = products.stream().filter(product -> product.getId() == Integer.valueOf(keyVal[0])).findFirst().get();
+                double multiplier = Double.valueOf(keyVal[1]);
+                protein=+p.getProtein()*multiplier/100;
+                carbo=+p.getCarbo()*multiplier/100;
+                fat=+p.getFat()*multiplier/100;
+            }
+            if (Math.abs(restriction.getProtein()-protein)<epsilon*4 && Math.abs(restriction.getCarbo()-carbo)<epsilon*4 && Math.abs(restriction.getFat() - fat)<epsilon*9) {
+                for (String str : split) {
+                    String[] keyVal = str.split(KEY_VAL_DELIM);
+                    Product p = products.stream().filter(product -> product.getId() == Integer.valueOf(keyVal[0])).findFirst().get();
+                    double multiplier = Integer.valueOf(keyVal[1]);
+                    result.put(p, multiplier);
+                    break;
                 }
             }
         }
-    }
+        LOG.debug("It took " + (System.currentTimeMillis() - start) + " ms to find solution");
 
-    private boolean solutionIsCloseEnough(Product bestRestriction, double epsilon) {
-        return bestRestriction.getProtein() < epsilon &&
-                bestRestriction.getCarbo() < epsilon &&
-                bestRestriction.getFat() < epsilon;
-    }
-
-    private double cKalDifference(Product first, Product second) {
-        return (first.getProtein() - second.getProtein() + first.getCarbo() - second.getCarbo()) * 4 + (first.getFat() - second.getFat()) * 9;
-    }
-
-    private Product subtractProducts(Product first, Product second, int multiplier) {
-        return new Product(first.getProtein() - second.getProtein() / multiplier, first.getCarbo() - second.getCarbo() / multiplier, first.getFat() - second.getFat() / multiplier);
-    }
-
-    private boolean isMoreThen(Product first, Product second, int multiplier) {
-        return first.getProtein() - second.getProtein() / multiplier >= 0 &&
-                first.getCarbo() - second.getCarbo() / multiplier >= 0 &&
-                first.getFat() - second.getFat() / multiplier >= 0;
-    }
-
-    private Map<Product, Double> reduceToMap(List<Product> products, String s) {
-        Map<Product, Double> result = new HashMap<Product, Double>() {{
-            for (Product p : products) {
-                put(p, 0.0);
-            }
-        }};
-        String[] split = s.substring(1).split(";", -1);
-        for (String str : split) {
-            String[] keyVal = str.split(":");
-            int key = Integer.valueOf(keyVal[0]);
-            int multiplier = Integer.valueOf(keyVal[1]);
-            result.put(products.get(key), result.get(products.get(key)) + 100 / multiplier);
+        if (Level.DEBUG.equals(LOG.getLevel())) {
+            compareResultAndPrint(restriction, result);
         }
         return result;
+    }
+
+    private List<String> addSolution(List<String> prevSolutions, Product product, int combinations) {
+        List<String> newSolutions = new ArrayList<>();
+        if (prevSolutions.isEmpty()) {
+            for (int i = 40; i <= combinations; i++) {
+                newSolutions.add(product.getId() + KEY_VAL_DELIM + i);
+            }
+            return newSolutions;
+        }
+        for (int i = 40; i <= combinations; i++) {
+            for (int j = 0; j < prevSolutions.size() ; j++) {
+                newSolutions.add(prevSolutions.get(j) + PAIR_DELIM + product.getId() + KEY_VAL_DELIM + i);
+            }
+        }
+        return newSolutions;
     }
 
     private void compareResultAndPrint(Product restriction, Map<Product, Double> result) {
