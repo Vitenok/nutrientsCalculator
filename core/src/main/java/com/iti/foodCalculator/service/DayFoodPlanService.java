@@ -12,8 +12,6 @@ public class DayFoodPlanService {
     DayFoodPlanDAO dayFoodPlanDAO;
 
     public void saveOrUpdate(DayFoodPlan dayFoodPlan) {
-        if (dayFoodPlan.getId() != 0) {
-
-        }
+        dayFoodPlanDAO.saveOrUpdate(dayFoodPlan);
     }
 }

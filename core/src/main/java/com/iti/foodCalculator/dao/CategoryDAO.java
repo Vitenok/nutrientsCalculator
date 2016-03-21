@@ -4,5 +4,4 @@ import com.iti.foodCalculator.entity.Category;
 import org.springframework.stereotype.Repository;
 
 @Repository("categoryDAO")
-public class CategoryDAO extends GenericDAO<Category> {
-}
+public class CategoryDAO extends GenericDAO<Category> {}

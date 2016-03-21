@@ -4,11 +4,11 @@ import com.iti.entity.DayFoodPlanRequest;
 import com.iti.foodCalculator.dao.DayFoodPlanDAO;
 import com.iti.foodCalculator.dao.ProductsDAO;
 import com.iti.foodCalculator.dao.UserDAO;
-import com.iti.foodCalculator.entity.*;
-import com.iti.foodCalculator.entity.pudik.AmountItem;
-import com.iti.foodCalculator.entity.pudik.CalculationInputDomainModel;
+import com.iti.foodCalculator.entity.DayFoodPlan;
+import com.iti.foodCalculator.entity.Product;
+import com.iti.foodCalculator.entity.User;
 import com.iti.foodCalculator.service.ProductWeightCalculationService;
-import com.iti.foodCalculator.service.ProductWeightCalculatorService;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -37,9 +38,6 @@ public class NutrientsCalculatorController {
 
     @Autowired
     DayFoodPlanDAO dayFoodPlanDAO;
-
-    @Autowired
-    ProductWeightCalculatorService productWeightCalculatorService;
 
     @Autowired
     ProductWeightCalculationService calcService;
@@ -60,22 +58,22 @@ public class NutrientsCalculatorController {
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
     public
     @ResponseBody
-    List<AmountItem> populateCalculation(@RequestBody CalculationInputDomainModel calculationInputDomainModel) {
-        return productWeightCalculatorService.calculateWeightOfProducts(calculationInputDomainModel);
-    }
-
-    @RequestMapping(value = "/calc", method = RequestMethod.POST)
-    public
-    @ResponseBody
     List<Map<String, Double>> calculate(@RequestBody DayFoodPlanRequest dayPlan, HttpSession session) {
+
+        if (Level.DEBUG.equals(LOG.getLevel())) {
+            LOG.debug("Calculating weights for next products:");
+            for (Product p : dayPlan.getUniqueProducts()) {
+                LOG.debug("\"" + p.getName() + "\", " + p.getkCal() + ", " + p.getProtein() + ", " + p.getFat() + ", " + p.getCarbo());
+            }
+        }
 
         Map<Product, Double> productsWithWeight = calcService.calcWeight(dayPlan.getUniqueProducts(), dayPlan.getConstrains());
 
-        DayFoodPlan dayFoodPlan = FoodPlanHelper.hydrate(dayPlan, productsWithWeight);
+        DayFoodPlan dayFoodPlan = DayFoodPlanHelper.hydrate(dayPlan, productsWithWeight);
 
         saveDayFoodPlanIfUserExists(dayFoodPlan, (User) session.getAttribute("user"));
 
-        return FoodPlanHelper.dehydrate(dayFoodPlan);
+        return DayFoodPlanHelper.dehydrate(dayFoodPlan);
     }
 
     @RequestMapping(value = "/foodPlan", method = RequestMethod.POST)
@@ -83,12 +81,12 @@ public class NutrientsCalculatorController {
     @ResponseBody
     List<Map<String, Double>> foodPlan(@RequestBody LocalDateTime date, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = userDAO.find("Petro Krasnomovets", "GOOGLE", "123123123");
-            session.setAttribute("user", user);
+        if (user != null) {
+            DayFoodPlan dayFoodPlan = dayFoodPlanDAO.findByUserIdAndDate(user.getId(), date);
+            return DayFoodPlanHelper.dehydrate(dayFoodPlan);
         }
-        DayFoodPlan dayFoodPlan = dayFoodPlanDAO.findByUserIdAndDate(user.getId(), date);
-        return FoodPlanHelper.dehydrate(dayFoodPlan);
+        LOG.error("No users logged in. DayFoodPlan will not be saved");
+        return null;
     }
 
     private DayFoodPlan saveDayFoodPlanIfUserExists(DayFoodPlan dayFoodPlan, User user) {
@@ -101,7 +99,7 @@ public class NutrientsCalculatorController {
             userDAO.saveOrUpdate(user);
             LOG.info("DayFoodPlan for user " + user + " saved successfully");
         } else {
-            LOG.info("No users logged in. DayFoodPlan will not be saved");
+            LOG.error("No users logged in. DayFoodPlan will not be saved");
         }
         return dayFoodPlan;
     }

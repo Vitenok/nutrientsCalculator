@@ -11,20 +11,21 @@ import java.util.*;
 @Service("productWeightCalculationService")
 public class ProductWeightCalculationService {
 
+    private static final Logger LOG = LogManager.getLogger(ProductWeightCalculationService.class);
     static int[][] ids = new int[(int) (Math.pow(2, 10))][];
 
     static {
-        for (int i = 0; i <= Math.pow(2, 10)-1 ; i++) { //TODO: increase me in real scenario!
+        for (int i = 0; i <= Math.pow(2, 10) - 1; i++) { //TODO: increase me in real scenario!
             ids[i] = Arrays.asList(Integer.toBinaryString(i).split("")).stream().mapToInt(Integer::valueOf).toArray();
         }
     }
 
-    private static final Logger LOG = LogManager.getLogger(ProductWeightCalculationService.class);
-
     private double epsilon = 0.001;
+    private int maxTimeToCalculateMillis = 500;
 
-    public ProductWeightCalculationService(double epsilon) {
+    public ProductWeightCalculationService(double epsilon, int maxTimeToCalculate) {
         this.epsilon = epsilon;
+        this.maxTimeToCalculateMillis = maxTimeToCalculate;
     }
 
     public ProductWeightCalculationService() {
@@ -32,9 +33,9 @@ public class ProductWeightCalculationService {
 
     public Map<Product, Double> calcWeight(List<Product> products, Product restriction) {
 
-        double[] superProportion = new double[]{restriction.getProtein()*4/restriction.getkCal(),
-                restriction.getCarbo()*4/restriction.getkCal(),
-                restriction.getFat()*9/restriction.getkCal()};
+        double[] superProportion = new double[]{restriction.getProtein() * 4 / restriction.getkCal(),
+                restriction.getCarbo() * 4 / restriction.getkCal(),
+                restriction.getFat() * 9 / restriction.getkCal()};
 
         long start = System.currentTimeMillis();
         Map<List<Product>, Product> allCombos = buildCombosMap(products);
@@ -46,18 +47,18 @@ public class ProductWeightCalculationService {
 
         start = System.currentTimeMillis();
 
-        Map<Product, Double> result = new HashMap<Product, Double>(){{
+        Map<Product, Double> result = new HashMap<Product, Double>() {{
             products.stream().forEach(p -> put(p, 1.0));
         }};
-        Product allProducts = allCombos.entrySet().stream().filter(e->e.getKey().size()==products.size()).findFirst().get().getValue();
+        Product allProducts = allCombos.entrySet().stream().filter(e -> e.getKey().size() == products.size()).findFirst().get().getValue();
         Product aggregatedResult = new Product(allProducts);
-        double[] currentProportion = new double[]{allProducts.getProtein()*4/allProducts.getkCal(),
-                allProducts.getCarbo()*4/allProducts.getkCal(),
-                allProducts.getFat()*9/allProducts.getkCal()};
+        double[] currentProportion = new double[]{allProducts.getProtein() * 4 / allProducts.getkCal(),
+                allProducts.getCarbo() * 4 / allProducts.getkCal(),
+                allProducts.getFat() * 9 / allProducts.getkCal()};
 
         int iterations = 1;
         LOG.debug("Current proportion : " + Arrays.toString(currentProportion));
-        while (!isProportionSuper(currentProportion, superProportion)) {
+        while (!isProportionSuper(currentProportion, superProportion) && System.currentTimeMillis()-start < maxTimeToCalculateMillis) {
             if (Level.DEBUG.equals(LOG.getLevel())) {
                 LOG.debug("Starting " + iterations + " iteration");
             }
@@ -68,7 +69,7 @@ public class ProductWeightCalculationService {
                 int pcfIdx = -1;
                 double delta = -1;
                 for (int i = 0; i < currentProportion.length; i++) {
-                    double abs = Math.abs(currentProportion[i] - superProportion[i])/currentProportion[i];
+                    double abs = Math.abs(currentProportion[i] - superProportion[i]) / currentProportion[i];
                     if (abs > delta) {
                         delta = abs;
                         pcfIdx = i;
@@ -87,8 +88,8 @@ public class ProductWeightCalculationService {
             }
             iterations++;
         }
-        double k = restriction.getkCal()/aggregatedResult.getkCal();
-        result.entrySet().forEach(e -> e.setValue(e.getValue()*k));
+        double k = restriction.getkCal() / aggregatedResult.getkCal();
+        result.entrySet().forEach(e -> e.setValue(e.getValue() * k));
 
         LOG.info("It took " + (System.currentTimeMillis() - start) + " ms to find solution with " + iterations + " iterations");
 
@@ -105,15 +106,14 @@ public class ProductWeightCalculationService {
     }
 
     private double density(double element, Product p) {
-        return element/(p.getProtein()*4+p.getCarbo()*4+p.getFat()*9);
+        return element / (p.getProtein() * 4 + p.getCarbo() * 4 + p.getFat() * 9);
     }
 
     private Map<List<Product>, Product> buildCombosMap(List<Product> products) {
         Map<List<Product>, Product> result = new HashMap<>();
-        for (int i = 0; i <= Math.pow(2, products.size())-1 ; i++) {
+        for (int i = 0; i <= Math.pow(2, products.size()) - 1; i++) {
             List<Product> listByIds = listByIds(products, ids[i]);
             if (!listByIds.isEmpty()) {
-//                LOG.debug(listByIds.stream().map(p -> String.valueOf(p.getId())).collect(Collectors.joining()));
                 result.put(listByIds, buildAggregatedProduct(listByIds));
             }
         }
@@ -121,10 +121,10 @@ public class ProductWeightCalculationService {
     }
 
     private List<Product> listByIds(List<Product> products, int[] ids) {
-        return new ArrayList<Product>(){{
+        return new ArrayList<Product>() {{
             for (int i = 0; i < ids.length; i++) {
                 if (ids[i] != 0) {
-                    add(products.get(ids.length-i-1));
+                    add(products.get(ids.length - i - 1));
                 }
             }
         }};
@@ -139,12 +139,12 @@ public class ProductWeightCalculationService {
             carbohydrate += p.getCarbo();
             fat += p.getFat();
         }
-        return new Product("", protein*4+carbohydrate*4+fat*9, protein, fat, carbohydrate);
+        return new Product("", protein * 4 + carbohydrate * 4 + fat * 9, protein, fat, carbohydrate);
     }
 
     private boolean isProportionSuper(double[] currentProportion, double[] superProportion) {
-        for (int i = 0; i <superProportion.length ; i++) {
-            if (Math.abs(currentProportion[i]-superProportion[i]) > epsilon) {
+        for (int i = 0; i < superProportion.length; i++) {
+            if (Math.abs(currentProportion[i] - superProportion[i]) > epsilon) {
                 return false;
             }
         }
@@ -156,14 +156,14 @@ public class ProductWeightCalculationService {
         Map.Entry<List<Product>, Product> result = null;
         double currMinProportionDeltaSum = 0;
         for (int i = 0; i < newProportion.length; i++) {
-            currMinProportionDeltaSum += Math.abs(currentProportion[i]-superProportion[i]);
+            currMinProportionDeltaSum += Math.abs(currentProportion[i] - superProportion[i]);
         }
 //        int iteration = 1;
         for (Map.Entry<List<Product>, Product> e : allCombos.entrySet()) {
             double newProportionDeltaSum = 0.0;
             updateTmpResult(newProportion, new Product(currProduct), e.getValue());
             for (int i = 0; i < newProportion.length; i++) {
-                newProportionDeltaSum += Math.abs(newProportion[i]-superProportion[i]);
+                newProportionDeltaSum += Math.abs(newProportion[i] - superProportion[i]);
             }
             if (newProportionDeltaSum < currMinProportionDeltaSum) {
 //                LOG.debug("     Better proportion " + Arrays.toString(newProportion) + " found on " + iteration + " out of " + allCombos.size());
@@ -182,14 +182,14 @@ public class ProductWeightCalculationService {
     }
 
     private void updateTmpResult(double[] proportion, Product currProduct, Product currentCombo) {
-        currProduct.setProtein(currProduct.getProtein()+currentCombo.getProtein());
+        currProduct.setProtein(currProduct.getProtein() + currentCombo.getProtein());
         currProduct.setCarbo(currProduct.getCarbo() + currentCombo.getCarbo());
         currProduct.setFat(currProduct.getFat() + currentCombo.getFat());
-        double kCal = currProduct.getProtein()*4 + currProduct.getCarbo()*4 + currProduct.getFat()*9;
-        currProduct.setkCal(kCal/100);
-        proportion[0] = currProduct.getProtein()*4 / kCal;
-        proportion[1] = currProduct.getCarbo()*4 / kCal;
-        proportion[2] = currProduct.getFat()*9 / kCal;
+        double kCal = currProduct.getProtein() * 4 + currProduct.getCarbo() * 4 + currProduct.getFat() * 9;
+        currProduct.setkCal(kCal / 100);
+        proportion[0] = currProduct.getProtein() * 4 / kCal;
+        proportion[1] = currProduct.getCarbo() * 4 / kCal;
+        proportion[2] = currProduct.getFat() * 9 / kCal;
     }
 
     private void compareResultAndPrint(Product restriction, Map<Product, Double> result) {

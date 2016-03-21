@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FoodPlanHelper {
+public class DayFoodPlanHelper {
     public static DayFoodPlan hydrate(DayFoodPlanRequest dayPlan, Map<Product, Double> productsMap) {
         DayFoodPlan dayFoodPlan = new DayFoodPlan();
         dayFoodPlan.setDate(dayPlan.getDate());
         for (int i = 0; i < dayPlan.getProductsLists().size(); i++) {
             MealPlan mealPlan = new MealPlan();
             for (Product product : dayPlan.getProductsLists().get(i)) {
-                mealPlan.addProductPlan(new ProductPlan(product, productsMap.get(product)/dayPlan.frequency(product)));
+                mealPlan.addProductPlan(new ProductPlan(product, productsMap.get(product) / dayPlan.frequency(product)));
             }
             dayFoodPlan.addMealPlan(mealPlan);
         }
@@ -27,7 +27,7 @@ public class FoodPlanHelper {
 
     public static List<Map<String, Double>> dehydrate(DayFoodPlan dayFoodPlan) {
         List<Map<String, Double>> result = new ArrayList<>();
-        for(MealPlan mp : dayFoodPlan.getMealPlans()) {
+        for (MealPlan mp : dayFoodPlan.getMealPlans()) {
             Map<String, Double> map = new HashMap<>();
             for (ProductPlan pp : mp.getProductPlans()) {
                 map.put(pp.getProduct().getName(), pp.getWeight());

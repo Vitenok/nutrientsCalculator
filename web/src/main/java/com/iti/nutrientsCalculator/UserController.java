@@ -2,6 +2,8 @@ package com.iti.nutrientsCalculator;
 
 import com.iti.foodCalculator.dao.UserDAO;
 import com.iti.foodCalculator.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
+    private static final Logger LOG = LogManager.getLogger(UserController.class);
 
     @Autowired
     UserDAO usersDAO;
@@ -32,17 +35,19 @@ public class UserController {
             if (user == null) {
                 user = new User(name, socialNetwork, token);
                 usersDAO.saveOrUpdate(user);
+                LOG.debug(name + " signed up from " + socialNetwork + " with user_id '" + token + "'");
             }
             session.setAttribute("user", user);
         }
-        System.out.println(name + "logged in from " + socialNetwork + " with user_id '" + token + "'");
+        LOG.debug(name + " logged in from " + socialNetwork + " with user_id '" + token + "'");
         return "";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        LOG.debug("logging out " + user.getName());
         session.removeAttribute("user");
-        System.out.println("logging out");
         return "";
     }
 }
