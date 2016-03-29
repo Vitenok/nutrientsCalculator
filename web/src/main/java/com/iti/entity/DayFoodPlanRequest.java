@@ -1,5 +1,6 @@
 package com.iti.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iti.foodCalculator.entity.Product;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class DayFoodPlanRequest {
 
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime date;
     private Product constrains;
     private List<List<Product>> productsLists;

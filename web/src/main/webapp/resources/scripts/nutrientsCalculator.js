@@ -149,7 +149,7 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $log) {
                     },
                     // get the milliseconds since 1 jan 1970
                     //date: $scope.currentDate.valueOf()
-                    date: "2016-02-29T12:09:36"
+                    date: new Date().toJSON() // TODO: Change to chosen date from calendar
                 });
 
                 $http({
