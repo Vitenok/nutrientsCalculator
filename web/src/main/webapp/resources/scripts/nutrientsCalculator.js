@@ -147,9 +147,7 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $log) {
                         carbo: $scope.carbsIntake,
                         fat: $scope.fatsIntake
                     },
-                    // get the milliseconds since 1 jan 1970
-                    //date: $scope.currentDate.valueOf()
-                    date: new Date().toJSON() // TODO: Change to chosen date from calendar
+                    date: $scope.currentDate.toJSON()
                 });
 
                 $http({
