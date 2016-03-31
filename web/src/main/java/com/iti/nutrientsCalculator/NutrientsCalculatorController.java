@@ -8,6 +8,7 @@ import com.iti.foodCalculator.entity.DayFoodPlan;
 import com.iti.foodCalculator.entity.Product;
 import com.iti.foodCalculator.entity.User;
 import com.iti.foodCalculator.service.ProductWeightCalculationService;
+import javafx.util.Pair;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,18 +59,18 @@ public class NutrientsCalculatorController {
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
     public
     @ResponseBody
-    List<Map<String, Double>> calculate(@RequestBody DayFoodPlanRequest dayPlan, HttpSession session) {
+    List<List<Pair<String, Double>>> calculate(@RequestBody DayFoodPlanRequest dayPlanRequest, HttpSession session) {
 
         if (Level.DEBUG.equals(LOG.getLevel())) {
             LOG.debug("Calculating weights for next products:");
-            for (Product p : dayPlan.getUniqueProducts()) {
+            for (Product p : dayPlanRequest.getUniqueProducts()) {
                 LOG.debug("\"" + p.getName() + "\", " + p.getkCal() + ", " + p.getProtein() + ", " + p.getFat() + ", " + p.getCarbo());
             }
         }
 
-        Map<Product, Double> productsWithWeight = calcService.calcWeight(dayPlan.getUniqueProducts(), dayPlan.getConstrains());
+        Map<Product, Double> productsWithWeight = calcService.calcWeight(dayPlanRequest.getUniqueProducts(), dayPlanRequest.getConstrains());
 
-        DayFoodPlan dayFoodPlan = DayFoodPlanHelper.hydrate(dayPlan, productsWithWeight);
+        DayFoodPlan dayFoodPlan = DayFoodPlanHelper.hydrate(dayPlanRequest, productsWithWeight);
 
         saveDayFoodPlanIfUserExists(dayFoodPlan, (User) session.getAttribute("user"));
 
@@ -79,7 +80,7 @@ public class NutrientsCalculatorController {
     @RequestMapping(value = "/foodPlan", method = RequestMethod.POST)
     public
     @ResponseBody
-    List<Map<String, Double>> foodPlan(@RequestBody LocalDateTime date, HttpSession session) {
+    List<List<Pair<String, Double>>> foodPlan(@RequestBody LocalDateTime date, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
             DayFoodPlan dayFoodPlan = dayFoodPlanDAO.findByUserIdAndDate(user.getId(), date);

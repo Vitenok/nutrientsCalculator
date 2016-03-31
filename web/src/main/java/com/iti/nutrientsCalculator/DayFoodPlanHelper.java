@@ -5,11 +5,12 @@ import com.iti.foodCalculator.entity.DayFoodPlan;
 import com.iti.foodCalculator.entity.MealPlan;
 import com.iti.foodCalculator.entity.Product;
 import com.iti.foodCalculator.entity.ProductPlan;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DayFoodPlanHelper {
     public static DayFoodPlan hydrate(DayFoodPlanRequest dayPlan, Map<Product, Double> productsMap) {
@@ -25,14 +26,10 @@ public class DayFoodPlanHelper {
         return dayFoodPlan;
     }
 
-    public static List<Map<String, Double>> dehydrate(DayFoodPlan dayFoodPlan) {
-        List<Map<String, Double>> result = new ArrayList<>();
+    public static List<List<Pair<String, Double>>> dehydrate(DayFoodPlan dayFoodPlan) {
+        List<List<Pair<String, Double>>> result = new ArrayList<>();
         for (MealPlan mp : dayFoodPlan.getMealPlans()) {
-            Map<String, Double> map = new HashMap<>();
-            for (ProductPlan pp : mp.getProductPlans()) {
-                map.put(pp.getProduct().getName(), pp.getWeight());
-            }
-            result.add(map);
+            result.add(mp.getProductPlans().stream().map(pp -> new Pair<>(pp.getProduct().getName(), pp.getWeight())).collect(Collectors.toList()));
         }
         return result;
     }
