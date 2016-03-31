@@ -207,7 +207,7 @@
 
                                 <p>{{proteinRange}}%</p>
 
-                                <p>{{proteinsIntake}}gr</p>
+                                <p>{{round(proteinsIntake)}}gr</p>
                             </div>
                             <div flex="30">
 
@@ -215,14 +215,14 @@
 
                                 <p>{{fatRange}}%</p>
 
-                                <p>{{fatsIntake}}gr</p>
+                                <p>{{round(fatsIntake)}}gr</p>
                             </div>
                             <div flex="30">
                                 <p>Carbohydrate</p>
 
                                 <p>{{carbohydrateRange}}%</p>
 
-                                <p>{{carbsIntake}}gr</p>
+                                <p>{{round(carbsIntake)}}gr</p>
                             </div>
                         </div>
                     </div>
@@ -377,26 +377,56 @@
                 <md-list>
                     <md-subheader class="md-no-sticky">Breakfast</md-subheader>
                     <md-list-item ng-repeat="item in menu[0]">
-                        <p> {{ item }} </p>
+                        <p> {{ item.key }} </p>
+                        <p> {{ round(item.value) }} </p>
+                        <!--prot-->
+                        <p> {{ round(breakfastInput[$index].protein * item.value / 100) }}</p>
+                       <!--Fat-->
+                        <p> {{ round(breakfastInput[$index].fat * item.value / 100) }}</p>
+                        <!--Carb-->
+                        <p> {{ round(breakfastInput[$index].carbo * item.value / 100) }}</p>
+                        <!--kcal-->
+                        <p> {{ round(breakfastInput[$index].kCal * item.value / 100) }}</p>
                     </md-list-item>
 
                     <md-subheader class="md-no-sticky">Lunch</md-subheader>
                     <md-list-item ng-repeat="item in menu[1]">
-                        <p> {{ item.name }} </p>
-                        <p> {{ item.value }} </p>
-                    </md-list-item>
+                        <p> {{ item.key }} </p>
+                        <p> {{ round(item.value) }} </p>
+                        <!--prot-->
+                        <p> {{ round(lunchInput[$index].protein * item.value / 100) }}</p>
+                        <!--Fat-->
+                        <p> {{ round(lunchInput[$index].fat * item.value / 100) }}</p>
+                        <!--Carb-->
+                        <p> {{ round(lunchInput[$index].carbo * item.value / 100) }}</p>
+                        <!--kcal-->
+                        <p> {{ round(lunchInput[$index].kCal * item.value / 100) }}</p>                    </md-list-item>
 
                     <md-subheader class="md-no-sticky">Dinner</md-subheader>
                     <md-list-item ng-repeat="item in menu[2]">
-                        <p> {{ item.name }} </p>
-                        <p> {{ item.value }} </p>
-                    </md-list-item>
+                        <p> {{ item.key }} </p>
+                        <p> {{ round(item.value) }} </p>
+                        <!--prot-->
+                        <p> {{ round(dinnerInput[$index].protein * item.value / 100) }}</p>
+                        <!--Fat-->
+                        <p> {{ round(dinnerInput[$index].fat * item.value / 100) }}</p>
+                        <!--Carb-->
+                        <p> {{ round(dinnerInput[$index].carbo * item.value / 100) }}</p>
+                        <!--kcal-->
+                        <p> {{ round(dinnerInput[$index].kCal * item.value / 100) }}</p>                    </md-list-item>
 
                     <md-subheader class="md-no-sticky">Snacks</md-subheader>
                     <md-list-item ng-repeat="item in menu[3]">
-                        <p> {{ item.name }} </p>
-                        <p> {{ item.value }} </p>
-                    </md-list-item>
+                        <p> {{ item.key }} </p>
+                        <p> {{ round(item.value) }} </p>
+                        <!--prot-->
+                        <p> {{ round(snakesInput[$index].protein * item.value / 100) }}</p>
+                        <!--Fat-->
+                        <p> {{ round(snakesInput[$index].fat * item.value / 100) }}</p>
+                        <!--Carb-->
+                        <p> {{ round(snakesInput[$index].carbo * item.value / 100) }}</p>
+                        <!--kcal-->
+                        <p> {{ round(snakesInput[$index].kCal * item.value / 100) }}</p>                    </md-list-item>
                 </md-list>
             </md-card-content>
         </md-card>

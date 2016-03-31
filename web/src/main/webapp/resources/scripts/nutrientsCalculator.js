@@ -161,15 +161,6 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $log) {
                     success(function (data, status, headers, config) {
                         $scope.menu = data;
                         $scope.isClicked = true;
-
-                        data.forEach(function (entry) {
-                                for (var key in entry) {
-                                    if (entry.hasOwnProperty(key)) {
-                                        var value = entry[key];
-                                        console.log(value.name);
-                                    }
-                                }
-                        });
                     }).
                     error(function (data, status, headers, config) {
                         $scope.isClicked = false;
@@ -344,4 +335,8 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $log) {
     $timeout(function () {
         window.dispatchEvent(new Event('resize'));
     }, 500);
+
+    $scope.round = function (i) {
+        return Math.round(i);
+    }
 });
