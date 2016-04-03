@@ -273,7 +273,7 @@
 
                     <md-list flex="100" style="max-height: 260px; overflow-x: hidden; ">
                         <md-list-item class="list-group-item col-md-12" ng-if="searchFoodItem"
-                                      ng-repeat="product in products | filter:searchFoodItem:startsWith">
+                                      ng-repeat="product in filteredProducts = ( products | filter:searchFoodItem:startsWith)" ng-click="addProductToCurrentMeal(product)">
                             <div flex="95">
                                 <div>{{product.name}}</div>
                                 <div class="md-caption">
@@ -282,13 +282,11 @@
                                     </i>
                                 </div>
                             </div>
-
-                            <div>
-                                <md-button ng-click="addProductToCurrentMeal(product)" class="md-primary">Add
-                                </md-button>
-                            </div>
                             <md-divider></md-divider>
                         </md-list-item>
+                        <div  flex="95" ng-show="filteredProducts.length  === 0">
+                            We didn't find requested product.  <a href="">Create new product</a> or <a href=""> create a dish</a>
+                        </div>
                     </md-list>
                 </md-content>
 

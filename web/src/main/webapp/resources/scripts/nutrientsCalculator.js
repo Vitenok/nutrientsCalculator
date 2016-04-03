@@ -62,6 +62,7 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $log) {
             $scope.toggle(product, $scope.snakesInput);
             $scope.showSnacks = $scope.snakesInput.length > 0;
         }
+        $scope.searchFoodItem = undefined;
         $scope.selectedArr.push(product);
         $scope.selectedArr = removeDuplicatesFromArray($scope.selectedArr);
     };
@@ -92,7 +93,6 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $log) {
 
     $scope.transformCarbAndProteinFromPercentToGr = function (intake, range) {
         if (intake !== undefined && intake !== null) {
-//            return Math.round(intake * range / 100 / 4);
             return intake * range / 100 / 4;
         } else {
             return 0;
@@ -101,7 +101,6 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $log) {
 
     $scope.transformFatFromPercentToGr = function (intake, range) {
         if (intake !== undefined && intake !== null) {
-//            return Math.round(intake * range / 100 / 9);
             return intake * range / 100 / 9;
         } else {
             return 0;
