@@ -71,7 +71,7 @@ function login(name, socialNetwork, userId) {
 }
 
 function afterLogin(name) {
-    document.getElementById('loggedInTxt').innerHTML = name;
+    document.getElementById('loggedInTxt').innerHTML = "Signed in as " + name;
     document.getElementById('loggedIn').style.display='';
     document.getElementById('login').style.display='none';
 }
