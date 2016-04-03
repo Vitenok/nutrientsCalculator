@@ -266,12 +266,12 @@
 
                 <md-content>
                     <md-input-container class="md-block" flex="100" style="margin-bottom: 0">
-                        <label>Search food or supplement</label>
+                        <label>Search food or <a href=""> create new product</a></label>
                         <input type="search" class="form-control"
-                               data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}">
+                               data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}" placeholder="Search food or supplement">
                     </md-input-container>
 
-                    <md-list flex="100" style="max-height: 260px; overflow-x: hidden; ">
+                    <md-list flex="100" style="max-height: 260px; overflow-x: hidden;">
                         <md-list-item class="list-group-item col-md-12" ng-if="searchFoodItem"
                                       ng-repeat="product in filteredProducts = ( products | filter:searchFoodItem:startsWith)" ng-click="addProductToCurrentMeal(product)">
                             <div flex="95">
@@ -285,7 +285,7 @@
                             <md-divider></md-divider>
                         </md-list-item>
                         <div  flex="95" ng-show="filteredProducts.length  === 0">
-                            We didn't find requested product.  <a href="">Create new product</a> or <a href=""> create a dish</a>
+                            We didn't find requested product.  <a href="">Create new product</a>
                         </div>
                     </md-list>
                 </md-content>
