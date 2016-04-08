@@ -317,6 +317,14 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
         }
     }, true);
 
+    $scope.$watch('intake', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            $scope.proteinsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.proteinRange);
+            $scope.fatsIntake = $scope.transformFatFromPercentToGr($scope.intake, $scope.fatRange);
+            $scope.carbsIntake = $scope.transformCarbAndProteinFromPercentToGr($scope.intake, $scope.carbohydrateRange);
+        }
+    }, true);
+
     $scope.startsWith = function (actual, expected) {
         if (expected !== undefined && expected !== null && expected !== "") {
             var lowerStr = (actual + "").toLowerCase();
