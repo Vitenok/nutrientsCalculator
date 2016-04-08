@@ -333,7 +333,7 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
     // Timeout for redrawing of slider due to bug
     $timeout(function () {
         window.dispatchEvent(new Event('resize'));
-    }, 500);
+    }, 200);
 
     $scope.round = function (i) {
         return Math.round(i);
