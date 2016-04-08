@@ -53,7 +53,10 @@ function getUserFromSession() {
         if (req.readyState == 4 && req.status == 200 && req.responseText != '') {
             var name = JSON.parse(req.responseText).name;
             afterLogin(name);
+        } else {
+            document.getElementById('loggedIn').style.display='none';
         }
+        document.getElementById('signInBlock').style.display='';
     };
     req.send();
 }
@@ -80,7 +83,7 @@ function logout () {
     var req = new XMLHttpRequest();
     req.open('GET', 'logout', true);
     req.onload = function (e) {
-        //document.getElementById('loggedInTxt').innerHTML = '';
+        document.getElementById('loggedInTxt').innerHTML = '';
         document.getElementById('loggedIn').style.display='none';
         document.getElementById('login').style.display='';
     };

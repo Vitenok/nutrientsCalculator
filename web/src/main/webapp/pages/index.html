@@ -19,7 +19,6 @@
     <!-- jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-    <script type="text/javascript" src="../resources/scripts/nutrientsCalculator.js"></script>
 
     <!-- Social  -->
     <!-- Facebook API-->
@@ -27,6 +26,8 @@
     <!-- Google API -->
     <script src="https://apis.google.com/js/platform.js?onload=glCheckLoginState" async defer></script>
     <script type="text/javascript" src="../resources/scripts/socialLogin.js"></script>
+
+    <script type="text/javascript" src="../resources/scripts/nutrientsCalculator.js"></script>
 
     <script type="text/javascript" src="../resources/scripts/slider.js"></script>
 
@@ -57,28 +58,38 @@
 <md-content>
 <md-toolbar>
     <div class="md-toolbar-tools">
-
         <h2>
             <span>Logo</span>
         </h2>
         <span flex></span>
 
-        <a href="" ng-click="showAdvanced($event)">Log in</a>
+        <div id="loggedInTxt" class="md-subhead"></div>
 
-       <!-- <div>
-            <span id="login">
-                <div>
-                    <button id="gLogin" onclick="glLogin();">Google login</button>
-                    <button id="fLogin" onclick="fbLogin();">Facebook login</button>
-                </div>
-            </span>
-
-            <div id="loggedIn">
-                <div id="loggedInTxt"></div>
-                <a href="#" class="btn tf-btn btn-default btn-lg btn-block" id="logout" onclick="logout();">Sign out</a>
+        <div id="signInBlock" style="display: none">
+            <div id="login" ng-cloak="" ng-cloak="">
+                <md-fab-speed-dial md-open="false" md-direction="left" class="md-fling" >
+                    <md-fab-trigger>
+                        <md-button aria-label="menu" class="md-fab md-warn">
+                            <md-icon md-svg-src="../resources/img/material_img/ic_person_white_24px.svg">i</md-icon>
+                        </md-button>
+                    </md-fab-trigger>
+                    <md-fab-actions>
+                        <md-button aria-label="Facebook" class="md-fab md-raised md-mini" id="fLogin" onclick="fbLogin();">
+                            <md-icon md-svg-src="../resources/img/material_img/FbGr.svg" aria-label="Facebook">F</md-icon>
+                        </md-button>
+                        <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini" id="gLogin" onclick="glLogin();">
+                            <md-icon md-svg-src="../resources/img/material_img/GplGr.svg" aria-label="Google Hangout">G</md-icon>
+                        </md-button>
+                    </md-fab-actions>
+                </md-fab-speed-dial>
             </div>
-        </div>-->
 
+            <div id="loggedIn" style="display: none">
+                <md-button class="md-fab md-warn" aria-label="Logout" id="logout" onclick="logout()">
+                    <md-icon md-svg-src="../resources/img/material_img/ic_directions_run_white_24px.svg"></md-icon>
+                </md-button>
+            </div>
+        </div>
     </div>
 </md-toolbar>
 <!--Personal data block-->
@@ -289,12 +300,14 @@
                     <md-input-container class="md-block" flex="100" style="margin-bottom: 0">
                         <label>Search food or <a href=""> create new product</a></label>
                         <input type="search" class="form-control"
-                               data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}" placeholder="Search food or supplement">
+                               data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}"
+                               placeholder="Search food or supplement">
                     </md-input-container>
 
                     <md-list flex="100" style="max-height: 260px; overflow-x: hidden;">
                         <md-list-item class="list-group-item col-md-12" ng-if="searchFoodItem"
-                                      ng-repeat="product in filteredProducts = ( products | filter:searchFoodItem:startsWith)" ng-click="addProductToCurrentMeal(product)">
+                                      ng-repeat="product in filteredProducts = ( products | filter:searchFoodItem:startsWith)"
+                                      ng-click="addProductToCurrentMeal(product)">
                             <div flex="95">
                                 <div>{{product.name}}</div>
                                 <div class="md-caption">
@@ -305,8 +318,8 @@
                             </div>
                             <md-divider></md-divider>
                         </md-list-item>
-                        <div  flex="95" ng-show="filteredProducts.length  === 0">
-                            We didn't find requested product.  <a href="">Create new product</a>
+                        <div flex="95" ng-show="filteredProducts.length  === 0">
+                            We didn't find requested product. <a href="">Create new product</a>
                         </div>
                     </md-list>
                 </md-content>
@@ -397,10 +410,11 @@
                     <md-subheader class="md-no-sticky">Breakfast</md-subheader>
                     <md-list-item ng-repeat="item in menu[0]">
                         <p> {{ item.key }} </p>
+
                         <p> {{ round(item.value) }} </p>
                         <!--prot-->
                         <p> {{ round(breakfastInput[$index].protein * item.value / 100) }}</p>
-                       <!--Fat-->
+                        <!--Fat-->
                         <p> {{ round(breakfastInput[$index].fat * item.value / 100) }}</p>
                         <!--Carb-->
                         <p> {{ round(breakfastInput[$index].carbo * item.value / 100) }}</p>
@@ -411,6 +425,7 @@
                     <md-subheader class="md-no-sticky">Lunch</md-subheader>
                     <md-list-item ng-repeat="item in menu[1]">
                         <p> {{ item.key }} </p>
+
                         <p> {{ round(item.value) }} </p>
                         <!--prot-->
                         <p> {{ round(lunchInput[$index].protein * item.value / 100) }}</p>
@@ -419,11 +434,12 @@
                         <!--Carb-->
                         <p> {{ round(lunchInput[$index].carbo * item.value / 100) }}</p>
                         <!--kcal-->
-                        <p> {{ round(lunchInput[$index].kCal * item.value / 100) }}</p>                    </md-list-item>
+                        <p> {{ round(lunchInput[$index].kCal * item.value / 100) }}</p></md-list-item>
 
                     <md-subheader class="md-no-sticky">Dinner</md-subheader>
                     <md-list-item ng-repeat="item in menu[2]">
                         <p> {{ item.key }} </p>
+
                         <p> {{ round(item.value) }} </p>
                         <!--prot-->
                         <p> {{ round(dinnerInput[$index].protein * item.value / 100) }}</p>
@@ -432,11 +448,12 @@
                         <!--Carb-->
                         <p> {{ round(dinnerInput[$index].carbo * item.value / 100) }}</p>
                         <!--kcal-->
-                        <p> {{ round(dinnerInput[$index].kCal * item.value / 100) }}</p>                    </md-list-item>
+                        <p> {{ round(dinnerInput[$index].kCal * item.value / 100) }}</p></md-list-item>
 
                     <md-subheader class="md-no-sticky">Snacks</md-subheader>
                     <md-list-item ng-repeat="item in menu[3]">
                         <p> {{ item.key }} </p>
+
                         <p> {{ round(item.value) }} </p>
                         <!--prot-->
                         <p> {{ round(snakesInput[$index].protein * item.value / 100) }}</p>
@@ -445,7 +462,7 @@
                         <!--Carb-->
                         <p> {{ round(snakesInput[$index].carbo * item.value / 100) }}</p>
                         <!--kcal-->
-                        <p> {{ round(snakesInput[$index].kCal * item.value / 100) }}</p>                    </md-list-item>
+                        <p> {{ round(snakesInput[$index].kCal * item.value / 100) }}</p></md-list-item>
                 </md-list>
             </md-card-content>
         </md-card>

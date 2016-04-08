@@ -1,6 +1,6 @@
 var app = angular.module('nutrientsCalc', ['ui.slider', 'ngMaterial', 'ngMessages']);
 
-app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $mdDialog, $mdMedia) {
+app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
     $scope.selected = {};
     $scope.supplementItems = [];
     $scope.isDisabledButton = true;
@@ -338,42 +338,4 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $mdDialog
     $scope.round = function (i) {
         return Math.round(i);
     };
-
-    $scope.showAdvanced = function(ev) {
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-            controller: DialogController,
-            templateUrl: '../../../partials/loginDialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose:true,
-            fullscreen: useFullScreen
-        })
-            .then(function(answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
-            }, function() {
-                $scope.status = 'You cancelled the dialog.';
-            });
-        $scope.$watch(function() {
-            return $mdMedia('xs') || $mdMedia('sm');
-        }, function(wantsFullScreen) {
-            $scope.customFullscreen = (wantsFullScreen === true);
-        });
-    };
-
-    function DialogController($scope, $mdDialog) {
-        $scope.show = function() {
-            $mdDialog.show();
-        };
-
-        $scope.hide = function() {
-            $mdDialog.hide();
-        };
-        $scope.cancel = function() {
-            $mdDialog.cancel();
-        };
-        $scope.answer = function(answer) {
-            $mdDialog.hide(answer);
-        };
-    }
 });
