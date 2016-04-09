@@ -342,7 +342,8 @@
                             </div>
 
                             <div flex="15">
-                                <md-button ng-click="removeThisItem(item, breakfastInput)" class="md-primary">Remove
+                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, breakfastInput)">
+                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
                                 </md-button>
                             </div>
                         </md-list-item>
@@ -350,13 +351,14 @@
                     </md-list>
                     <md-list flex="100" ng-show="showLunch">
                         <h4>Lunch</h4>
-                        <md-list-item class="md-3-line md-long-text" ng-repeat="item in lunchInput">
+                        <md-list-item class="list-group-item col-md-12" ng-repeat="item in lunchInput">
                             <div class="" flex="85">
                                 {{item.name}}
                             </div>
 
                             <div flex="15">
-                                <md-button ng-click="removeThisItem(item, lunchInput)" class="md-primary">Remove
+                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, lunchInput)">
+                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
                                 </md-button>
                             </div>
                         </md-list-item>
@@ -364,13 +366,14 @@
                     </md-list>
                     <md-list flex="100" ng-show="showDinner">
                         <h4>Dinner</h4>
-                        <md-list-item class="md-3-line md-long-text" ng-repeat="item in dinnerInput">
+                        <md-list-item class="list-group-item col-md-12" ng-repeat="item in dinnerInput">
                             <div class="" flex="85">
                                 {{item.name}}
                             </div>
 
                             <div flex="15">
-                                <md-button ng-click="removeThisItem(item, dinnerInput)" class="md-primary">Remove
+                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, dinnerInput)">
+                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
                                 </md-button>
                             </div>
                         </md-list-item>
@@ -378,13 +381,14 @@
                     </md-list>
                     <md-list flex="100" ng-show="showSnacks">
                         <h4>Snacks</h4>
-                        <md-list-item class="md-3-line md-long-text" ng-repeat="item in snakesInput">
+                        <md-list-item class="list-group-item col-md-12" ng-repeat="item in snakesInput">
                             <div class="" flex="85">
                                 {{item.name}}
                             </div>
 
                             <div flex="15">
-                                <md-button ng-click="removeThisItem(item, snakesInput)" class="md-primary">Remove
+                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, snakesInput)">
+                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
                                 </md-button>
                             </div>
                         </md-list-item>

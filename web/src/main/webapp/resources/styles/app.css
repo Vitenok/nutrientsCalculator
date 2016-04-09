@@ -1,3 +1,7 @@
 .light-gray {
     color: #989898;
 }
+
+.light-gray-background {
+    background-color: #989898 !important;
+}
