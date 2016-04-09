@@ -4,6 +4,7 @@
 
     <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link rel="stylesheet" type="text/css" href="../resources/styles/app.css">
     <link rel="stylesheet" type="text/css" href="../resources/styles/slider.css">
 
 
@@ -396,74 +397,109 @@
 </div>
 
 
-<div layout="row">
+<div layout="row" ng-show="menu.length > 0">
     <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
 
         <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Result</span>
-                </md-card-title-text>
-            </md-card-title>
+
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <h2>
+                        <span>Result</span>
+                    </h2></div>
+            </md-toolbar>
+
             <md-card-content>
-                <md-list>
-                    <md-subheader class="md-no-sticky">Breakfast</md-subheader>
-                    <md-list-item ng-repeat="item in menu[0]">
-                        <p> {{ item.key }} </p>
+                <div layout="column" layout-xs="column">
+                    <md-list flex="100">
+                        <h4 ng-show="menu[0].length > 0">Breakfast</h4>
+                        <md-list-item flex="100" ng-repeat="item in menu[0]"  ng-show="menu[0].length > 0"
+                                      class="list-group-item col-md-12" layout-align="center start">
+                            <div flex="80">
+                                <div>{{item.key}}</div>
+                                <div class="md-caption light-gray">
+                                    <i>Protein: {{ round(breakfastInput[$index].protein * item.value / 100) }} gr,
+                                        Fat: {{ round(breakfastInput[$index].fat * item.value / 100) }} gr,
+                                        Carbs: {{ round(breakfastInput[$index].carbo * item.value / 100) }} gr,
+                                        kCal: {{ round(breakfastInput[$index].kCal * item.value / 100) }} kCal
+                                    </i>
+                                </div>
+                            </div>
 
-                        <p> {{ round(item.value) }} </p>
-                        <!--prot-->
-                        <p> {{ round(breakfastInput[$index].protein * item.value / 100) }}</p>
-                        <!--Fat-->
-                        <p> {{ round(breakfastInput[$index].fat * item.value / 100) }}</p>
-                        <!--Carb-->
-                        <p> {{ round(breakfastInput[$index].carbo * item.value / 100) }}</p>
-                        <!--kcal-->
-                        <p> {{ round(breakfastInput[$index].kCal * item.value / 100) }}</p>
-                    </md-list-item>
+                            <div flex="20"  >
+                                {{round(item.value) }} gr
+                            </div>
 
-                    <md-subheader class="md-no-sticky">Lunch</md-subheader>
-                    <md-list-item ng-repeat="item in menu[1]">
-                        <p> {{ item.key }} </p>
+                            <md-divider></md-divider>
 
-                        <p> {{ round(item.value) }} </p>
-                        <!--prot-->
-                        <p> {{ round(lunchInput[$index].protein * item.value / 100) }}</p>
-                        <!--Fat-->
-                        <p> {{ round(lunchInput[$index].fat * item.value / 100) }}</p>
-                        <!--Carb-->
-                        <p> {{ round(lunchInput[$index].carbo * item.value / 100) }}</p>
-                        <!--kcal-->
-                        <p> {{ round(lunchInput[$index].kCal * item.value / 100) }}</p></md-list-item>
+                        </md-list-item>
 
-                    <md-subheader class="md-no-sticky">Dinner</md-subheader>
-                    <md-list-item ng-repeat="item in menu[2]">
-                        <p> {{ item.key }} </p>
+                        <h4 ng-show="menu[1].length > 0">Lunch</h4>
+                        <md-list-item flex="100" ng-repeat="item in menu[1]" ng-show="menu[1].length > 0"
+                                      class="list-group-item col-md-12" layout-align="center start">
+                            <div flex="80">
+                                <div>{{item.key}}</div>
+                                <div class="md-caption light-gray">
+                                    <i>Protein: {{ round(lunchInput[$index].protein * item.value / 100) }} gr,
+                                        Fat: {{ round(lunchInput[$index].fat * item.value / 100) }} gr,
+                                        Carbs: {{ round(lunchInput[$index].carbo * item.value / 100) }} gr,
+                                        kCal: {{ round(lunchInput[$index].kCal * item.value / 100) }} kCal
+                                    </i>
+                                </div>
+                            </div>
 
-                        <p> {{ round(item.value) }} </p>
-                        <!--prot-->
-                        <p> {{ round(dinnerInput[$index].protein * item.value / 100) }}</p>
-                        <!--Fat-->
-                        <p> {{ round(dinnerInput[$index].fat * item.value / 100) }}</p>
-                        <!--Carb-->
-                        <p> {{ round(dinnerInput[$index].carbo * item.value / 100) }}</p>
-                        <!--kcal-->
-                        <p> {{ round(dinnerInput[$index].kCal * item.value / 100) }}</p></md-list-item>
+                            <div flex="20"  >
+                                {{round(item.value) }} gr
+                            </div>
 
-                    <md-subheader class="md-no-sticky">Snacks</md-subheader>
-                    <md-list-item ng-repeat="item in menu[3]">
-                        <p> {{ item.key }} </p>
+                            <md-divider></md-divider>
 
-                        <p> {{ round(item.value) }} </p>
-                        <!--prot-->
-                        <p> {{ round(snakesInput[$index].protein * item.value / 100) }}</p>
-                        <!--Fat-->
-                        <p> {{ round(snakesInput[$index].fat * item.value / 100) }}</p>
-                        <!--Carb-->
-                        <p> {{ round(snakesInput[$index].carbo * item.value / 100) }}</p>
-                        <!--kcal-->
-                        <p> {{ round(snakesInput[$index].kCal * item.value / 100) }}</p></md-list-item>
-                </md-list>
+                        </md-list-item>
+
+                        <h4 ng-show="menu[2].length > 0">Dinner</h4>
+                        <md-list-item flex="100" ng-repeat="item in menu[2]" ng-show="menu[2].length > 0"
+                                      class="list-group-item col-md-12" layout-align="center start">
+                            <div flex="80">
+                                <div>{{item.key}}</div>
+                                <div class="md-caption light-gray">
+                                    <i>Protein: {{ round(dinnerInput[$index].protein * item.value / 100) }} gr,
+                                        Fat: {{ round(dinnerInput[$index].fat * item.value / 100) }} gr,
+                                        Carbs: {{ round(dinnerInput[$index].carbo * item.value / 100) }} gr,
+                                        kCal: {{ round(dinnerInput[$index].kCal * item.value / 100) }} kCal
+                                    </i>
+                                </div>
+                            </div>
+
+                            <div flex="20"  >
+                                {{round(item.value) }} gr
+                            </div>
+
+                            <md-divider></md-divider>
+
+                        </md-list-item>
+
+                        <h4 ng-show="menu[3].length > 0">Snacks</h4>
+                        <md-list-item flex="100" ng-repeat="item in menu[3]" ng-show="menu[3].length > 0"
+                                      class="list-group-item col-md-12" layout-align="center start">
+                            <div flex="80">
+                                <div>{{item.key}}</div>
+                                <div class="md-caption light-gray">
+                                    <i>Protein: {{ round(snakesInput[$index].protein * item.value / 100) }} gr,
+                                        Fat: {{ round(snakesInput[$index].fat * item.value / 100) }} gr,
+                                        Carbs: {{ round(snakesInput[$index].carbo * item.value / 100) }} gr,
+                                        kCal: {{ round(snakesInput[$index].kCal * item.value / 100) }} kCal
+                                    </i>
+                                </div>
+                            </div>
+                            <div flex="20"  >
+                                {{round(item.value) }} gr
+                            </div>
+
+                            <md-divider></md-divider>
+
+                        </md-list-item>
+                    </md-list>
+                </div>
             </md-card-content>
         </md-card>
     </div>
