@@ -347,3 +347,37 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
         return Math.round(i);
     };
 });
+
+app.filter('findAllProducts', function() {
+    return function(items, word) {
+        var filtered = [];
+        var startsWith = [];
+        var contains = [];
+
+        function compare(a,b) {
+            if (a.name < b.name)
+                return -1;
+            else if (a.name > b.name)
+                return 1;
+            else
+                return 0;
+        }
+
+        angular.forEach(items, function(item) {
+            if (item !== undefined && word !== undefined){
+                if(item.name.toLowerCase().indexOf(word.toLowerCase()) === 0){
+                    startsWith.push(item);
+                }
+                if(item.name.toLowerCase().indexOf(word.toLowerCase()) > 0){
+                    contains.push(item);
+                }
+            }
+        });
+
+        startsWith.sort(compare);
+        contains.sort(compare);
+
+        filtered = startsWith.concat(contains);
+        return filtered;
+    };
+});

@@ -302,12 +302,12 @@
                         <label>Search food or <a href=""> create new product</a></label>
                         <input type="search" class="form-control"
                                data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}"
-                               placeholder="Search food or supplement">
+                               placeholder="Search food or supplement: minimum 3 letters" ng-minlength="3">
                     </md-input-container>
 
                     <md-list flex="100" style="max-height: 260px; overflow-x: hidden;">
                         <md-list-item class="list-group-item col-md-12" ng-if="searchFoodItem"
-                                      ng-repeat="product in filteredProducts = ( products | filter:searchFoodItem:startsWith)"
+                                      ng-repeat="product in filteredProducts = ( products | findAllProducts:searchFoodItem)"
                                       ng-click="addProductToCurrentMeal(product)">
                             <div flex="95">
                                 <div>{{product.name}}</div>
@@ -319,7 +319,7 @@
                             </div>
                             <md-divider></md-divider>
                         </md-list-item>
-                        <div flex="95" ng-show="filteredProducts.length  === 0">
+                        <div flex="95" ng-show="filteredProducts.length  === 0 && searchFoodItem.length >= 3">
                             We didn't find requested product. <a href="">Create new product</a>
                         </div>
                     </md-list>
