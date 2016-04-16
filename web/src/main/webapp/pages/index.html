@@ -14,6 +14,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
 
+    <!--Angular route-->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+
+
     <!-- Angular Material Library -->
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
 
@@ -64,36 +68,65 @@
         </h2>
         <span flex></span>
 
-        <div id="loggedInTxt" class="md-subhead"></div>
+        <md-button id="loggedInTxt" href="#settings" aria-label="loggedInTxt" >
+            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                        md-autohide="false">
+                Settings
+            </md-tooltip>
+        </md-button>
 
         <div id="signInBlock" style="display: none">
-            <div id="login" ng-cloak="" ng-cloak="">
-                <md-fab-speed-dial md-open="false" md-direction="left" class="md-fling" >
+            <div id="login" ng-cloak="">
+                <md-fab-speed-dial md-open="false" md-direction="left" class="md-fling">
                     <md-fab-trigger>
                         <md-button aria-label="menu" class="md-fab md-warn">
-                            <md-icon md-svg-src="../resources/img/material_img/ic_person_white_24px.svg">i</md-icon>
+                            <md-icon md-svg-src="../resources/img/material_img/ic_menu_white_24px.svg">i</md-icon>
+                            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                                        md-autohide="false">
+                                Sign in
+                            </md-tooltip>
                         </md-button>
                     </md-fab-trigger>
                     <md-fab-actions>
-                        <md-button aria-label="Facebook" class="md-fab md-raised md-mini" id="fLogin" onclick="fbLogin();">
+                        <md-button aria-label="Facebook" class="md-fab md-raised md-mini" id="fLogin" ng-click="fbLogin();">
                             <md-icon md-svg-src="../resources/img/material_img/FbGr.svg" aria-label="Facebook">F</md-icon>
+                            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                                        md-autohide="false">
+                                Facebook
+                            </md-tooltip>
                         </md-button>
                         <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini" id="gLogin" onclick="glLogin();">
                             <md-icon md-svg-src="../resources/img/material_img/GplGr.svg" aria-label="Google Hangout">G</md-icon>
+                            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                                        md-autohide="false">
+                                Google
+                            </md-tooltip>
                         </md-button>
                     </md-fab-actions>
                 </md-fab-speed-dial>
             </div>
 
             <div id="loggedIn" style="display: none">
-                <md-button class="md-fab md-warn" aria-label="Logout" id="logout" onclick="logout()">
-                    <md-icon md-svg-src="../resources/img/material_img/ic_directions_run_white_24px.svg"></md-icon>
+                <md-button class="md-fab md-warn" aria-label="Logout" id="logout" ng-click="logout()">
+                    <md-icon md-svg-src="../resources/img/material_img/exit_white.svg"></md-icon>
+                    <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                                md-autohide="false">
+                        Sign out
+                    </md-tooltip>
                 </md-button>
             </div>
         </div>
     </div>
 </md-toolbar>
+
 <!--Personal data block-->
+<!--TODO: !userDataIsPresent -> userDataIsPresent-->
+
+<!--Personal data and macros distribution will be injected when settings button is clicked-->
+<div ng-view></div>
+
+
+<!--
 <div layout="row">
     <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
         <md-card>
@@ -104,7 +137,7 @@
             </md-card-title>
             <md-card-content>
 
-                <div layout="row" layout-xs="column">
+                <div layout="row" layout-xs="column" ng-cloak>
                     <div flex-gt-xs="35" flex-gt-sm="35">
                         <div layout="column">
                             <form name="personalDataForm1">
@@ -113,7 +146,7 @@
                                     <md-select ng-model="sex.chosenSex">
                                         <md-option ng-repeat="(index, option) in sex.options"
                                                    ng-value="{{option}}"
-                                                   ng-selected="(index == 1) ? true:false">
+                                                   ng-selected="(option.name == sex.chosenSex.name) ? true : false">
                                             {{option.name}}
                                         </md-option>
                                     </md-select>
@@ -122,7 +155,7 @@
 
                                 <md-input-container class="md-block" flex>
                                     <label>Age</label>
-                                    <input ng-model="age" ng-init="age = 30" name="userAge" required type="number"
+                                    <input ng-model="userData.user.age" name="userAge" required type="number"
                                            step="1" min="15" max="80">
 
                                     <div ng-messages="personalDataForm1.userAge.$error">
@@ -140,9 +173,8 @@
 
                                 <md-input-container class="md-block" flex>
                                     <label>Height(cm)</label>
-                                    <input ng-model="userHeight" ng-init="userHeight = 158" name="userHeight" required
+                                    <input ng-model="userData.user.height" name="userHeight" required
                                            type="number" step="1" min="145" max="210">
-                                    <!--<input ng-model="age" ng-init="age = 30" name="userAge" required type="number" step="1" min="15" max="80">-->
 
                                     <div ng-messages="personalDataForm2.userHeight.$error">
                                         <div ng-message="required">This is required field</div>
@@ -152,9 +184,8 @@
                                 </md-input-container>
                                 <md-input-container class="md-block" flex>
                                     <label>Weight(kg)</label>
-                                    <input ng-model="userWeight" name="userWeight" ng-init="userWeight = 56"
+                                    <input ng-model="userData.user.weight" name="userWeight"
                                            type="number" step="1" min="40" max="200" required>
-                                    <!--<input ng-model="userWeight" ng-init="userWeight = 56" min="40" max="200" required>-->
 
                                     <div ng-messages="personalDataForm2.userWeight.$error">
                                         <div ng-message="required">This is required field</div>
@@ -173,7 +204,7 @@
                                     <md-select ng-model="goal.chosenGoal">
                                         <md-option ng-repeat="(index,option) in goal.options"
                                                    ng-value="{{option}}"
-                                                   ng-selected="(index == 1) ? true:false">
+                                                   ng-selected="(option.name == goal.chosenGoal.name) ? true : false">
                                             {{option.name}}
                                         </md-option>
                                     </md-select>
@@ -185,7 +216,7 @@
                                     <md-select ng-model="activityLevel.chosenLevel" name="testSel">
                                         <md-option ng-repeat=" (index, option)  in activityLevel.options"
                                                    ng-value="{{option}}"
-                                                   ng-selected="(index == 1) ? true:false">
+                                                   ng-selected="(option.name == activityLevel.chosenLevel.name) ? true : false">
                                             {{option.name}}
                                         </md-option>
                                     </md-select>
@@ -200,7 +231,8 @@
                 </div>
 
                 <div layout="column">
-                    Your basal metabolic rate (BMR) is {{BMR}} and TDEE is {{TDEE}} kCal
+                    Your basal metabolic rate (BMR) is {{BMR}} and total daily energy expenditure (TDEE) is {{TDEE}} kCal.
+                    <b> Your goal calories intake is {{ intake }} kCal. </b>
                 </div>
 
                 <div layout="row" flex-gt-xs="30" flex-gt-sm="30">
@@ -265,6 +297,7 @@
         </md-card>
     </div>
 </div>
+-->
 
 <!--Search food block-->
 <div layout="row">

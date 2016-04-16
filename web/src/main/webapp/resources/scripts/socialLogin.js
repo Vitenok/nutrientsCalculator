@@ -1,3 +1,4 @@
+/*
 //Facebook onload hook
 
 window.fbAsyncInit = function () {
@@ -24,6 +25,7 @@ function fbLogin () {
         }
     }, {scope: 'public_profile, email'});
 }
+*/
 
 //Google onload hook
 
@@ -46,7 +48,7 @@ function glLogin() {
     });
 }
 
-function getUserFromSession() {
+/*function getUserFromSession() {
     var req = new XMLHttpRequest();
     req.open("GET", "user", true);
     req.onload = function (e) {
@@ -59,7 +61,7 @@ function getUserFromSession() {
         document.getElementById('signInBlock').style.display='';
     };
     req.send();
-}
+}*/
 
 function login(name, socialNetwork, userId) {
     var req = new XMLHttpRequest();
@@ -74,11 +76,12 @@ function login(name, socialNetwork, userId) {
 }
 
 function afterLogin(name) {
-    document.getElementById('loggedInTxt').innerHTML = "Signed in as " + name;
+    document.getElementById('loggedInTxt').innerHTML = name;
     document.getElementById('loggedIn').style.display='';
     document.getElementById('login').style.display='none';
 }
 
+/*
 function logout () {
     var req = new XMLHttpRequest();
     req.open('GET', 'logout', true);
@@ -91,4 +94,4 @@ function logout () {
         console.log(e);
     };
     req.send();
-}
+}*/

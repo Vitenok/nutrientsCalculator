@@ -1,6 +1,187 @@
-var app = angular.module('nutrientsCalc', ['ui.slider', 'ngMaterial', 'ngMessages']);
+var app = angular.module('nutrientsCalc', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute']);
 
-app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
+app.config(function($routeProvider) {
+    $routeProvider
+
+        // route for the settings page
+
+
+        .when('/settings', {
+            templateUrl : '../../pages/partials/userSettings.html',
+            controller  : 'nutrientsCalcCtrl'
+        })
+;
+});
+
+
+app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout, $routeParams) {
+
+    $routeParams.test = $scope.userData;
+
+
+    $scope.userDataIsPresent = true;
+
+    $scope.userData = {
+        user: {
+            sex: {name: "Male", value: "Male"},
+            age: 25,
+            height: 175,
+            weight: 70,
+            goal: {name: "Gain", value: 0.1},
+            activityLvl: {name: "4-6 hours exercise per week", value: 1.35},
+            savedCalories: 1500
+        },
+        macros: {
+            protein: 38,
+            fat: 33,
+            carb: 29
+        },
+        menu: {
+            meal1: [
+                {name: "", weight: 0}
+            ],
+            meal2: [
+                {name: "", weight: 0}
+            ],
+            meal3: [
+                {name: "", weight: 0}
+            ],
+            meal4: [
+                {name: "", weight: 0}
+            ]
+        }
+    };
+
+// Facebook onload hook
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '549922185166119',
+            cookie: true,
+            status: true,
+            xfbml: true,
+            version: 'v2.5'
+        });
+        getUserFromSession();
+    };
+
+// Facebook login method
+    $scope.fbLogin = function(){
+        FB.login(function (response) {
+            if (response.status === 'connected') { // not_authorized, unknown
+                FB.api('/me', function (response) {
+                    console.log(response.name + ' (id:' + response.id + ') logged into FACEBOOK');
+                    login(response.name, "FACEBOOK", response.id);
+                });
+                //picture - GET /v2.5/{user-id}/picture HTTP/1.1 against Host: graph.facebook.com
+            } else {
+            }
+        }, {scope: 'public_profile, email'});
+    };
+
+    function getUserFromSession() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "user", true);
+        req.onload = function (e) {
+            if (req.readyState == 4 && req.status == 200 && req.responseText != '') {
+                var name = JSON.parse(req.responseText).name;
+                afterLogin(name);
+            } else {
+                document.getElementById('loggedIn').style.display = 'none';
+            }
+            document.getElementById('signInBlock').style.display = '';
+        };
+        req.send();
+    }
+
+    function login(name, socialNetwork, userId) {
+        var req = new XMLHttpRequest();
+        req.open("GET", "login?name="+name+"&socialNetwork="+socialNetwork+"&token="+userId, true);
+        req.onload = function (e) {
+            afterLogin(name);
+        };
+        req.onerror = function (e) {
+            console.log(e);
+        };
+        req.send();
+    }
+
+    function afterLogin(name) {
+        /*
+             TODO:call to check  saved user data on BE
+             - if true: Show menu planner (not null response obj)
+             - if false: Show Personal data input first (null response obj)
+             Note: call should include date to return saved menu for current day
+        */
+
+        $scope.userDataIsPresent = true;
+//        $scope.userIsSignedIn = true;
+
+        if($scope.userDataIsPresent){
+            // Data from response
+            $scope.userData = {
+                user: {
+                    sex: {name: "Female", value: "Female"},
+                    age: 30,
+                    height: 158,
+                    weight: 58,
+                    goal: {name: "Cut", value: -0.2},
+                    activityLvl: {name: "< 1 hour exercise per week", value: 1.1},
+                    savedCalories: 1100
+                },
+                macros: {
+                    protein: 38,
+                    fat: 33,
+                    carb: 29
+                },
+                menu: {
+                    meal1: [
+                        {name: "", weight: 0}
+                    ],
+                    meal2: [
+                        {name: "", weight: 0}
+                    ],
+                    meal3: [
+                        {name: "", weight: 0}
+                    ],
+                    meal4: [
+                        {name: "", weight: 0}
+                    ]
+                }
+            };
+
+            $scope.sex.chosenSex = $scope.userData.user.sex;
+            $scope.goal.chosenGoal = $scope.userData.user.goal;
+            $scope.activityLevel.chosenLevel = $scope.userData.user.activityLvl;
+
+            console.log($scope.sex.chosenSex);
+
+            $scope.position.firstKnob = $scope.userData.macros.protein;
+            $scope.position.secondKnob = $scope.userData.macros.protein  +  $scope.userData.macros.fat;
+        } else {
+
+        }
+
+
+        // Toolbar buttons
+        document.getElementById('loggedInTxt').innerHTML = name;
+        document.getElementById('loggedIn').style.display='';
+        document.getElementById('login').style.display='none';
+    }
+
+     $scope.logout = function() {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'logout', true);
+        req.onload = function (e) {
+            document.getElementById('loggedInTxt').innerHTML = '';
+            document.getElementById('loggedIn').style.display='none';
+            document.getElementById('login').style.display='';
+        };
+        req.onerror = function (e) {
+            console.log(e);
+        };
+        req.send();
+    };
+
     $scope.selected = {};
     $scope.supplementItems = [];
     $scope.isDisabledButton = true;
@@ -168,17 +349,6 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
         }
     };
 
-    //TODO
-    $scope.clearSelection = function () {
-        $scope.selectedArr.forEach(function (entry) {
-            entry['checked'] = false;
-        });
-        $scope.selectedArr = [];
-        $scope.isDisabledButton = true;
-        $scope.isClicked = false;
-        $scope.menu = [];
-    };
-
     $scope.removeThisItem = function (item, list) {
         var idx = list.indexOf(item);
         if (idx > -1) list.splice(idx, 1);
@@ -208,13 +378,6 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
         $scope.sCarbs = null;
         $scope.sCalories = null;
         $scope.sWeight = null;
-    };
-
-    // todo
-    $scope.clearAllSupplements = function () {
-        $scope.supplementItems = [];
-        $scope.suppl = false;
-        $scope.supplement = {};
     };
 
     $scope.$watch('position.firstKnob', function (newVal, oldVal) {
@@ -260,7 +423,7 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
 
     // Calculate calorie need
     $scope.sex = {
-        chosenSex: {name: "Female", value: "Female"},
+        chosenSex: $scope.userData.user.sex,
         options: [
             {name: "Male", value: "Male"},
             {name: "Female", value: "Female"}
@@ -268,7 +431,7 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
     };
 
     $scope.activityLevel = {
-        chosenLevel: {name: "1-3 hours exercise per week", value: 1.2},
+        chosenLevel: $scope.userData.user.activityLvl,
         options: [
             {name: "< 1 hour exercise per week", value: 1.1},
             {name: "1-3 hours exercise per week", value: 1.2},
@@ -278,7 +441,7 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
     };
 
     $scope.goal = {
-        chosenGoal: {name: "Cut", value: -0.2},
+        chosenGoal: $scope.userData.user.goal,
         options: [
             {name: "Maintain", value: 1},
             {name: "Cut", value: -0.2},
@@ -302,8 +465,8 @@ app.controller('nutrientsCalcCtrl', function ($scope, $http, $timeout) {
     };
 
 
-    $scope.$watch('[sex.chosenSex, age, userHeight, userWeight, activityLevel.chosenLevel, goal.chosenGoal]', function (newVal, oldVal) {
-        $scope.BMR = Math.round($scope.calculateBMR($scope.sex.chosenSex.value, $scope.age, $scope.userWeight, $scope.userHeight));
+    $scope.$watch('[sex.chosenSex, userData.user.age, userData.user.height, userData.user.weight, activityLevel.chosenLevel, goal.chosenGoal]', function (newVal, oldVal) {
+        $scope.BMR = Math.round($scope.calculateBMR($scope.sex.chosenSex.value, $scope.userData.user.age, $scope.userData.user.weight, $scope.userData.user.height));
         $scope.TDEE = Math.round($scope.calculateTDEE($scope.BMR, $scope.activityLevel.chosenLevel.value));
 
         if ($scope.goal.chosenGoal.name === "Cut") {
