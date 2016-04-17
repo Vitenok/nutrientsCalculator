@@ -26,7 +26,7 @@ function fbLogin () {
     }, {scope: 'public_profile, email'});
 }
 */
-
+/**
 //Google onload hook
 
 var auth2;
@@ -47,6 +47,7 @@ function glLogin() {
         login(profile.getName(), "GOOGLE", profile.getId());
     });
 }
+ **/
 
 /*function getUserFromSession() {
     var req = new XMLHttpRequest();

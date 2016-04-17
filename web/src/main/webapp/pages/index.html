@@ -30,7 +30,9 @@
     <script src="https://connect.facebook.net/en_US/sdk.js" async defer></script>
     <!-- Google API -->
     <script src="https://apis.google.com/js/platform.js?onload=glCheckLoginState" async defer></script>
+    <!--
     <script type="text/javascript" src="../resources/scripts/socialLogin.js"></script>
+    -->
 
     <script type="text/javascript" src="../resources/scripts/nutrientsCalculator.js"></script>
 
@@ -68,54 +70,46 @@
         </h2>
         <span flex></span>
 
-        <md-button id="loggedInTxt" href="#settings" aria-label="loggedInTxt" >
-            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                        md-autohide="false">
-                Settings
-            </md-tooltip>
+        <md-button aria-label="Settings" ng-click="location.path = '#/settings'" ng-show="showSettings">
+            {{serverUser == undefined ? '' : serverUser.name}}
+            <md-tooltip md-direction="bottom" ng-show="showSettings" md-visible="showSettings" md-autohide="false">Settings</md-tooltip>
         </md-button>
 
-        <div id="signInBlock" style="display: none">
-            <div id="login" ng-cloak="">
-                <md-fab-speed-dial md-open="false" md-direction="left" class="md-fling">
-                    <md-fab-trigger>
-                        <md-button aria-label="menu" class="md-fab md-warn">
-                            <md-icon md-svg-src="../resources/img/material_img/ic_menu_white_24px.svg">i</md-icon>
-                            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                                        md-autohide="false">
-                                Sign in
-                            </md-tooltip>
-                        </md-button>
-                    </md-fab-trigger>
-                    <md-fab-actions>
-                        <md-button aria-label="Facebook" class="md-fab md-raised md-mini" id="fLogin" ng-click="fbLogin();">
-                            <md-icon md-svg-src="../resources/img/material_img/FbGr.svg" aria-label="Facebook">F</md-icon>
-                            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                                        md-autohide="false">
-                                Facebook
-                            </md-tooltip>
-                        </md-button>
-                        <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini" id="gLogin" onclick="glLogin();">
-                            <md-icon md-svg-src="../resources/img/material_img/GplGr.svg" aria-label="Google Hangout">G</md-icon>
-                            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                                        md-autohide="false">
-                                Google
-                            </md-tooltip>
-                        </md-button>
-                    </md-fab-actions>
-                </md-fab-speed-dial>
-            </div>
-
-            <div id="loggedIn" style="display: none">
-                <md-button class="md-fab md-warn" aria-label="Logout" id="logout" ng-click="logout()">
-                    <md-icon md-svg-src="../resources/img/material_img/exit_white.svg"></md-icon>
+        <md-fab-speed-dial md-open="false" md-direction="left" class="md-fling" ng-show="!userDataIsPresent">
+            <md-fab-trigger>
+                <md-button aria-label="menu" class="md-fab md-warn">
+                    <md-icon md-svg-src="../resources/img/material_img/ic_menu_white_24px.svg">i</md-icon>
                     <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                                md-autohide="false">
-                        Sign out
+                                md-autohide="true">
+                        Sign in
                     </md-tooltip>
                 </md-button>
-            </div>
-        </div>
+            </md-fab-trigger>
+            <md-fab-actions>
+                <md-button aria-label="Facebook" class="md-fab md-raised md-mini" ng-click="fbLogin();">
+                    <md-icon md-svg-src="../resources/img/material_img/FbGr.svg" aria-label="Facebook">F</md-icon>
+                    <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                                md-autohide="false">
+                        Facebook
+                    </md-tooltip>
+                </md-button>
+                <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini" ng-click="glLogin();">
+                    <md-icon md-svg-src="../resources/img/material_img/GplGr.svg" aria-label="Google Hangout">G</md-icon>
+                    <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                                md-autohide="false">
+                        Google
+                    </md-tooltip>
+                </md-button>
+            </md-fab-actions>
+        </md-fab-speed-dial>
+
+        <md-button class="md-fab md-warn" aria-label="Logout" ng-click="logout()" ng-show="userDataIsPresent">
+            <md-icon md-svg-src="../resources/img/material_img/exit_white.svg"></md-icon>
+            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
+                        md-autohide="false">
+                Sign out
+            </md-tooltip>
+        </md-button>
     </div>
 </md-toolbar>
 
@@ -123,11 +117,8 @@
 <!--TODO: !userDataIsPresent -> userDataIsPresent-->
 
 <!--Personal data and macros distribution will be injected when settings button is clicked-->
-<div ng-view></div>
-
-
-<!--
-<div layout="row">
+<!--<div ng-view></div>-->
+<div layout="row" ng-show="(!userDataIsPresent && location.path != '#/settings') || (userDataIsPresent && location.path == '#/settings')">
     <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
         <md-card>
             <md-card-title>
@@ -155,7 +146,7 @@
 
                                 <md-input-container class="md-block" flex>
                                     <label>Age</label>
-                                    <input ng-model="userData.user.age" name="userAge" required type="number"
+                                    <input ng-model="user.age" name="userAge" required type="number"
                                            step="1" min="15" max="80">
 
                                     <div ng-messages="personalDataForm1.userAge.$error">
@@ -173,7 +164,7 @@
 
                                 <md-input-container class="md-block" flex>
                                     <label>Height(cm)</label>
-                                    <input ng-model="userData.user.height" name="userHeight" required
+                                    <input ng-model="user.height" name="userHeight" required
                                            type="number" step="1" min="145" max="210">
 
                                     <div ng-messages="personalDataForm2.userHeight.$error">
@@ -184,7 +175,7 @@
                                 </md-input-container>
                                 <md-input-container class="md-block" flex>
                                     <label>Weight(kg)</label>
-                                    <input ng-model="userData.user.weight" name="userWeight"
+                                    <input ng-model="user.weight" name="userWeight"
                                            type="number" step="1" min="40" max="200" required>
 
                                     <div ng-messages="personalDataForm2.userWeight.$error">
@@ -213,7 +204,7 @@
                                 </md-input-container>
                                 <md-input-container class="md-block" flex>
                                     <label>Activity level</label>
-                                    <md-select ng-model="activityLevel.chosenLevel" name="testSel">
+                                    <md-select ng-model="activityLevel.chosenLevel">
                                         <md-option ng-repeat=" (index, option)  in activityLevel.options"
                                                    ng-value="{{option}}"
                                                    ng-selected="(option.name == activityLevel.chosenLevel.name) ? true : false">
@@ -297,7 +288,7 @@
         </md-card>
     </div>
 </div>
--->
+
 
 <!--Search food block-->
 <div layout="row">
@@ -332,7 +323,7 @@
 
                 <md-content>
                     <md-input-container class="md-block" flex="100" style="margin-bottom: 0">
-                        <label>Search food or <a href=""> create new product</a></label>
+                        <!-- <label>Search food or <a href=""> create new product</a></label> -->
                         <input type="search" class="form-control"
                                data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}"
                                placeholder="Search food or supplement: minimum 3 letters" ng-minlength="3">
