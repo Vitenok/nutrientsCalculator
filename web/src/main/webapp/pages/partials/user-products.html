@@ -1,0 +1,442 @@
+<div layout="row" data-ng-controller="userProductsController">
+    <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab label="Products">
+                <md-content class="md-padding">
+                    <md-card>
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline"></span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content>
+
+                            <div layout="row" layout-xs="column" ng-cloak>
+                                <div flex-gt-sm="35">
+                                    <div layout="column">
+                                        Name
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        Protein
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        Carbohydrate
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        Fat
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        kCalories
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div layout="row" layout-xs="column" ng-cloak>
+                                <div flex-gt-sm="35">
+                                    <div layout="column">
+                                        <form name="addProductNameForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.name" name="productName" required aria-label="productName">
+                                                <div ng-messages="addProductNameForm.productName.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductProteinForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.protein" name="productProtein" required
+                                                       type="number" min="1" aria-label="productProtein">
+                                                <div ng-messages="addProductProteinForm.productProtein.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductCarbohydrateForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.carbo" name="productCarbohydrate" required
+                                                       type="number" min="1" aria-label="productCarbohydrate">
+                                                <div ng-messages="addProductCarbohydrateForm.productCarbohydrate.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductFatForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.fat" name="productFat" required
+                                                       type="number" min="1" aria-label="productFat">
+                                                <div ng-messages="addProductFatForm.productFat.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductCaloriesForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.kCal" name="productCalories" required
+                                                       type="number" min="1" aria-label="productCalories">
+                                                <div ng-messages="addProductCaloriesForm.productCalories.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <md-button class="md-primary" ng-click="addProduct()">Add</md-button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div layout="row" layout-xs="column" ng-cloak ng-repeat="product in user.products | filter: {type:0}">
+                                <div flex-gt-sm="35">
+                                    <div layout="column">
+                                        <form name="productNameForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.name" name="productName" required aria-label="productName">
+                                                <div ng-messages="productNameForm.productName.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productProteinForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.protein" name="productProtein" required
+                                                       type="number" min="1" aria-label="productProtein">
+                                                <div ng-messages="productProteinForm.productProtein.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productCarbohydrateForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.carbo" name="productCarbohydrate" required
+                                                       type="number" min="1" aria-label="productCarbohydrate">
+                                                <div ng-messages="productCarbohydrateForm.productCarbohydrate.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productFatForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.fat" name="productFat" required
+                                                       type="number" min="1" aria-label="productFat">
+                                                <div ng-messages="productFatForm.productFat.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productCaloriesForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.kCal" name="productCalories" required
+                                                       type="number" min="1" aria-label="productCalories">
+                                                <div ng-messages="productCaloriesForm.productCalories.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <md-button class="md-warn" ng-click="deleteProduct(product)">Delete</md-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <md-button class="md-raised md-primary center" ng-click="save()">Save</md-button>
+                        </md-card-content>
+                    </md-card>
+                </md-content>
+            </md-tab>
+
+            <!--==========================-->                <!--==========================-->
+            <!--==========================-->                <!--==========================-->
+            <!--==========================--><!-- NEW TAB --><!--==========================-->
+            <!--==========================-->                <!--==========================-->
+            <!--==========================-->                <!--==========================-->
+
+            <md-tab label="Supplements">
+                <md-content class="md-padding">
+                    <md-card>
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline"></span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content>
+
+                            <div layout="row" layout-xs="column" ng-cloak>
+                                <div flex-gt-sm="35">
+                                    <div layout="column">
+                                        Name
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        Protein
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        Carbohydrate
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        Fat
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        kCalories
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        Serving size, g
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div layout="row" layout-xs="column" ng-cloak>
+                                <div flex-gt-sm="35">
+                                    <div layout="column">
+                                        <form name="addProductNameForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.name" name="productName" required aria-label="productName">
+                                                <div ng-messages="addProductNameForm.productName.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductProteinForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.protein" name="productProtein" required
+                                                       type="number" min="1" aria-label="productProtein">
+                                                <div ng-messages="addProductProteinForm.productProtein.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductCarbohydrateForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.carbo" name="productCarbohydrate" required
+                                                       type="number" min="1" aria-label="productCarbohydrate">
+                                                <div ng-messages="addProductCarbohydrateForm.productCarbohydrate.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductFatForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.fat" name="productFat" required
+                                                       type="number" min="1" aria-label="productFat">
+                                                <div ng-messages="addProductFatForm.productFat.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductCaloriesForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.kCal" name="productCalories" required
+                                                       type="number" min="1" aria-label="productCalories">
+                                                <div ng-messages="addProductCaloriesForm.productCalories.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="addProductServingForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="newProduct.serving" name="productSering" required
+                                                       type="number" min="1" aria-label="productSering">
+                                                <div ng-messages="addProductServingForm.productSering.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <md-button class="md-primary" ng-click="addProduct()">Add</md-button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div layout="row" layout-xs="column" ng-cloak ng-repeat="product in user.products | filter: {type:1}">
+                                <div flex-gt-sm="35">
+                                    <div layout="column">
+                                        <form name="productNameForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.name" name="productName" required aria-label="productName">
+                                                <div ng-messages="productNameForm.productName.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productProteinForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.protein" name="productProtein" required
+                                                       type="number" min="1" aria-label="productProtein">
+                                                <div ng-messages="productProteinForm.productProtein.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productCarbohydrateForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.carbo" name="productCarbohydrate" required
+                                                       type="number" min="1" aria-label="productCarbohydrate">
+                                                <div ng-messages="productCarbohydrateForm.productCarbohydrate.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productFatForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.fat" name="productFat" required
+                                                       type="number" min="1" aria-label="productFat">
+                                                <div ng-messages="productFatForm.productFat.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productCaloriesForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.kCal" name="productCalories" required
+                                                       type="number" min="1" aria-label="productCalories">
+                                                <div ng-messages="productCaloriesForm.productCalories.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <form name="productServingForm">
+                                            <md-input-container class="md-block" flex>
+                                                <input ng-model="product.serving" name="productSering" required
+                                                       type="number" min="1" aria-label="productSering">
+                                                <div ng-messages="productServingForm.productSering.$error">
+                                                    <div ng-message="required">This is required field</div>
+                                                    <div ng-message="min">Minimum value is 1</div>
+                                                </div>
+                                            </md-input-container>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div flex-gt-sm="15">
+                                    <div layout="column">
+                                        <md-button class="md-warn" ng-click="deleteProduct(product)">Delete</md-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <md-button class="md-raised md-primary center" ng-click="save()">Save</md-button>
+                        </md-card-content>
+                    </md-card>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div>
+</div>

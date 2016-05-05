@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="nutrientsCalc">
+<html lang="en">
 <head>
 
     <!-- Angular Material style sheet -->
@@ -17,6 +17,8 @@
     <!--Angular route-->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
 
+    <!-- Angular cookies -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
 
     <!-- Angular Material Library -->
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
@@ -29,514 +31,78 @@
     <!-- Facebook API-->
     <script src="https://connect.facebook.net/en_US/sdk.js" async defer></script>
     <!-- Google API -->
-    <script src="https://apis.google.com/js/platform.js?onload=glCheckLoginState" async defer></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!--
     <script type="text/javascript" src="../resources/scripts/socialLogin.js"></script>
     -->
 
-    <script type="text/javascript" src="../resources/scripts/nutrientsCalculator.js"></script>
+    <script type="text/javascript" src="../resources/scripts/app.js"></script>
+    <script type="text/javascript" src="../resources/scripts/login.js"></script>
+    <script type="text/javascript" src="../resources/scripts/settings.js"></script>
+    <script type="text/javascript" src="../resources/scripts/planner.js"></script>
+    <script type="text/javascript" src="../resources/scripts/userProducts.js"></script>
+    <script type="text/javascript" src="../resources/scripts/registrar.js"></script>
 
     <script type="text/javascript" src="../resources/scripts/slider.js"></script>
 
+    <style>
+        md-list-item.md-3-line, md-list-item.md-3-line > .md-no-style {
+            min-height: 30px !important;
+        }
+
+        md-list-item {
+            margin-bottom: 10px !important;
+            margin-top: 5px !important;
+        }
+
+        md-card-title {
+            padding-bottom: 24px !important;
+        }
+
+    </style>
+
 </head>
-<body ng-cloak>
-<!--
-   HTML content here
--->
+<body data-ng-app="kulya-pulya" ng-cloak>
 
-<style>
-    md-list-item.md-3-line, md-list-item.md-3-line > .md-no-style {
-        min-height: 30px !important;
-    }
+    <div data-ng-controller="mainController">
+        <md-content>
+            <md-toolbar>
+                <div class="md-toolbar-tools" ng-show="$root.user.name != null">
+                    <h2>
+                        <span>Logo</span>
+                    </h2>
+                    <span flex></span>
 
-    md-list-item {
-        margin-bottom: 10px !important;
-        margin-top: 5px !important;
-    }
+                    <md-button aria-label="Settings" ng-click="location.path('/planner')">
+                        Planner
+                    </md-button>
+                    <md-button aria-label="Settings" ng-click="location.path('/registrar')">
+                        Registrar
+                    </md-button>
 
-    md-card-title {
-        padding-bottom: 24px !important;
-    }
+                    <md-button aria-label="Custom Products" ng-click="location.path('/user-products')">
+                        My Products
+                    </md-button>
 
-</style>
+                    <md-button aria-label="Settings" ng-click="location.path('/settings')">
+                        Settings <!--{{$root.user.name}}-->
+                        <!--<md-tooltip md-direction="bottom" md-autohide="false">
+                            Settings
+                        </md-tooltip>-->
+                    </md-button>
 
-
-<div ng-cloak data-ng-controller="nutrientsCalcCtrl">
-<md-content>
-<md-toolbar>
-    <div class="md-toolbar-tools">
-        <h2>
-            <span>Logo</span>
-        </h2>
-        <span flex></span>
-
-        <md-button aria-label="Settings" ng-click="location.path = '#/settings'" ng-show="showSettings">
-            {{serverUser == undefined ? '' : serverUser.name}}
-            <md-tooltip md-direction="bottom" ng-show="showSettings" md-visible="showSettings" md-autohide="false">Settings</md-tooltip>
-        </md-button>
-
-        <md-fab-speed-dial md-open="false" md-direction="left" class="md-fling" ng-show="!userDataIsPresent">
-            <md-fab-trigger>
-                <md-button aria-label="menu" class="md-fab md-warn">
-                    <md-icon md-svg-src="../resources/img/material_img/ic_menu_white_24px.svg">i</md-icon>
-                    <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                                md-autohide="true">
-                        Sign in
-                    </md-tooltip>
-                </md-button>
-            </md-fab-trigger>
-            <md-fab-actions>
-                <md-button aria-label="Facebook" class="md-fab md-raised md-mini" ng-click="fbLogin();">
-                    <md-icon md-svg-src="../resources/img/material_img/FbGr.svg" aria-label="Facebook">F</md-icon>
-                    <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                                md-autohide="false">
-                        Facebook
-                    </md-tooltip>
-                </md-button>
-                <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini" ng-click="glLogin();">
-                    <md-icon md-svg-src="../resources/img/material_img/GplGr.svg" aria-label="Google Hangout">G</md-icon>
-                    <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                                md-autohide="false">
-                        Google
-                    </md-tooltip>
-                </md-button>
-            </md-fab-actions>
-        </md-fab-speed-dial>
-
-        <md-button class="md-fab md-warn" aria-label="Logout" ng-click="logout()" ng-show="userDataIsPresent">
-            <md-icon md-svg-src="../resources/img/material_img/exit_white.svg"></md-icon>
-            <md-tooltip md-direction="bottom" md-visible="tooltipVisible"
-                        md-autohide="false">
-                Sign out
-            </md-tooltip>
-        </md-button>
-    </div>
-</md-toolbar>
-
-<!--Personal data block-->
-<!--TODO: !userDataIsPresent -> userDataIsPresent-->
-
-<!--Personal data and macros distribution will be injected when settings button is clicked-->
-<!--<div ng-view></div>-->
-<div layout="row" ng-show="(!userDataIsPresent && location.path != '#/settings') || (userDataIsPresent && location.path == '#/settings')">
-    <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
-        <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Personal data</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
-
-                <div layout="row" layout-xs="column" ng-cloak>
-                    <div flex-gt-xs="35" flex-gt-sm="35">
-                        <div layout="column">
-                            <form name="personalDataForm1">
-                                <md-input-container class="md-block" flex>
-                                    <label>Sex</label>
-                                    <md-select ng-model="sex.chosenSex">
-                                        <md-option ng-repeat="(index, option) in sex.options"
-                                                   ng-value="{{option}}"
-                                                   ng-selected="(option.name == sex.chosenSex.name) ? true : false">
-                                            {{option.name}}
-                                        </md-option>
-                                    </md-select>
-                                    <div class="md-errors-spacer"></div>
-                                </md-input-container>
-
-                                <md-input-container class="md-block" flex>
-                                    <label>Age</label>
-                                    <input ng-model="user.age" name="userAge" required type="number"
-                                           step="1" min="15" max="80">
-
-                                    <div ng-messages="personalDataForm1.userAge.$error">
-                                        <div ng-message="required">This is required field</div>
-                                        <div ng-message="min">Minimum age is 15 years</div>
-                                        <div ng-message="max">Maximum age is 80 years</div>
-                                    </div>
-                                </md-input-container>
-                            </form>
-                        </div>
-                    </div>
-                    <div flex-gt-xs="35" flex-gt-sm="35">
-                        <div layout="column">
-                            <form name="personalDataForm2">
-
-                                <md-input-container class="md-block" flex>
-                                    <label>Height(cm)</label>
-                                    <input ng-model="user.height" name="userHeight" required
-                                           type="number" step="1" min="145" max="210">
-
-                                    <div ng-messages="personalDataForm2.userHeight.$error">
-                                        <div ng-message="required">This is required field</div>
-                                        <div ng-message="min">Minimum height is 145 cm</div>
-                                        <div ng-message="max">Maximum height is 210 cm</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex>
-                                    <label>Weight(kg)</label>
-                                    <input ng-model="user.weight" name="userWeight"
-                                           type="number" step="1" min="40" max="200" required>
-
-                                    <div ng-messages="personalDataForm2.userWeight.$error">
-                                        <div ng-message="required">This is required field</div>
-                                        <div ng-message="min">Minimum height is 40 kg</div>
-                                        <div ng-message="max">Maximum height is 200 kg</div>
-                                    </div>
-                                </md-input-container>
-                            </form>
-                        </div>
-                    </div>
-                    <div flex-gt-xs="50" flex-gt-sm="50">
-                        <div layout="column">
-                            <form name="test">
-                                <md-input-container class="md-block" flex>
-                                    <label>Goal</label>
-                                    <md-select ng-model="goal.chosenGoal">
-                                        <md-option ng-repeat="(index,option) in goal.options"
-                                                   ng-value="{{option}}"
-                                                   ng-selected="(option.name == goal.chosenGoal.name) ? true : false">
-                                            {{option.name}}
-                                        </md-option>
-                                    </md-select>
-
-                                    <div class="md-errors-spacer"></div>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex>
-                                    <label>Activity level</label>
-                                    <md-select ng-model="activityLevel.chosenLevel">
-                                        <md-option ng-repeat=" (index, option)  in activityLevel.options"
-                                                   ng-value="{{option}}"
-                                                   ng-selected="(option.name == activityLevel.chosenLevel.name) ? true : false">
-                                            {{option.name}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="test.testSel.$error">
-                                        <div ng-message="required">This is required field</div>
-
-                                    </div>
-                                </md-input-container>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div layout="column">
-                    Your basal metabolic rate (BMR) is {{BMR}} and total daily energy expenditure (TDEE) is {{TDEE}} kCal.
-                    <b> Your goal calories intake is {{ intake }} kCal. </b>
-                </div>
-
-                <div layout="row" flex-gt-xs="30" flex-gt-sm="30">
-                    <div layout="column">
-
-                        <div>
-                            <md-input-container class="md-block" flex>
-                                <label>Total calories</label>
-                                <input ng-model="intake">
-                            </md-input-container>
-                        </div>
-                    </div>
-                </div>
-            </md-card-content>
-        </md-card>
-
-
-        <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Macronutrients distribution</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
-                <div layout="column" layout-align="center center" ng-show="true">
-                    <div>{{intake}}</div>
-                    kCal
-                    <slider floor="0" ceiling="100" ng-model-low="position.firstKnob"
-                            ng-model-high="position.secondKnob">
-                    </slider>
-                </div>
-                <div layout="row" layout-align="center center">
-                    <div flex="90" layout-align="center center">
-                        <div layout="row" layout-align="center center" style="text-align: center">
-                            <div flex="30">
-                                <p>Protein</p>
-
-                                <p>{{proteinRange}}%</p>
-
-                                <p>{{round(proteinsIntake)}}gr</p>
-                            </div>
-                            <div flex="30">
-
-                                <p>Fat</p>
-
-                                <p>{{fatRange}}%</p>
-
-                                <p>{{round(fatsIntake)}}gr</p>
-                            </div>
-                            <div flex="30">
-                                <p>Carbohydrate</p>
-
-                                <p>{{carbohydrateRange}}%</p>
-
-                                <p>{{round(carbsIntake)}}gr</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </md-card-content>
-        </md-card>
-    </div>
-</div>
-
-
-<!--Search food block-->
-<div layout="row">
-    <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
-
-        <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Menu planner</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
-
-                <div layout="row" layout-xs="column">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Meal type</label>
-                        <md-select ng-model="mealType.chosenMealType">
-                            <md-option ng-repeat="(index, option) in mealType.options"
-                                       ng-value="{{option}}"
-                                       ng-selected="(index == 0) ? true:false">
-                                {{option.name}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-datepicker ng-model="currentDate"
-                                   md-placeholder="Enter date"
-                                   style="margin-top: 16px; margin-right: 0; padding-right: 0"
-                                   md-min-date="minDate"
-                                   md-max-date="maxDate">
-                    </md-datepicker>
-                </div>
-
-                <md-content>
-                    <md-input-container class="md-block" flex="100" style="margin-bottom: 0">
-                        <!-- <label>Search food or <a href=""> create new product</a></label> -->
-                        <input type="search" class="form-control"
-                               data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}"
-                               placeholder="Search food or supplement: minimum 3 letters" ng-minlength="3">
-                    </md-input-container>
-
-                    <md-list flex="100" style="max-height: 260px; overflow-x: hidden;">
-                        <md-list-item class="list-group-item col-md-12" ng-if="searchFoodItem"
-                                      ng-repeat="product in filteredProducts = ( products | findAllProducts:searchFoodItem)"
-                                      ng-click="addProductToCurrentMeal(product)">
-                            <div flex="95">
-                                <div>{{product.name}}</div>
-                                <div class="md-caption">
-                                    <i>Protein: {{product.protein}}, Fat:
-                                        {{product.fat}}, Carbs: {{product.carbo}}, kCal: {{product.kCal}}
-                                    </i>
-                                </div>
-                            </div>
-                            <md-divider></md-divider>
-                        </md-list-item>
-                        <div flex="95" ng-show="filteredProducts.length  === 0 && searchFoodItem.length >= 3">
-                            We didn't find requested product. <a href="">Create new product</a>
-                        </div>
-                    </md-list>
-                </md-content>
-
-
-                <div layout="row" layout-align="center center">
-                    <md-button class="md-raised md-warn" style="margin-bottom: 44px" ng-disabled="isDisabledButton"
-                               ng-click="calculateMenu()">
-                        Calculate
+                    <md-button class="md-fab md-warn" aria-label="Logout" ng-click="location.path('/logout')">
+                        <md-icon md-svg-src="../../resources/img/material_img/exit_white.svg"></md-icon>
+                        <md-tooltip md-direction="bottom" md-autohide="false">
+                            Sign out
+                        </md-tooltip>
                     </md-button>
                 </div>
-
-                <div layout="column" layout-xs="column">
-                    <md-list flex="100" ng-show="showBreakfast">
-                        <h4>Breakfast</h4>
-                        <md-list-item class="list-group-item col-md-12" ng-repeat="item in breakfastInput">
-                            <div class="" flex="85">
-                                {{item.name}}
-                            </div>
-
-                            <div flex="15">
-                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, breakfastInput)">
-                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
-                                </md-button>
-                            </div>
-                        </md-list-item>
-                        <md-divider></md-divider>
-                    </md-list>
-                    <md-list flex="100" ng-show="showLunch">
-                        <h4>Lunch</h4>
-                        <md-list-item class="list-group-item col-md-12" ng-repeat="item in lunchInput">
-                            <div class="" flex="85">
-                                {{item.name}}
-                            </div>
-
-                            <div flex="15">
-                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, lunchInput)">
-                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
-                                </md-button>
-                            </div>
-                        </md-list-item>
-                        <md-divider></md-divider>
-                    </md-list>
-                    <md-list flex="100" ng-show="showDinner">
-                        <h4>Dinner</h4>
-                        <md-list-item class="list-group-item col-md-12" ng-repeat="item in dinnerInput">
-                            <div class="" flex="85">
-                                {{item.name}}
-                            </div>
-
-                            <div flex="15">
-                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, dinnerInput)">
-                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
-                                </md-button>
-                            </div>
-                        </md-list-item>
-                        <md-divider></md-divider>
-                    </md-list>
-                    <md-list flex="100" ng-show="showSnacks">
-                        <h4>Snacks</h4>
-                        <md-list-item class="list-group-item col-md-12" ng-repeat="item in snakesInput">
-                            <div class="" flex="85">
-                                {{item.name}}
-                            </div>
-
-                            <div flex="15">
-                                <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item" ng-click="removeThisItem(item, snakesInput)">
-                                    <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
-                                </md-button>
-                            </div>
-                        </md-list-item>
-                        <md-divider></md-divider>
-                    </md-list>
-                </div>
-            </md-card-content>
-        </md-card>
-    </div>
-</div>
-
-
-<div layout="row" ng-show="menu.length > 0">
-    <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
-
-        <md-card>
-
-            <md-toolbar class="md-hue-2">
-                <div class="md-toolbar-tools">
-                    <h2>
-                        <span>Result</span>
-                    </h2></div>
             </md-toolbar>
+        </md-content>
 
-            <md-card-content>
-                <div layout="column" layout-xs="column">
-                    <md-list flex="100">
-                        <h4 ng-show="menu[0].length > 0">Breakfast</h4>
-                        <md-list-item flex="100" ng-repeat="item in menu[0]"  ng-show="menu[0].length > 0"
-                                      class="list-group-item col-md-12" layout-align="center start">
-                            <div flex="80">
-                                <div>{{item.key}}</div>
-                                <div class="md-caption light-gray">
-                                    <i>Protein: {{ round(breakfastInput[$index].protein * item.value / 100) }} gr,
-                                        Fat: {{ round(breakfastInput[$index].fat * item.value / 100) }} gr,
-                                        Carbs: {{ round(breakfastInput[$index].carbo * item.value / 100) }} gr,
-                                        kCal: {{ round(breakfastInput[$index].kCal * item.value / 100) }} kCal
-                                    </i>
-                                </div>
-                            </div>
-
-                            <div flex="20"  >
-                                {{round(item.value) }} gr
-                            </div>
-
-                            <md-divider></md-divider>
-
-                        </md-list-item>
-
-                        <h4 ng-show="menu[1].length > 0">Lunch</h4>
-                        <md-list-item flex="100" ng-repeat="item in menu[1]" ng-show="menu[1].length > 0"
-                                      class="list-group-item col-md-12" layout-align="center start">
-                            <div flex="80">
-                                <div>{{item.key}}</div>
-                                <div class="md-caption light-gray">
-                                    <i>Protein: {{ round(lunchInput[$index].protein * item.value / 100) }} gr,
-                                        Fat: {{ round(lunchInput[$index].fat * item.value / 100) }} gr,
-                                        Carbs: {{ round(lunchInput[$index].carbo * item.value / 100) }} gr,
-                                        kCal: {{ round(lunchInput[$index].kCal * item.value / 100) }} kCal
-                                    </i>
-                                </div>
-                            </div>
-
-                            <div flex="20"  >
-                                {{round(item.value) }} gr
-                            </div>
-
-                            <md-divider></md-divider>
-
-                        </md-list-item>
-
-                        <h4 ng-show="menu[2].length > 0">Dinner</h4>
-                        <md-list-item flex="100" ng-repeat="item in menu[2]" ng-show="menu[2].length > 0"
-                                      class="list-group-item col-md-12" layout-align="center start">
-                            <div flex="80">
-                                <div>{{item.key}}</div>
-                                <div class="md-caption light-gray">
-                                    <i>Protein: {{ round(dinnerInput[$index].protein * item.value / 100) }} gr,
-                                        Fat: {{ round(dinnerInput[$index].fat * item.value / 100) }} gr,
-                                        Carbs: {{ round(dinnerInput[$index].carbo * item.value / 100) }} gr,
-                                        kCal: {{ round(dinnerInput[$index].kCal * item.value / 100) }} kCal
-                                    </i>
-                                </div>
-                            </div>
-
-                            <div flex="20"  >
-                                {{round(item.value) }} gr
-                            </div>
-
-                            <md-divider></md-divider>
-
-                        </md-list-item>
-
-                        <h4 ng-show="menu[3].length > 0">Snacks</h4>
-                        <md-list-item flex="100" ng-repeat="item in menu[3]" ng-show="menu[3].length > 0"
-                                      class="list-group-item col-md-12" layout-align="center start">
-                            <div flex="80">
-                                <div>{{item.key}}</div>
-                                <div class="md-caption light-gray">
-                                    <i>Protein: {{ round(snakesInput[$index].protein * item.value / 100) }} gr,
-                                        Fat: {{ round(snakesInput[$index].fat * item.value / 100) }} gr,
-                                        Carbs: {{ round(snakesInput[$index].carbo * item.value / 100) }} gr,
-                                        kCal: {{ round(snakesInput[$index].kCal * item.value / 100) }} kCal
-                                    </i>
-                                </div>
-                            </div>
-                            <div flex="20"  >
-                                {{round(item.value) }} gr
-                            </div>
-
-                            <md-divider></md-divider>
-
-                        </md-list-item>
-                    </md-list>
-                </div>
-            </md-card-content>
-        </md-card>
+        <div ng-view></div>
     </div>
-</div>
-
-
-</md-content>
-</div>
-
 
 </body>
 </html>

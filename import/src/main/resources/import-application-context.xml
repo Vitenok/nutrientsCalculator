@@ -6,6 +6,6 @@
 
     <import resource="classpath:core-application-context.xml" />
 
-    <bean class="com.iti.foodCalculator.dao.ProductsDAO" id="productsDAO"/>
+    <bean class="com.iti.foodcalc.core.dao.ProductsDAO" id="productsDAO"/>
 
 </beans>

@@ -1,0 +1,171 @@
+<div layout="row" data-ng-controller="settingsController">
+    <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Personal data</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+
+                <div layout="row" layout-xs="column" ng-cloak>
+                    <div flex-gt-xs="35" flex-gt-sm="35">
+                        <div layout="column">
+                            <form name="personalDataForm1">
+                                <md-input-container class="md-block" flex>
+                                    <label>Sex</label>
+                                    <md-select ng-model="sex.chosenSex">
+                                        <md-option ng-repeat="option in sex.options"
+                                                   ng-value="option"
+                                                   ng-selected="(option == sex.chosenSex) ? true : false">
+                                            {{option}}
+                                        </md-option>
+                                    </md-select>
+                                    <div class="md-errors-spacer"></div>
+                                </md-input-container>
+
+                                <md-input-container class="md-block" flex>
+                                    <label>Age</label>
+                                    <input ng-model="user.age" name="userAge" required type="number"
+                                           step="1" min="1" max="100">
+
+                                    <div ng-messages="personalDataForm1.userAge.$error">
+                                        <div ng-message="required">This is required field</div>
+                                        <div ng-message="min">Minimum age is 1 years</div>
+                                        <div ng-message="max">Maximum age is 100 years</div>
+                                    </div>
+                                </md-input-container>
+                            </form>
+                        </div>
+                    </div>
+                    <div flex-gt-xs="35" flex-gt-sm="35">
+                        <div layout="column">
+                            <form name="personalDataForm2">
+
+                                <md-input-container class="md-block" flex>
+                                    <label>Height(cm)</label>
+                                    <input ng-model="user.height" name="userHeight" required
+                                           type="number" step="1" min="145" max="210">
+
+                                    <div ng-messages="personalDataForm2.userHeight.$error">
+                                        <div ng-message="required">This is required field</div>
+                                        <div ng-message="min">Minimum height is 145 cm</div>
+                                        <div ng-message="max">Maximum height is 210 cm</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container class="md-block" flex>
+                                    <label>Weight(kg)</label>
+                                    <input ng-model="user.weight" name="userWeight"
+                                           type="number" step="1" min="30" max="200" required>
+
+                                    <div ng-messages="personalDataForm2.userWeight.$error">
+                                        <div ng-message="required">This is required field</div>
+                                        <div ng-message="min">Minimum weight is 30 kg</div>
+                                        <div ng-message="max">Maximum weight is 200 kg</div>
+                                    </div>
+                                </md-input-container>
+                            </form>
+                        </div>
+                    </div>
+                    <div flex-gt-xs="50" flex-gt-sm="50">
+                        <div layout="column">
+                            <form name="test">
+                                <md-input-container class="md-block" flex>
+                                    <label>Goal</label>
+                                    <md-select ng-model="goal.chosenGoal">
+                                        <md-option ng-repeat="(index,option) in goal.options"
+                                                   ng-value="{{option}}"
+                                                   ng-selected="(option.value == goal.chosenGoal.value) ? true : false">
+                                            {{option.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <div class="md-errors-spacer"></div>
+                                </md-input-container>
+                                <md-input-container class="md-block" flex>
+                                    <label>Activity level</label>
+                                    <md-select ng-model="activityLevel.chosenLevel">
+                                        <md-option ng-repeat=" (index, option)  in activityLevel.options"
+                                                   ng-value="{{option}}"
+                                                   ng-selected="(option.value == activityLevel.chosenLevel.value) ? true : false">
+                                            {{option.name}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="test.testSel.$error">
+                                        <div ng-message="required">This is required field</div>
+
+                                    </div>
+                                </md-input-container>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div layout="column">
+                    Your basal metabolic rate (BMR) is {{BMR}} and total daily energy expenditure (TDEE) is {{TDEE}}
+                    kCal.
+                    <b> Your goal calories intake is {{ user.totalCalories }} kCal. </b>
+                </div>
+
+                <div layout="row" flex-gt-xs="30" flex-gt-sm="30">
+                    <div layout="column">
+
+                        <div>
+                            <md-input-container class="md-block" flex>
+                                <label>Total calories</label>
+                                <input ng-model="user.totalCalories" required type="number">
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+
+
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Macronutrients distribution</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div layout="column" layout-align="center center" ng-show="true">
+                    <div>{{user.totalCalories}}</div>
+                    kCal
+                    <slider floor="0" ceiling="100" ng-model-low="position.firstKnob"
+                            ng-model-high="position.secondKnob"/>
+                </div>
+                <div layout="row" layout-align="center center">
+                    <div flex="90" layout-align="center center">
+                        <div layout="row" layout-align="center center" style="text-align: center">
+                            <div flex="30">
+                                <p>Protein</p>
+
+                                <p>{{user.proteinPercent}}%</p>
+
+                                <p>{{percentToCalories(user.proteinPercent, 4)}}gr</p>
+                            </div>
+                            <div flex="30">
+
+                                <p>Fat</p>
+
+                                <p>{{user.fatPercent}}%</p>
+
+                                <p>{{percentToCalories(user.fatPercent, 9)}}gr</p>
+                            </div>
+                            <div flex="30">
+                                <p>Carbohydrate</p>
+
+                                <p>{{user.carbohydratePercent}}%</p>
+
+                                <p>{{percentToCalories(user.carbohydratePercent, 4)}}gr</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+    <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
+</div>

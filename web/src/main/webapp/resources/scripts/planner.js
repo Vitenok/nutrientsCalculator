@@ -1,0 +1,193 @@
+angular.module('kulya-pulya')
+    .config(function($mdDateLocaleProvider) {
+        $mdDateLocaleProvider.formatDate = function(d) {
+            return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
+        };
+    })
+    .controller('plannerController', function ($scope, $rootScope, $http, $timeout, $location, $cookies) {
+            console.log("In Planner Controller");
+
+            $scope.location = $location;
+
+            var u = $cookies.get('user');
+            if (u == undefined || u == null || u == '') {
+                $location.path('/login');
+                return;
+            }
+            $scope.user = JSON.parse(u);
+            $scope.Math = window.Math;
+
+            $scope.mealType = {
+                chosenMealType: {name: "Breakfast"},
+                options: [
+                    {name: "Breakfast"},
+                    {name: "Lunch"},
+                    {name: "Dinner"},
+                    {name: "Snacks"}
+                ]
+            };
+
+            $scope.meals = [];
+            $scope.mealType.mealsNames = [];
+            $scope.mealType.options.forEach(function(option){
+                $scope.meals.push([]);
+                $scope.mealType.mealsNames.push(option.name);
+            });
+
+            var d = new Date();
+            d.setHours(d.getHours() - d.getTimezoneOffset() / 60);
+            $scope.currentDate = d;
+            $scope.$watch('currentDate', function (newVal, oldVal) {
+                if (newVal != oldVal) {
+                    var d = new Date(newVal);
+                    d.setHours(d.getHours() - d.getTimezoneOffset() / 60);
+                    $scope.loadDayPlan(d);
+                }
+            }, true);
+
+            $scope.loadProducts = function () {
+                $http.post('main/products', $scope.user.id).then(
+                    function (response) {
+                        $scope.products = response.data;
+                        console.log("FoodItems received successfully");
+                    },
+                    function (error) {
+                        console.error("FoodItems not received successfully. Status:" + JSON.stringify(error));
+                    });
+            };
+            $scope.loadProducts();
+
+            $scope.loadDayPlan = function (date) {
+                $http.post('dayPlan/get', {
+                    date: date,
+                    userId: $scope.user.id
+                }).then(
+                    function (response) {
+                        $scope.meals.forEach(function(meal){meal.length = 0});
+                        $scope.calculatedMeals = [];
+                        if (response.data != '') {
+                            $scope.calculatedMeals = response.data;
+                            $scope.updateCalculatedMeals(true);
+                        }
+                        console.log("FoodItems received successfully");
+                    },
+                    function (error) {
+                        console.error("FoodItems not received successfully. Status:" + JSON.stringify(error));
+                    });
+            };
+            $scope.loadDayPlan($scope.currentDate);
+
+            $scope.addProductToMeal = function(product, mealIdx) {
+                var productIdx = $scope.meals[mealIdx].indexOf(product);
+                if (productIdx == -1) {
+                    $scope.meals[mealIdx].push(product);
+                    if (product.user == undefined) {
+                        var servings = $scope.user.servings.filter(function(userServing){
+                            return userServing.productId == product.id;
+                        }, product);
+                        if (servings.length != 0) {
+                            product.serving = servings[0].weight;
+                        }
+                    }
+                }
+
+                $scope.searchFoodItem = undefined;
+            }
+
+            $scope.addProductToChosenMeal = function(product){
+                var mealIdx = $scope.mealType.mealsNames.indexOf($scope.mealType.chosenMealType.name);
+                $scope.addProductToMeal(product, mealIdx);
+            };
+
+            $scope.removeProductFromMeal = function(product, mealIdx) {
+                $scope.meals[mealIdx] = $scope.meals[mealIdx].filter(function(currProduct){
+                    return currProduct.id != product.id;
+                }, product);
+                /**
+                if ($scope.calculatedMeals.length != 0) {
+                    $scope.calculatedMeals[mealIdx].productPlans = $scope.calculatedMeals[mealIdx].productPlans.filter(function(currProductPlan){
+                        return currProductPlan.product.id != product.id;
+                    }, product);
+                }
+                 **/
+            };
+
+            $scope.calculatedMeals = [];
+            $scope.calculateMenu = function() {
+                var d = new Date($scope.currentDate);
+                d.setHours(d.getHours() - d.getTimezoneOffset() / 60);
+                $http.post('dayPlan/calculate', {
+                    date: d,
+                    productsLists: $scope.meals,
+                    userId: $scope.user.id
+                }).then(
+                    function(response){
+                        $scope.calculatedMeals = response.data;
+                        $scope.updateCalculatedMeals(false);
+                        console.log('Calculation successful : ' + JSON.stringify(response.status));
+                    },
+                    function(error){
+                        console.error(' Error while calculating: ' + JSON.stringify(error));
+                    });
+            };
+
+            $scope.showResult = function() {
+                for (var i=0; i<$scope.calculatedMeals.length; i++) {
+                    if ($scope.calculatedMeals[i].productPlans.length != 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            $scope.updateCalculatedMeals = function(updateMeals) {
+                for (var i=0; i<$scope.calculatedMeals.length; i++) {
+                    $scope.calculatedMeals[i].productPlans.forEach(function(productPlan){
+                        if (updateMeals) {
+                            $scope.addProductToMeal(productPlan.product, i);
+                        }
+                        productPlan.distribution = $scope.getProductPlanDistribution(productPlan.product, productPlan.weight);
+                    });
+                }
+            };
+
+            $scope.getProductPlanDistribution = function(product, weight) {
+                return 'Protein: ' + Math.round(product.protein*weight/100) + ' gr, ' +
+                    'Fat: ' + Math.round(product.fat*weight/100) + ' gr, ' +
+                    'Carbs: ' + Math.round(product.carbo*weight/100) + ' gr, ' +
+                    'kCal: ' + Math.round(product.kCal*weight/100) + ' kCal';
+            }
+
+    })
+    .filter('findAllProducts', function() {
+            return function(items, word) {
+                var startsWith = [];
+                var contains = [];
+
+                function compare(a,b) {
+                    if (a.name < b.name)
+                        return -1;
+                    else if (a.name > b.name)
+                        return 1;
+                    else
+                        return 0;
+                }
+
+                angular.forEach(items, function(item) {
+                    if (item !== undefined && word !== undefined){
+                        if(item.name.toLowerCase().indexOf(word.toLowerCase()) === 0){
+                            startsWith.push(item);
+                        }
+                        if(item.name.toLowerCase().indexOf(word.toLowerCase()) > 0){
+                            contains.push(item);
+                        }
+                    }
+                });
+
+                startsWith.sort(compare);
+                contains.sort(compare);
+
+                return startsWith.concat(contains);
+            };
+        })
+;

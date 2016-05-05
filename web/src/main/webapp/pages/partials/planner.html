@@ -1,0 +1,139 @@
+<div data-ng-controller="plannerController">
+    <div layout="row">
+        <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
+
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Menu planner</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+
+                    <div layout="row" layout-xs="column">
+                        <md-input-container class="md-block" flex-gt-xs>
+                            <label>Meal type</label>
+                            <md-select ng-model="mealType.chosenMealType">
+                                <md-option ng-repeat="(index, option) in mealType.options"
+                                           ng-value="{{option}}"
+                                           ng-selected="(index == 0) ? true:false">
+                                    {{option.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-datepicker ng-model="currentDate"
+                                       md-placeholder="Enter date"
+                                       style="margin-top: 16px; margin-right: 0; padding-right: 0"
+                                       md-min-date="minDate"
+                                       md-max-date="maxDate">
+                        </md-datepicker>
+                    </div>
+
+                    <md-content>
+                        <md-input-container class="md-block" flex="100" style="margin-bottom: 0">
+                            <!-- <label>Search food or <a href=""> create new product</a></label> -->
+                            <input type="search" class="form-control"
+                                   data-ng-model="searchFoodItem" ng-model-options="{debounce: 50}"
+                                   placeholder="Search food or supplement: minimum 3 letters" ng-minlength="3">
+                        </md-input-container>
+
+                        <md-list flex="100" style="max-height: 260px; overflow-x: hidden;">
+                            <md-list-item class="list-group-item col-md-12" ng-if="searchFoodItem"
+                                          ng-repeat="product in filteredProducts = ( products | findAllProducts:searchFoodItem)"
+                                          ng-click="addProductToChosenMeal(product)">
+                                <div flex="95">
+                                    <div>{{product.name}}</div>
+                                    <div class="md-caption">
+                                        <i>Protein: {{product.protein}}, Fat:
+                                            {{product.fat}}, Carbs: {{product.carbo}}, kCal: {{product.kCal}}
+                                        </i>
+                                    </div>
+                                </div>
+                                <md-divider></md-divider>
+                            </md-list-item>
+                            <div flex="95" ng-show="filteredProducts.length  === 0 && searchFoodItem.length >= 3">
+                                We didn't find requested product. <a href="">Create new product</a>
+                            </div>
+                        </md-list>
+                    </md-content>
+
+
+                    <div layout="row" layout-align="center center">
+                        <md-button class="md-raised md-warn" style="margin-bottom: 44px" ng-disabled="isDisabledButton"
+                                   ng-click="calculateMenu()">
+                            Calculate
+                        </md-button>
+                    </div>
+
+                    <div layout="column" layout-xs="column">
+                        <md-list flex="100" ng-repeat="(mealIdx, meal) in meals" ng-show="meal.length != 0">
+                            <h4>{{mealType.mealsNames[mealIdx]}}</h4>
+                            <md-list-item class="list-group-item col-md-12" ng-repeat="product in meal">
+                                <div flex="85">{{product.name}}</div>
+                                <div flex="5" data-ng-show="product.type == 'SUPPLEMENT'">
+                                    <form name="productServingForm">
+                                        <md-input-container class="md-block" flex>
+                                            <input ng-model="product.serving" name="productServing" required
+                                                   type="number" min="1" aria-label="productServing">
+                                            <div ng-messages="productServingForm.productServing.$error">
+                                                <div ng-message="required">This is required field</div>
+                                                <div ng-message="min">Minimum value is 1</div>
+                                            </div>
+                                        </md-input-container>
+                                    </form>
+                                </div>
+                                <div flex="15">
+                                    <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item"
+                                               ng-click="removeProductFromMeal(product, mealIdx)">
+                                        <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
+                                    </md-button>
+                                </div>
+                            </md-list-item>
+                            <md-divider></md-divider>
+                        </md-list>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+
+
+    <div layout="row" ng-show="showResult()">
+        <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
+
+            <md-card>
+
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+                        <h2>
+                            <span>Result</span>
+                        </h2></div>
+                </md-toolbar>
+
+                <md-card-content>
+                    <div layout="column" layout-xs="column">
+                        <md-list flex="100" ng-repeat="(mealIdx, meal) in calculatedMeals" ng-show="meal.productPlans.length != 0">
+                            <h4>{{mealType.mealsNames[mealIdx]}}</h4>
+                            <md-list-item flex="100" class="list-group-item col-md-12" layout-align="center start"
+                                          ng-repeat="productPlan in meal.productPlans" >
+                                <div flex="85">
+                                    <div>{{productPlan.product.name}}</div>
+                                    <div class="md-caption light-gray">
+                                        <i>{{productPlan.distribution}}</i>
+                                    </div>
+                                </div>
+
+                                <div flex="15">
+                                    {{Math.round(productPlan.weight)}} gr
+                                </div>
+
+                                <md-divider></md-divider>
+
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</div>
