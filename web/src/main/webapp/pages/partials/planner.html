@@ -1,15 +1,14 @@
 <div data-ng-controller="plannerController">
-    <div layout="row">
-        <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
-
+    <div layout="row" layout-xs="column" layout-sm="column">
+        <div flex-sm="90" flex-gt-sm="35" flex-offset-gt-sm="10" >
             <md-card>
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">Menu planner</span>
-                    </md-card-title-text>
-                </md-card-title>
+                    <md-toolbar class="md-hue-1">
+                        <div class="md-toolbar-tools">
+                            <h2>
+                                <span>Plan menu:</span>
+                            </h2></div>
+                    </md-toolbar>
                 <md-card-content>
-
                     <div layout="row" layout-xs="column">
                         <md-input-container class="md-block" flex-gt-xs>
                             <label>Meal type</label>
@@ -58,14 +57,15 @@
                     </md-content>
 
 
-                    <div layout="row" layout-align="center center">
-                        <md-button class="md-raised md-warn" style="margin-bottom: 44px" ng-disabled="isDisabledButton"
-                                   ng-click="calculateMenu()">
-                            Calculate
-                        </md-button>
-                    </div>
-
                     <div layout="column" layout-xs="column">
+                        <div>
+                            <h3 style="margin-bottom:0; text-align: center">
+                                <span>
+                                    Selected:
+                                </span>
+                            </h3>
+                        </div>
+
                         <md-list flex="100" ng-repeat="(mealIdx, meal) in meals" ng-show="meal.length != 0">
                             <h4>{{mealType.mealsNames[mealIdx]}}</h4>
                             <md-list-item class="list-group-item col-md-12" ng-repeat="product in meal">
@@ -83,30 +83,32 @@
                                     </form>
                                 </div>
                                 <div flex="15">
-                                    <md-button class="md-fab md-mini light-gray-background" aria-label="Remove item"
+                                    <md-button class="md-icon-button md-primary" aria-label="Remove item"
                                                ng-click="removeProductFromMeal(product, mealIdx)">
-                                        <md-icon md-svg-src="../resources/img/material_img/delete.svg"></md-icon>
+                                        <md-icon md-svg-src="../resources/img/material_img/delete-cross.svg"></md-icon>
                                     </md-button>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
                         </md-list>
                     </div>
+
+                    <div layout="row" layout-align="center center">
+                        <md-button class="md-raised md-warn large-button" style="margin-top: 12px" ng-disabled="isDisabledButton"
+                                   ng-click="calculateMenu()">
+                            Calculate
+                        </md-button>
+                    </div>
                 </md-card-content>
             </md-card>
         </div>
-    </div>
 
-
-    <div layout="row" ng-show="showResult()">
-        <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
-
+        <div flex-sm="90" flex-gt-sm="45">
             <md-card>
-
-                <md-toolbar class="md-hue-2">
+                <md-toolbar class="md-hue-1">
                     <div class="md-toolbar-tools">
                         <h2>
-                            <span>Result</span>
+                            <span>Get calculated result:</span>
                         </h2></div>
                 </md-toolbar>
 

@@ -8,7 +8,7 @@ html, body {
 }
 
 .light-gray-background {
-    background-color: #989898 !important;
+    background-color: #F2F1F4 !important;
 }
 
 .md-toolbar-tools .md-button {
@@ -32,4 +32,11 @@ html, body {
 
 .blue-color{
     background-color: darkblue!important;
+}
+
+.large-button {
+    margin-top: 12px;
+    padding-left: 36px!important;
+    padding-right: 36px!important;
+    height: 42px;
 }
