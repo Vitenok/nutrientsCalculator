@@ -1,7 +1,35 @@
+html, body {
+    line-height: 24px;
+    height: 100%!important;
+}
+
 .light-gray {
     color: #989898;
 }
 
 .light-gray-background {
     background-color: #989898 !important;
+}
+
+.md-toolbar-tools .md-button {
+    height: 100%;
+    color: #f5f2f9 !important;
+}
+
+.md-hue-1 {
+    background-color: #F2F1F4 !important;
+}
+
+.light-text {
+    color: #f5f2f9 !important;
+}
+
+.background-fill{
+    height:90vh;
+    background-color:#4DB6AC;
+    color:#efefef;
+}
+
+.blue-color{
+    background-color: darkblue!important;
 }

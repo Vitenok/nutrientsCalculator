@@ -1,4 +1,24 @@
-<div data-ng-controller="loginController">
-    <md-button md-no-ink class="md-primary" ng-click="fbLogin()">Facebook</md-button>
-    <md-button md-no-ink class="md-primary" ng-click="glLogin()">Google</md-button>
+<div data-ng-controller="loginController" class="background-fill" layout="column" layout-align="center center">
+    <div layout="column" layout-align="center center">
+        <div flex>
+            <h1>
+                <span class="light-text">Lorem ipsum</span>
+            </h1>
+            <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at venenatis felis, eu blandit mi.
+                Donec vitae elit libero.
+            </span>
+        </div>
+
+        <div layout="row" layout-xs="column">
+            <md-button class="md-raised  md-warn" ng-click="glLogin()">
+                <md-icon md-svg-src="../resources/img/material_img/google-letter-logo.svg"></md-icon>
+                Google
+            </md-button>
+
+            <md-button class="md-raised  md-warn blue-color" ng-click="fbLogin()">
+                <md-icon md-svg-src="../resources/img/material_img/facebook-letter-logo.svg"></md-icon>
+                Facebook
+            </md-button>
+        </div>
+    </div>
 </div>

@@ -27,7 +27,7 @@ slider div.bar, [slider] div.bar {
 slider div.bar .selection, [slider] div.bar .selection {
     width: 0%;
     height: 100%;
-    background: #fc311e;
+    background: rgb(255,87,34);
 }
 
 /* line 28, slider.scss */
@@ -36,7 +36,7 @@ slider div.handle, [slider] div.handle {
     width: 15px;
     height: 15px;
     top: -7px;
-    background-color: #fc311e;
+    background-color: rgb(255,87,34);
     z-index: 2;
     border-radius: 100%;
 }
@@ -44,7 +44,7 @@ slider div.handle, [slider] div.handle {
 /* line 38, slider.scss */
 slider div.handle:after, [slider] div.handle:after {
     content: '';
-    background-color: #fc311e;
+    background-color: rgb(255,87,34);
     width: 8px;
     height: 8px;
     position: absolute;
@@ -60,7 +60,7 @@ slider div.handle:after:hover, [slider] div.handle:after:hover {
 
 /* line 53, slider.scss */
 slider div.handle.active:after, [slider] div.handle.active:after {
-    background-color: #fc311e;
+    background-color: rgb(255,87,34);
 }
 
 /* line 58, slider.scss */

@@ -68,33 +68,26 @@
         <md-content>
             <md-toolbar>
                 <div class="md-toolbar-tools" ng-show="$root.user.name != null">
-                    <h2>
-                        <span>Logo</span>
-                    </h2>
+
                     <span flex></span>
 
-                    <md-button aria-label="Settings" ng-click="location.path('/planner')">
+                    <md-button aria-label="Settings" ng-click="location.path('/planner')" class="toolbar-button">
                         Planner
                     </md-button>
-                    <md-button aria-label="Settings" ng-click="location.path('/registrar')">
+                    <md-button aria-label="Settings" ng-click="location.path('/registrar')" class="toolbar-button">
                         Registrar
                     </md-button>
 
-                    <md-button aria-label="Custom Products" ng-click="location.path('/user-products')">
+                    <md-button aria-label="Custom Products" ng-click="location.path('/user-products')" class="toolbar-button">
                         My Products
                     </md-button>
 
-                    <md-button aria-label="Settings" ng-click="location.path('/settings')">
-                        Settings <!--{{$root.user.name}}-->
-                        <!--<md-tooltip md-direction="bottom" md-autohide="false">
-                            Settings
-                        </md-tooltip>-->
+                    <md-button aria-label="Settings" ng-click="location.path('/settings')"class="toolbar-button">
+                        Settings<!--{{$root.user.name}}-->
                     </md-button>
 
-                    <md-button class="md-fab md-warn" aria-label="Logout" ng-click="location.path('/logout')">
-                        <md-icon md-svg-src="../../resources/img/material_img/exit_white.svg"></md-icon>
-                        <md-tooltip md-direction="bottom" md-autohide="false">
-                            Sign out
+                    <md-button aria-label="Logout" ng-click="location.path('/logout')" class="toolbar-button">
+                        Sign out
                         </md-tooltip>
                     </md-button>
                 </div>

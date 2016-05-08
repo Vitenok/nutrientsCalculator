@@ -1,15 +1,17 @@
 <div layout="row" data-ng-controller="settingsController">
-    <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
+    <div flex-xs="90" flex="60" flex-offset="20" flex-offset-xs="5">
         <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Personal data</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
+            <md-toolbar class="md-hue-1">
+                <div class="md-toolbar-tools">
+                    <h2>
+                        <span>Personal data</span>
+                    </h2>
+                </div>
+            </md-toolbar>
 
-                <div layout="row" layout-xs="column" ng-cloak>
-                    <div flex-gt-xs="35" flex-gt-sm="35">
+            <md-card-content>
+                <div layout="row" layout-xs="column" layout-sm="column" ng-cloak>
+                    <div flex-gt-sm="35" flex-sm="100">
                         <div layout="column">
                             <form name="personalDataForm1">
                                 <md-input-container class="md-block" flex>
@@ -38,7 +40,7 @@
                             </form>
                         </div>
                     </div>
-                    <div flex-gt-xs="35" flex-gt-sm="35">
+                    <div flex-gt-sm="35" flex-sm="100">
                         <div layout="column">
                             <form name="personalDataForm2">
 
@@ -67,7 +69,7 @@
                             </form>
                         </div>
                     </div>
-                    <div flex-gt-xs="50" flex-gt-sm="50">
+                    <div flex-gt-sm="50" flex-sm="100">
                         <div layout="column">
                             <form name="test">
                                 <md-input-container class="md-block" flex>
@@ -93,7 +95,6 @@
                                     </md-select>
                                     <div ng-messages="test.testSel.$error">
                                         <div ng-message="required">This is required field</div>
-
                                     </div>
                                 </md-input-container>
                             </form>
@@ -107,31 +108,21 @@
                     <b> Your goal calories intake is {{ user.totalCalories }} kCal. </b>
                 </div>
 
-                <div layout="row" flex-gt-xs="30" flex-gt-sm="30">
-                    <div layout="column">
-
-                        <div>
-                            <md-input-container class="md-block" flex>
-                                <label>Total calories</label>
-                                <input ng-model="user.totalCalories" required type="number">
-                            </md-input-container>
-                        </div>
+                <div layout="row" layout-xs="column" ng-cloak>
+                    <div flex>
+                        <md-input-container class="md-block" flex>
+                            <label>Total calories</label>
+                            <input ng-model="user.totalCalories" required type="number">
+                        </md-input-container>
                     </div>
                 </div>
-            </md-card-content>
-        </md-card>
 
-
-        <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Macronutrients distribution</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
                 <div layout="column" layout-align="center center" ng-show="true">
-                    <div>{{user.totalCalories}}</div>
-                    kCal
+                    <div>
+                        <h3>
+                            <span>Macronutrients distribution</span>
+                        </h3>
+                    </div>
                     <slider floor="0" ceiling="100" ng-model-low="position.firstKnob"
                             ng-model-high="position.secondKnob"/>
                 </div>
@@ -162,10 +153,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div layout="row">
+                    <div flex style="text-align: center">
+                        <md-button class="md-raised md-warn action-button" ng-click="save()">Save</md-button>
+                    </div>
                 </div>
             </md-card-content>
         </md-card>
     </div>
-    <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
 </div>

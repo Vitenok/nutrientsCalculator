@@ -11,6 +11,14 @@ angular.module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute
             .otherwise({redirectTo: '/login'});
     }])
 
+    .config(function($mdThemingProvider) {
+        $mdThemingProvider.theme('default')
+            .primaryPalette('teal', {
+                'default': '300'
+            })
+            .accentPalette('orange');
+    })
+
     .run( function($rootScope, $location, $http, $cookies) {
 
         $rootScope.$on( '$routeChangeStart', function(event, next, current) {
