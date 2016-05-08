@@ -119,7 +119,7 @@
                                 </div>
                             </div>
 
-                            <div layout="row" layout-xs="column" ng-cloak ng-repeat="product in user.products | filter: {type:0}">
+                            <div layout="row" layout-xs="column" ng-cloak ng-repeat="product in user.products | filter: {type:'PRODUCT'}">
                                 <div flex-gt-sm="35">
                                     <div layout="column">
                                         <form name="productNameForm">
@@ -343,7 +343,7 @@
                                 </div>
                             </div>
 
-                            <div layout="row" layout-xs="column" ng-cloak ng-repeat="product in user.products | filter: {type:1}">
+                            <div layout="row" layout-xs="column" ng-cloak ng-repeat="product in user.products | filter: {type:'SUPPLEMENT'}">
                                 <div flex-gt-sm="35">
                                     <div layout="column">
                                         <form name="productNameForm">
