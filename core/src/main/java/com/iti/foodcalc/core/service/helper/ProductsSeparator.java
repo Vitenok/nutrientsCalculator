@@ -92,7 +92,7 @@ public class ProductsSeparator {
                 .mapToInt(Product::getId)
                 .boxed()
                 .collect(Collectors.toList());
-        List<Product> nonSupplementsProducts = productsDAO.findByIds(nonSupplementsIds);
+        List<Product> nonSupplementsProducts = nonSupplementsIds.isEmpty() ? Collections.emptyList() : productsDAO.findByIds(nonSupplementsIds);
 
         fruits = nonSupplementsProducts
                 .stream()

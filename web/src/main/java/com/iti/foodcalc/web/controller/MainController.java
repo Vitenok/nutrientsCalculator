@@ -47,10 +47,7 @@ public class MainController {
             user = userDAO.findById(userId);
             session.setAttribute("user", user);
         }
-        List<Product> all = getSharedProducts();
-        List<Product> byUser = productsDAO.findByUser(userId);
-        byUser.addAll(all);
-        return byUser;
+        return getSharedProducts();
     }
 
     public List<Product> getSharedProducts(){

@@ -63,16 +63,17 @@ angular.module('kulya-pulya')
                     userId: $scope.user.id
                 }).then(
                     function (response) {
+                        $scope.currentServings = [];
                         $scope.meals.forEach(function(meal){meal.length = 0});
                         $scope.calculatedMeals = [];
                         if (response.data != '') {
                             $scope.calculatedMeals = response.data;
                             $scope.updateCalculatedMeals(true);
                         }
-                        console.log("FoodItems received successfully");
+                        console.log("Day food plan received successfully");
                     },
                     function (error) {
-                        console.error("FoodItems not received successfully. Status:" + JSON.stringify(error));
+                        console.error("Day food plan not received successfully. Status:" + JSON.stringify(error));
                     });
             };
             $scope.loadDayPlan($scope.currentDate);
@@ -81,8 +82,8 @@ angular.module('kulya-pulya')
                 var productIdx = $scope.meals[mealIdx].indexOf(product);
                 if (productIdx == -1) {
                     $scope.meals[mealIdx].push(product);
-                    if (product.user == undefined) {
-                        var servings = $scope.user.servings.filter(function(userServing){
+                    if (product.type == 'SUPPLEMENT') {
+                        var servings = $scope.user.servings.filter(function (userServing) {
                             return userServing.productId == product.id;
                         }, product);
                         if (servings.length != 0) {
@@ -90,9 +91,24 @@ angular.module('kulya-pulya')
                         }
                     }
                 }
-
                 $scope.searchFoodItem = undefined;
-            }
+            };
+
+            $scope.currentServings = [];
+            $scope.servingChanged = function(product){
+                if (product.type != 'SUPPLEMENT') {
+                    return;
+                }
+                product.serving = product.serving;
+                var servings = $scope.currentServings.filter(function (serving) {
+                    return serving.productId == product.id;
+                }, product);
+                if (servings.length == 0) {
+                    $scope.currentServings.push({productId:product.id, weight:product.serving});
+                } else {
+                    servings[0].weight = product.serving;
+                }
+            };
 
             $scope.addProductToChosenMeal = function(product){
                 var mealIdx = $scope.mealType.mealsNames.indexOf($scope.mealType.chosenMealType.name);
@@ -102,6 +118,9 @@ angular.module('kulya-pulya')
             $scope.removeProductFromMeal = function(product, mealIdx) {
                 $scope.meals[mealIdx] = $scope.meals[mealIdx].filter(function(currProduct){
                     return currProduct.id != product.id;
+                }, product);
+                $scope.currentServings = $scope.currentServings.filter(function(serving){
+                    return serving.productId != product.id;
                 }, product);
                 /**
                 if ($scope.calculatedMeals.length != 0) {
@@ -116,14 +135,17 @@ angular.module('kulya-pulya')
             $scope.calculateMenu = function() {
                 var d = new Date($scope.currentDate);
                 d.setHours(d.getHours() - d.getTimezoneOffset() / 60);
-                $http.post('dayPlan/calculate', {
+                $http.post('dayPlan/create', {
                     date: d,
                     productsLists: $scope.meals,
+                    servings: $scope.currentServings,
                     userId: $scope.user.id
                 }).then(
                     function(response){
-                        $scope.calculatedMeals = response.data;
+                        $scope.calculatedMeals = response.data.mealPlans;
                         $scope.updateCalculatedMeals(false);
+                        $scope.user = response.data.user;
+                        $cookies.put('user', JSON.stringify(response.data.user));
                         console.log('Calculation successful : ' + JSON.stringify(response.status));
                     },
                     function(error){

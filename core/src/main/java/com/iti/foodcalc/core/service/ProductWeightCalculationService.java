@@ -40,6 +40,10 @@ public class ProductWeightCalculationService {
 
     public Map<Product, Double> calcWeight(List<Product> products, Product restriction) {
 
+        if (products.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
         double[] superProportion = new double[]{restriction.getProtein() * caloriesInProtein / restriction.getkCal(),
                 restriction.getCarbo() * caloriesInCarbohydrate / restriction.getkCal(),
                 restriction.getFat() * caloriesInFat / restriction.getkCal()};

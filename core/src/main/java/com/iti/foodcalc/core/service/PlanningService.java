@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PlanningService {
@@ -34,16 +36,18 @@ public class PlanningService {
     @Autowired
     UserDAO userDAO;
 
-    public List<MealPlan> createPlan(User user, List<List<Product>> products, LocalDateTime date){
+    public DayFoodPlan createPlan(User user, List<UserProductServing> servings, List<List<Product>> products, LocalDateTime date){
         productsSeparator.init(user, products, date);
 
         Map<Product, Double> productsWithWeight = productWeightCalculationService.calcWeight(productsSeparator.getProductsToCalculate(), getConstraints(user));
 
-        DayFoodPlan dayFoodPlan = createDayFoodPlan(products, date, productsWithWeight);
+        DayFoodPlan dayFoodPlan = createDayFoodPlan(products, productsSeparator.getDate(), productsWithWeight, user);
 
         saveDayFoodPlan(dayFoodPlan, user);
 
-        return dayFoodPlan.getMealPlans();
+        saveUserProductServings(servings, user);
+
+        return dayFoodPlan;
     }
 
     private Product getConstraints(User user) {
@@ -57,13 +61,14 @@ public class PlanningService {
         return new Product("Constraints", user.getTotalCalories()-productsSeparator.getRemoveFromConstraints().getkCal(), protein, fat, carbohydrate);
     }
 
-    private DayFoodPlan createDayFoodPlan(List<List<Product>> products, LocalDateTime date, Map<Product, Double> productsMap) {
+    private DayFoodPlan createDayFoodPlan(List<List<Product>> products, LocalDateTime date, Map<Product, Double> productsMap, User user) {
         DayFoodPlan dayFoodPlan = new DayFoodPlan();
         dayFoodPlan.setDate(date);
+        dayFoodPlan.setUser(user);
         for (List<Product> productList : products) {
             MealPlan mealPlan = new MealPlan();
             for (Product product : productList) {
-                ProductPlan productPlan = null;
+                ProductPlan productPlan;
                 Double calculatedWeight = productsMap.get(product);
                 if (calculatedWeight == null) {
                     productPlan = new ProductPlan(product, productsSeparator.getProductsMap().get(product.getId()));
@@ -89,5 +94,24 @@ public class PlanningService {
         LOG.info("DayFoodPlan for user " + user + " saved successfully");
 
         return dayFoodPlan;
+    }
+
+    private void saveUserProductServings(List<UserProductServing>  servings, User user) {
+        for(UserProductServing s : servings) {
+            // Trying to update user products first
+            Optional<Product> p = user.getProducts().stream().filter(up -> up.getId() == s.getProductId()).findFirst();
+            if (p.isPresent()) {
+                p.get().setServing(s.getWeight());
+                continue;
+            }
+            // Otherwise - updating user servings
+            Optional<UserProductServing> ups = user.getServings().stream().filter(us -> us.getId() == s.getId()).findFirst();
+            if (ups.isPresent()) {
+                ups.get().setWeight(s.getWeight());
+            } else {
+                user.addServing(s);
+            }
+        }
+        userDAO.saveOrUpdate(user);
     }
 }

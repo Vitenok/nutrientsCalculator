@@ -38,7 +38,7 @@
 
                         <md-list flex="100" style="max-height: 260px; overflow-x: hidden;">
                             <md-list-item class="list-group-item col-md-12" ng-if="searchFoodItem"
-                                          ng-repeat="product in filteredProducts = ( products | findAllProducts:searchFoodItem)"
+                                          ng-repeat="product in filteredProducts = ( products.concat(user.products) | findAllProducts:searchFoodItem)"
                                           ng-click="addProductToChosenMeal(product)">
                                 <div flex="95">
                                     <div>{{product.name}}</div>
@@ -51,7 +51,7 @@
                                 <md-divider></md-divider>
                             </md-list-item>
                             <div flex="95" ng-show="filteredProducts.length  === 0 && searchFoodItem.length >= 3">
-                                We didn't find requested product. <a href="">Create new product</a>
+                                We didn't find requested product. <a href="#/user-products">Create new product</a>
                             </div>
                         </md-list>
                     </md-content>
@@ -70,11 +70,11 @@
                             <h4>{{mealType.mealsNames[mealIdx]}}</h4>
                             <md-list-item class="list-group-item col-md-12" ng-repeat="product in meal">
                                 <div flex="85">{{product.name}}</div>
-                                <div flex="5" data-ng-show="product.type == 'SUPPLEMENT'">
+                                <div flex="10" data-ng-show="product.type == 'SUPPLEMENT'">
                                     <form name="productServingForm">
                                         <md-input-container class="md-block" flex>
                                             <input ng-model="product.serving" name="productServing" required
-                                                   type="number" min="1" aria-label="productServing">
+                                                   type="number" min="1" aria-label="productServing" ng-change="servingChanged(product)">
                                             <div ng-messages="productServingForm.productServing.$error">
                                                 <div ng-message="required">This is required field</div>
                                                 <div ng-message="min">Minimum value is 1</div>

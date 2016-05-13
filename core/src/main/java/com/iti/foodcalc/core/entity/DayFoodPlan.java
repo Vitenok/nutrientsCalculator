@@ -19,7 +19,7 @@ public class DayFoodPlan {
     private LocalDateTime date;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dayFoodPlan", orphanRemoval = true)

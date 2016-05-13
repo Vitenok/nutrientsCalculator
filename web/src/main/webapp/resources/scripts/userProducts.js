@@ -14,23 +14,23 @@ angular.module('kulya-pulya')
 
         $scope.addProduct = function() {
             if ($scope.newProduct.serving != 0) {
-                $scope.newProduct.type = 1;
+                $scope.newProduct.type = 'SUPPLEMENT';
             }
             $scope.user.products.unshift($scope.newProduct);
-            $scope.addProductNameForm.$setUntouched()
-            $scope.addProductProteinForm.$setUntouched()
-            $scope.addProductCarbohydrateForm.$setUntouched()
-            $scope.addProductFatForm.$setUntouched()
-            $scope.addProductCaloriesForm.$setUntouched()
-            $scope.addProductServingForm.$setUntouched()
+            $scope.addProductNameForm.$setUntouched();
+            $scope.addProductProteinForm.$setUntouched();
+            $scope.addProductCarbohydrateForm.$setUntouched();
+            $scope.addProductFatForm.$setUntouched();
+            $scope.addProductCaloriesForm.$setUntouched();
+            $scope.addProductServingForm.$setUntouched();
             $scope.newProduct = {};
             $scope.save();
-        }
+        };
 
         $scope.deleteProduct = function(product) {
             var i = $scope.user.products.indexOf(product);
             $scope.user.products.splice(i,1);
-        }
+        };
 
         $scope.save = function() {
             $http.post('user/products/save',
