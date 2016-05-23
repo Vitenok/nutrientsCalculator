@@ -64,13 +64,57 @@
 </head>
 <body data-ng-app="kulya-pulya" ng-cloak>
 
-    <div data-ng-controller="mainController">
-        <md-content>
-            <md-toolbar>
-                <div class="md-toolbar-tools" ng-show="$root.user.name != null">
+<div data-ng-controller="mainController">
+    <md-content>
+        <md-toolbar>
+            <div class="md-toolbar-tools" ng-show="$root.user.name != null">
 
-                    <span flex></span>
+                <span flex></span>
 
+                <div hide-gt-xs>
+                    <md-menu>
+                        <md-button aria-label="Open phone interactions menu" ng-click="openMenu($mdOpenMenu, $event)"
+                                   class="md-icon-button">
+                            <md-icon md-svg-src="../resources/img/material_img/ic_reorder_white_36px.svg"></md-icon>
+                        </md-button>
+
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button aria-label="Settings" ng-click="location.path('/planner')"
+                                           class="toolbar-button">
+                                    Planner
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button aria-label="Settings" ng-click="location.path('/registrar')"
+                                           class="toolbar-button">
+                                    Registrar
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button aria-label="Custom Products" ng-click="location.path('/user-products')"
+                                           class="toolbar-button">
+                                    My Products
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button aria-label="Settings" ng-click="location.path('/settings')"
+                                           class="toolbar-button">
+                                    Settings<!--{{$root.user.name}}-->
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button aria-label="Logout" ng-click="location.path('/logout')"
+                                           class="toolbar-button">
+                                    Sign out
+                                    </md-tooltip>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+
+                <div hide-xs>
                     <md-button aria-label="Settings" ng-click="location.path('/planner')" class="toolbar-button">
                         Planner
                     </md-button>
@@ -78,11 +122,12 @@
                         Registrar
                     </md-button>
 
-                    <md-button aria-label="Custom Products" ng-click="location.path('/user-products')" class="toolbar-button">
+                    <md-button aria-label="Custom Products" ng-click="location.path('/user-products')"
+                               class="toolbar-button">
                         My Products
                     </md-button>
 
-                    <md-button aria-label="Settings" ng-click="location.path('/settings')"class="toolbar-button">
+                    <md-button aria-label="Settings" ng-click="location.path('/settings')" class="toolbar-button">
                         Settings<!--{{$root.user.name}}-->
                     </md-button>
 
@@ -91,11 +136,11 @@
                         </md-tooltip>
                     </md-button>
                 </div>
-            </md-toolbar>
-        </md-content>
-
-        <div ng-view></div>
-    </div>
+            </div>
+        </md-toolbar>
+    </md-content>
+    <div ng-view></div>
+</div>
 
 </body>
 </html>

@@ -16,7 +16,7 @@ angular.module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute
             .primaryPalette('teal', {
                 'default': '300'
             })
-            .accentPalette('orange');
+            .accentPalette('deep-orange');
     })
 
     .run( function($rootScope, $location, $http, $cookies) {
@@ -52,5 +52,12 @@ angular.module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute
         $rootScope.user = JSON.parse(u);
 
         console.log('In Main Controller');
+
+        var originatorEv;
+
+        $scope.openMenu = function($mdOpenMenu, ev) {
+            originatorEv = ev;
+            $mdOpenMenu(ev);
+        };
     })
     ;
