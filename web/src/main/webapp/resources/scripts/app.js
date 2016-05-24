@@ -1,4 +1,9 @@
-angular.module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies'])
+angular
+    .module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies'])
+
+    .constant("ApplicationProperties", {
+        meals:'Breakfast,Lunch,Dinner,Snacks'
+    })
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider

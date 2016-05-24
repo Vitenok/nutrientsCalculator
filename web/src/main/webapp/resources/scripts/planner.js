@@ -4,7 +4,7 @@ angular.module('kulya-pulya')
             return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
         };
     })
-    .controller('plannerController', function ($scope, $rootScope, $http, $timeout, $location, $cookies) {
+    .controller('plannerController', function (ApplicationProperties, $scope, $rootScope, $http, $timeout, $location, $cookies) {
             console.log("In Planner Controller");
 
             $scope.location = $location;
@@ -17,21 +17,19 @@ angular.module('kulya-pulya')
             $scope.user = JSON.parse(u);
             $scope.Math = window.Math;
 
-            $scope.mealType = {
-                chosenMealType: {name: "Breakfast"},
-                options: [
-                    {name: "Breakfast"},
-                    {name: "Lunch"},
-                    {name: "Dinner"},
-                    {name: "Snacks"}
-                ]
-            };
+            var mealTypes = ApplicationProperties.meals.split(',');
 
+            $scope.mealType = {
+                chosenMealType: {name: mealTypes[0]},
+                options: []
+            };
             $scope.meals = [];
             $scope.mealType.mealsNames = [];
-            $scope.mealType.options.forEach(function(option){
+
+            mealTypes.forEach(function(option){
+                $scope.mealType.options.push({name:option});
                 $scope.meals.push([]);
-                $scope.mealType.mealsNames.push(option.name);
+                $scope.mealType.mealsNames.push(option);
             });
 
             var d = new Date();
