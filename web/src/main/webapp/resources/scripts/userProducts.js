@@ -11,25 +11,34 @@ angular.module('kulya-pulya')
         }
         $scope.user = JSON.parse(u);
         $scope.newProduct = {};
+        $scope.newSupplement = {type:'SUPPLEMENT'};
+
+        $scope.checkIfNameExists = function(name, element, isExistingProduct) {
+            var existingProduct = $scope.user.products.filter(function (product) {
+                return product.name == name;
+            }, name);
+            element.$setTouched(true);
+            element.$setValidity('exists', isExistingProduct ? existingProduct.length == 1 : existingProduct.length == 0);
+        }
 
         $scope.addProduct = function() {
-            if ($scope.newProduct.serving != 0) {
-                $scope.newProduct.type = 'SUPPLEMENT';
-            }
+            $scope.addProductForm.$setUntouched();
             $scope.user.products.unshift($scope.newProduct);
-            $scope.addProductNameForm.$setUntouched();
-            $scope.addProductProteinForm.$setUntouched();
-            $scope.addProductCarbohydrateForm.$setUntouched();
-            $scope.addProductFatForm.$setUntouched();
-            $scope.addProductCaloriesForm.$setUntouched();
-            $scope.addProductServingForm.$setUntouched();
             $scope.newProduct = {};
             $scope.save();
         };
 
+        $scope.addSupplement = function() {
+            $scope.addSupplementForm.$setUntouched();
+            $scope.user.products.unshift($scope.newSupplement);
+            $scope.newSupplement = {type:'SUPPLEMENT'};
+            $scope.save();
+        }
+
         $scope.deleteProduct = function(product) {
             var i = $scope.user.products.indexOf(product);
             $scope.user.products.splice(i,1);
+            $scope.save();
         };
 
         $scope.save = function() {
