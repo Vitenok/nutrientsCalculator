@@ -26,7 +26,7 @@ html, body {
 
 .background-fill{
     height:90vh;
-    background-color:#4DB6AC;
+    background-color:#3F51B5;
     color:#efefef;
 }
 
@@ -39,4 +39,12 @@ html, body {
     padding-left: 36px!important;
     padding-right: 36px!important;
     height: 42px;
+}
+
+.center {
+    margin: auto!important;
+}
+
+.md-toolbar-tools {
+    color: #212121;
 }

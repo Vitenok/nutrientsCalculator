@@ -18,10 +18,9 @@ angular
 
     .config(function($mdThemingProvider) {
         $mdThemingProvider.theme('default')
-            .primaryPalette('teal', {
-                'default': '300'
+            .primaryPalette('indigo', {
             })
-            .accentPalette('deep-orange');
+            .accentPalette('light-blue');
     })
 
     .run( function($rootScope, $location, $http, $cookies) {

@@ -1,5 +1,5 @@
 <div layout="row" data-ng-controller="userProductsController">
-    <div flex-xs="90" flex="50" flex-offset="25" flex-offset-xs="5">
+    <div flex-xs="90" flex="60" flex-offset="20" flex-offset-xs="5">
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="Products">
                 <md-content class="md-padding">
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
 
-                            <form name="addProductForm">
+                            <form name="addProductForm" style="margin-bottom: 20px">
                                 <div layout="row" layout-xs="column" ng-cloak>
                                     <div flex-gt-sm="35">
                                         <div layout="column">
@@ -110,7 +110,10 @@
                                     </div>
                                     <div flex-gt-sm="15">
                                         <div layout="column">
-                                            <md-button class="md-primary" ng-disabled="addProductForm.$invalid" ng-click="addProduct()">Add</md-button>
+                                            <md-button class="md-fab md-mini center" aria-label="add"  ng-disabled="addProductForm.$invalid" ng-click="addProduct()">
+                                                <md-icon md-svg-src="../resources/img/material_img/ic_add_white_24px.svg"></md-icon>
+                                            </md-button>
+
                                         </div>
                                     </div>
                                     <div flex-gt-sm="15">
@@ -184,12 +187,16 @@
                                         </div>
                                         <div flex-gt-sm="15">
                                             <div layout="column">
-                                                <md-button class="md-raised md-primary center" ng-click="save()" ng-disabled="editProductForm.$invalid">Save</md-button>
+                                                <md-button class="md-icon-button center" aria-label="save" ng-click="save()" ng-disabled="editProductForm.$invalid">
+                                                    <md-icon md-svg-src="../resources/img/material_img/ic_save_black_24px.svg"></md-icon>
+                                                </md-button>
                                             </div>
                                         </div>
                                         <div flex-gt-sm="15">
                                             <div layout="column">
-                                                <md-button class="md-warn" ng-click="deleteProduct(product)">Delete</md-button>
+                                                <md-button class="md-icon-button center" aria-label="delete"  ng-click="deleteProduct(product)">
+                                                    <md-icon md-svg-src="../resources/img/material_img/ic_delete_black_24px.svg"></md-icon>
+                                                </md-button>
                                             </div>
                                         </div>
                                     </div>
@@ -257,7 +264,7 @@
                                 </div>
                             </div>
 
-                            <form name="addSupplementForm">
+                            <form name="addSupplementForm" style="margin-bottom: 20px">
                                 <div layout="row" layout-xs="column" ng-cloak>
                                     <div flex-gt-sm="35">
                                         <div layout="column">
@@ -332,7 +339,10 @@
                                     </div>
                                     <div flex-gt-sm="15">
                                         <div layout="column">
-                                            <md-button class="md-primary" ng-disabled="addSupplementForm.$invalid" ng-click="addSupplement()">Add</md-button>
+                                            <md-button class="md-fab md-mini center" aria-label="add"  ng-disabled="addSupplementForm.$invalid" ng-click="addSupplement()">
+                                                <md-icon md-svg-src="../resources/img/material_img/ic_add_white_24px.svg"></md-icon>
+                                            </md-button>
+
                                         </div>
                                     </div>
                                     <div flex-gt-sm="15">
@@ -418,12 +428,16 @@
                                         </div>
                                         <div flex-gt-sm="15">
                                             <div layout="column">
-                                                <md-button class="md-raised md-primary center" ng-click="save()" ng-disabled="editSupplementForm.$invalid">Save</md-button>
+                                                <md-button class="md-icon-button center" aria-label="save" ng-click="save()" ng-disabled="editSupplementForm.$invalid">
+                                                    <md-icon md-svg-src="../resources/img/material_img/ic_save_black_24px.svg"></md-icon>
+                                                </md-button>
                                             </div>
                                         </div>
                                         <div flex-gt-sm="15">
                                             <div layout="column">
-                                                <md-button class="md-warn" ng-click="deleteProduct(product)">Delete</md-button>
+                                                <md-button class="md-icon-button center" aria-label="delete"  ng-click="deleteProduct(product)">
+                                                    <md-icon md-svg-src="../resources/img/material_img/ic_delete_black_24px.svg"></md-icon>
+                                                </md-button>
                                             </div>
                                         </div>
                                     </div>
