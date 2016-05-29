@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,7 +40,7 @@ public class PlanningService {
     public DayFoodPlan createPlan(User user, List<UserProductServing> servings, List<List<Product>> products, LocalDateTime date){
         productsSeparator.init(user, products, date);
 
-        Map<Product, Double> productsWithWeight = productWeightCalculationService.calcWeight(productsSeparator.getProductsToCalculate(), getConstraints(user));
+        Map<Product, Integer> productsWithWeight = mapDoubleToInt(productWeightCalculationService.calcWeight(productsSeparator.getProductsToCalculate(), getConstraints(user)));
 
         DayFoodPlan dayFoodPlan = createDayFoodPlan(products, productsSeparator.getDate(), productsWithWeight, user);
 
@@ -48,6 +49,13 @@ public class PlanningService {
         saveUserProductServings(servings, user);
 
         return dayFoodPlan;
+    }
+
+    private Map<Product, Integer> mapDoubleToInt(Map<Product, Double> productDoubleMap) {
+        Map<Product, Integer> m = new HashMap<Product, Integer>(){{
+            productDoubleMap.forEach((k,v)->put(k,(int)Math.round(v)));
+        }};
+        return m;
     }
 
     private Product getConstraints(User user) {
@@ -61,7 +69,7 @@ public class PlanningService {
         return new Product("Constraints", user.getTotalCalories()-productsSeparator.getRemoveFromConstraints().getkCal(), protein, fat, carbohydrate);
     }
 
-    private DayFoodPlan createDayFoodPlan(List<List<Product>> products, LocalDateTime date, Map<Product, Double> productsMap, User user) {
+    private DayFoodPlan createDayFoodPlan(List<List<Product>> products, LocalDateTime date, Map<Product, Integer> productsMap, User user) {
         DayFoodPlan dayFoodPlan = new DayFoodPlan();
         dayFoodPlan.setDate(date);
         dayFoodPlan.setUser(user);
@@ -69,7 +77,7 @@ public class PlanningService {
             MealPlan mealPlan = new MealPlan();
             for (Product product : productList) {
                 ProductPlan productPlan;
-                Double calculatedWeight = productsMap.get(product);
+                Integer calculatedWeight = productsMap.get(product);
                 if (calculatedWeight == null) {
                     productPlan = new ProductPlan(product, productsSeparator.getProductsMap().get(product.getId()));
                 } else {

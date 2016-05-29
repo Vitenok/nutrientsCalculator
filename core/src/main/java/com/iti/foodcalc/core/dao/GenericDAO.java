@@ -1,5 +1,6 @@
 package com.iti.foodcalc.core.dao;
 
+import com.iti.foodcalc.core.entity.Product;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,19 +35,31 @@ abstract class GenericDAO<T> {
         getSession().saveOrUpdate(t);
     }
 
+    public void saveOrUpdateAll(List<T> ts) {
+        for (T t : ts) {
+            saveOrUpdate(t);
+        }
+    }
+
     public T findById(int id) {
         return (T) createCriteria().add(Restrictions.eq("id", id)).uniqueResult();
+    }
+
+    public List<T> findByIds(List<Integer> ids) {
+        return createCriteria()
+                .add(Restrictions.in("id", ids))
+                .list();
     }
 
     public List<T> findAll() {
         return createCriteria().list();
     }
 
-    public void delete(int id) {
+/*    public void delete(int id) {
         getSession().createQuery("delete from " + persistentClass.getName() + " where id = :id").setInteger("id", id).executeUpdate();
     }
 
     public void delete(T t) {
         getSession().delete(t);
-    }
+    }*/
 }

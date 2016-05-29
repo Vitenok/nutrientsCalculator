@@ -22,7 +22,7 @@ public class Product implements Serializable {
 
     private TYPE type = TYPE.PRODUCT;
 
-    private double serving;
+    private int serving;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference("category-products")
@@ -582,11 +582,11 @@ public class Product implements Serializable {
         this.type = type;
     }
 
-    public double getServing() {
+    public int getServing() {
         return serving;
     }
 
-    public void setServing(double serving) {
+    public void setServing(int serving) {
         this.serving = serving;
     }
 

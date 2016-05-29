@@ -24,7 +24,7 @@ public class User {
     private double height;
     private double goal;
     private int age;
-    private double weight;
+    private int weight;
     private double activityLevel;
     private int totalCalories;
     private int proteinPercent;
@@ -49,7 +49,7 @@ public class User {
     @JsonManagedReference("user")
     private List<UserProductServing> servings;
 
-    public User(String name, String socialNetwork, String socialNetworkId, SEX sex, double height, int goal, int age, double weight, int activityLevel, int totalCalories, int proteinPercent, int fatPercent, int carbohydratePercent, List<DayFoodPlan> dayFoodPlans) {
+    public User(String name, String socialNetwork, String socialNetworkId, SEX sex, double height, int goal, int age, int weight, int activityLevel, int totalCalories, int proteinPercent, int fatPercent, int carbohydratePercent, List<DayFoodPlan> dayFoodPlans) {
         this.name = name;
         this.socialNetwork = socialNetwork;
         this.socialNetworkId = socialNetworkId;
@@ -155,11 +155,11 @@ public class User {
         this.age = age;
     }
 
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 

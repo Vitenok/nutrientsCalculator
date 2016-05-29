@@ -16,7 +16,7 @@ public class UserProductServing {
 
     private int productId;
 
-    private double weight;
+    private int weight;
 
     public int getId() {
         return id;
@@ -42,11 +42,11 @@ public class UserProductServing {
         this.productId = productId;
     }
 
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 }

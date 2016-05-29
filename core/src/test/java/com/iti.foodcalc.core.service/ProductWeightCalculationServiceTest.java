@@ -40,6 +40,10 @@ public class ProductWeightCalculationServiceTest {
     @Autowired
     PlanningService planningService;
 
+    @Test
+    public void dummyTestForUpdatingDB(){
+    }
+
     @Ignore
     @Test
     public void testCalculateWeightOfProducts() throws Exception {
@@ -66,18 +70,6 @@ public class ProductWeightCalculationServiceTest {
         for (double weight : productByWeight.values()) {
             assertTrue("All product should be taken", weight > 0);
         }
-    }
-
-    @Test
-    @Ignore
-    public void getFruits(){
-//        List<Product> products = new ArrayList(){{
-//            add(productsDAO.findById(945));
-//        }};
-
-//        List<Product> products = productsDAO.findByIds(new ArrayList(){{add(945);add(944);}});
-        System.out.println("");
-        System.out.println("");
     }
 
     @Ignore

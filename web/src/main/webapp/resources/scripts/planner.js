@@ -15,16 +15,15 @@ angular.module('kulya-pulya')
                 return;
             }
             $scope.user = JSON.parse(u);
-            $scope.Math = window.Math;
 
             var mealTypes = ApplicationProperties.meals.split(',');
 
             $scope.mealType = {
                 chosenMealType: {name: mealTypes[0]},
-                options: []
+                options: [],
+                mealsNames : []
             };
             $scope.meals = [];
-            $scope.mealType.mealsNames = [];
 
             mealTypes.forEach(function(option){
                 $scope.mealType.options.push({name:option});
@@ -179,35 +178,4 @@ angular.module('kulya-pulya')
             }
 
     })
-    .filter('findAllProducts', function() {
-            return function(items, word) {
-                var startsWith = [];
-                var contains = [];
-
-                function compare(a,b) {
-                    if (a.name < b.name)
-                        return -1;
-                    else if (a.name > b.name)
-                        return 1;
-                    else
-                        return 0;
-                }
-
-                angular.forEach(items, function(item) {
-                    if (item !== undefined && word !== undefined){
-                        if(item.name.toLowerCase().indexOf(word.toLowerCase()) === 0){
-                            startsWith.push(item);
-                        }
-                        if(item.name.toLowerCase().indexOf(word.toLowerCase()) > 0){
-                            contains.push(item);
-                        }
-                    }
-                });
-
-                startsWith.sort(compare);
-                contains.sort(compare);
-
-                return startsWith.concat(contains);
-            };
-        })
 ;

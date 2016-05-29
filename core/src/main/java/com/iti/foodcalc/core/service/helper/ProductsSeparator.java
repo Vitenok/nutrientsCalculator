@@ -59,7 +59,7 @@ public class ProductsSeparator {
     private Product removeFromConstraints;
 
     private Map<Integer, Integer> frequencies;
-    private Map<Integer, Double> productsMap;
+    private Map<Integer, Integer> productsMap;
 
 
 
@@ -121,23 +121,23 @@ public class ProductsSeparator {
                 .stream()
                 .mapToInt(pr -> frequencies.get(pr.getId()))
                 .sum();
-        removeFromConstraints.add(aggregateProductAndUpdateMap(fruits, fruitsWeightPerDay / fruitsCount));
+        removeFromConstraints.add(aggregateProductAndUpdateMap(fruits, (int)Math.round(fruitsWeightPerDay / fruitsCount)));
 
         double vegetablesCount = vegetables
                 .stream()
                 .mapToInt(pr -> frequencies.get(pr.getId()))
                 .sum();
-        removeFromConstraints.add(aggregateProductAndUpdateMap(vegetables, vegetablesWeightPerDay / vegetablesCount));
+        removeFromConstraints.add(aggregateProductAndUpdateMap(vegetables, (int)Math.round(vegetablesWeightPerDay / vegetablesCount)));
 
     }
 
-    private Product aggregateProductAndUpdateMap(List<Product> products, double weight) {
+    private Product aggregateProductAndUpdateMap(List<Product> products, int weight) {
         double p = 0;
         double c = 0;
         double f = 0;
         for (Product product : products) {
             int frequency = frequencies.get(product.getId());
-            double usedWeight = weight==0?product.getServing():weight;
+            int usedWeight = weight==0?product.getServing():weight;
             p += product.getProtein()*frequency*usedWeight/100;
             c += product.getCarbo()*frequency*usedWeight/100;
             f += product.getFat()*frequency*usedWeight/100;
@@ -205,7 +205,7 @@ public class ProductsSeparator {
         return removeFromConstraints;
     }
 
-    public Map<Integer, Double> getProductsMap() {
+    public Map<Integer, Integer> getProductsMap() {
         return productsMap;
     }
 }

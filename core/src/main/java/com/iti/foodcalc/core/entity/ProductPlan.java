@@ -17,12 +17,14 @@ public class ProductPlan {
     @JsonBackReference("mealPlan")
     private MealPlan mealPlan;
 
-    private double weight;
+    private int weight;
+
+    private int registeredWeight;
 
     public ProductPlan() {
     }
 
-    public ProductPlan(Product product, double weight) {
+    public ProductPlan(Product product, int weight) {
         this.weight = weight;
         this.product = product;
     }
@@ -55,8 +57,16 @@ public class ProductPlan {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public int getRegisteredWeight() {
+        return registeredWeight;
+    }
+
+    public void setRegisteredWeight(int registeredWeight) {
+        this.registeredWeight = registeredWeight;
     }
 
     @Override
@@ -66,22 +76,19 @@ public class ProductPlan {
 
         ProductPlan that = (ProductPlan) o;
 
-        if (getId() != that.getId()) return false;
-        if (Double.compare(that.getWeight(), getWeight()) != 0) return false;
-        if (getProduct() != null ? !getProduct().equals(that.getProduct()) : that.getProduct() != null) return false;
-        return !(getMealPlan() != null ? !getMealPlan().equals(that.getMealPlan()) : that.getMealPlan() != null);
+        if (id != that.id) return false;
+        if (weight != that.weight) return false;
+        if (registeredWeight != that.registeredWeight) return false;
+        return !(product != null ? !product.equals(that.product) : that.product != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = getId();
-        result = 31 * result + (getProduct() != null ? getProduct().hashCode() : 0);
-        result = 31 * result + (getMealPlan() != null ? getMealPlan().hashCode() : 0);
-        temp = Double.doubleToLongBits(getWeight());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        int result = id;
+        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + weight;
+        result = 31 * result + registeredWeight;
         return result;
     }
 
@@ -91,6 +98,7 @@ public class ProductPlan {
                 "id=" + id +
                 ", product=" + product.getName() +
                 ", weight=" + weight +
+                ", registeredWeight=" + registeredWeight +
                 '}';
     }
 }

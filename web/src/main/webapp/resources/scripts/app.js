@@ -1,5 +1,5 @@
 angular
-    .module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies'])
+    .module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies', 'chart.js'])
 
     .constant("ApplicationProperties", {
         meals:'Breakfast,Lunch,Dinner,Snacks'
@@ -62,6 +62,37 @@ angular
         $scope.openMenu = function($mdOpenMenu, ev) {
             originatorEv = ev;
             $mdOpenMenu(ev);
+        };
+    })
+    .filter('findAllProducts', function() {
+        return function(items, word) {
+            var startsWith = [];
+            var contains = [];
+
+            function compare(a,b) {
+                if (a.name < b.name)
+                    return -1;
+                else if (a.name > b.name)
+                    return 1;
+                else
+                    return 0;
+            }
+
+            angular.forEach(items, function(item) {
+                if (item !== undefined && word !== undefined){
+                    if(item.name.toLowerCase().indexOf(word.toLowerCase()) === 0){
+                        startsWith.push(item);
+                    }
+                    if(item.name.toLowerCase().indexOf(word.toLowerCase()) > 0){
+                        contains.push(item);
+                    }
+                }
+            });
+
+            startsWith.sort(compare);
+            contains.sort(compare);
+
+            return startsWith.concat(contains);
         };
     })
     ;

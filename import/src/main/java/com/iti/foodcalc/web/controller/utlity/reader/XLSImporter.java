@@ -23,7 +23,7 @@ public class XLSImporter {
         ApplicationContext context = new ClassPathXmlApplicationContext("import-application-context.xml");
         ProductsDAO dao = context.getBean("productsDAO", ProductsDAO.class);
         List<Product> products = new XLSImporter().readXlsFileToList();
-        dao.save(products);
+        dao.saveOrUpdateAll(products);
         System.out.println("Imported successfully");
     }
 
