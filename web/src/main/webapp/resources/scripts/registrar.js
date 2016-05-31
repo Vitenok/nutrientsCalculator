@@ -4,7 +4,7 @@ angular.module('kulya-pulya')
             return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
         };
     })
-    .controller('registrarController', function (ApplicationProperties, $scope, $location, $http, $cookies) {
+    .controller('registrarController', function (ApplicationProperties, $scope, $location, $http, $cookies, $timeout) {
         console.log("In Registrar Controller");
 
         $scope.location = $location;
@@ -38,6 +38,11 @@ angular.module('kulya-pulya')
             }
         }, true);
 
+        $scope.stats = {
+            p:0, c:0, f:0, kC:0,
+            rp:0, rc:0, rf:0, rkC:0
+        };
+
         $scope.loadProducts = function () {
             $http.post('main/products', $scope.user.id).then(
                 function (response) {
@@ -61,6 +66,7 @@ angular.module('kulya-pulya')
                     if (response.data != '') {
                         $scope.calculatedMeals = response.data;
                         $scope.updateCalculatedMeals();
+                        $scope.refreshChart();
                     }
                     console.log("Day food plan received successfully");
                 },
@@ -125,18 +131,116 @@ angular.module('kulya-pulya')
                     if (response.data != '') {
                         $scope.calculatedMeals = response.data;
                         $scope.updateCalculatedMeals();
+                        $scope.refreshChart();
                     }
                     console.log("Day food plan received successfully");
                 },
                 function (error) {
                     console.error("Day food plan not received successfully. Status:" + JSON.stringify(error));
                 });
-        }
+        };
 
-        $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-        $scope.series = ['Series A', 'Series B'];
-        $scope.chartdata = [
-            [65, 59, 80, 81, 56, 55, 40],
-            [28, 48, 40, 19, 86, 27, 90]
-        ];
+        $scope.registerNewWeight = function(productPlan) {
+            $scope.refreshChart();
+        };
+
+        $scope.refreshChart = function() {
+            $scope.stats = {
+                p:0, c:0, f:0, kC:0,
+                rp:0, rc:0, rf:0, rkC:0
+            };
+            $scope.calculatedMeals.forEach(function(calculatedMeal){
+                calculatedMeal.productPlans.forEach(function(productPlan){
+                    $scope.stats.p += Math.round(productPlan.weight*productPlan.product.protein/100);
+                    $scope.stats.c += Math.round(productPlan.weight*productPlan.product.carbo/100);
+                    $scope.stats.f += Math.round(productPlan.weight*productPlan.product.fat/100);
+                    $scope.stats.rp += Math.round(productPlan.registeredWeight*productPlan.product.protein/100);
+                    $scope.stats.rc += Math.round(productPlan.registeredWeight*productPlan.product.carbo/100);
+                    $scope.stats.rf += Math.round(productPlan.registeredWeight*productPlan.product.fat/100);
+                    var kCalPerGram = (productPlan.product.protein*4+productPlan.product.carbo*4+productPlan.product.fat*9)/100;
+                    $scope.stats.kC += Math.round(productPlan.weight*kCalPerGram);
+                    $scope.stats.rkC += Math.round(productPlan.registeredWeight*kCalPerGram);
+                });
+            });
+            $scope.pcfChart.data = [
+                [$scope.stats.p, $scope.stats.c, $scope.stats.f],
+                [$scope.stats.rp, $scope.stats.rc, $scope.stats.rf]
+            ];
+        };
+
+        $scope.pcfChart = {
+            labels : ['Protein (g)', 'Carbohydrate (g)', 'Fat (g)'],
+            series : ['Planned', 'Registered'],
+            data : [
+                [$scope.stats.p, $scope.stats.c, $scope.stats.f],
+                [$scope.stats.rp, $scope.stats.rc, $scope.stats.rf]
+            ]
+        };
+
+        $scope.caloriesDistChart = {
+            labels : ['Calories burned from activities', 'Calories burned from BMR']
+            //,data : [$scope.caloriesFromActivities, $scope.caloriesFromBMR]
+        };
+
+        $scope.fa = $cookies.get('FitnessApplication');
+        //$scope.showStepsCount = false;
+        //$scope.stepsCount = 0;
+
+        $timeout($scope.getStepsCount, 1000);
+
+        $scope.getStepsCount = function(){
+            if ($scope.fa && $scope.fa == 'GoogleFit') {
+                var date = new Date();
+                date.setHours(0);date.setMinutes(0);date.setSeconds(0);
+                $scope.getStepsCountFromGoogleFit(date.getTime(), new Date().getTime());
+            }
+        };
+
+        $scope.getStepsCountFromGoogleFit = function(fromDate, toDate) {
+            if (typeof gapi == 'undefined') {
+                console.error('gapi not loaded yet');
+                return;
+            }
+            gapi.auth.authorize({
+                client_id: '518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com',
+                scope: 'https://www.googleapis.com/auth/fitness.activity.read',
+                immediate: true
+            }, function(authResult) {
+                gapi.client.load('fitness', 'v1', function () {
+                    gapi.client.fitness.users.dataSources.datasets.get({
+                        userId: 'me',
+                        dataSourceId: 'derived:com.google.calories.expended:com.google.android.gms:from_activities',
+                        datasetId: (fromDate * 1000000 + '-' + toDate * 1000000),
+                        fields: 'point/value/fpVal'
+                    }).execute(function (resp) {
+                        $scope.$apply(function(){
+                            var t = resp.point.reduce(
+                                function(total, obj){
+                                    return total+parseFloat(obj.value[0].fpVal);
+                                },
+                                0);
+                            $scope.caloriesFromActivities = Math.round(t);
+                            //console.log('$scope.caloriesFromActivities: ' + $scope.caloriesFromActivities);
+                        });
+                    });
+
+                    gapi.client.fitness.users.dataSources.datasets.get({
+                        userId: 'me',
+                        dataSourceId: 'derived:com.google.calories.expended:com.google.android.gms:from_bmr',
+                        datasetId: (fromDate * 1000000 + '-' + toDate * 1000000),
+                        fields: 'point/value/fpVal'
+                    }).execute(function (resp) {
+                        $scope.$apply(function(){
+                            var t = resp.point.reduce(
+                                function(total, obj){
+                                    return total+parseFloat(obj.value[0].fpVal);
+                                },
+                                0);
+                            $scope.caloriesFromBMR = Math.round(t);
+                            //console.log('$scope.caloriesFromBMR: ' + $scope.caloriesFromBMR);
+                        });
+                    });
+                });
+            });
+        }
     });

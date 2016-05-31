@@ -3,11 +3,43 @@
 
 
         <div flex-sm="90" flex-gt-sm="35" flex-offset-gt-sm="10" >
+            <md-card ng-show="calculatedMeals.length != 0">
+                <md-toolbar class="md-hue-1">
+                    <div class="md-toolbar-tools">
+                        <h2>
+                            <span>Registered/Burned/Planned calories: {{stats.rkC}}/{{caloriesFromActivities+caloriesFromBMR}}/{{stats.kC}}</span>
+                        </h2>
+                    </div>
+                </md-toolbar>
+                <md-card-content>
+                    <canvas id="caloriesDist" class="chart chart-doughnut"
+                            chart-data="[caloriesFromActivities, caloriesFromBMR]" chart-labels="caloriesDistChart.labels">
+                    </canvas>
+                </md-card-content>
+            </md-card>
+            <md-card ng-show="calculatedMeals.length != 0">
+                <md-toolbar class="md-hue-1">
+                    <div class="md-toolbar-tools">
+                        <h2>
+                            <span>Registered/Planned Protein, Carbohydrates, Fat</span>
+                        </h2>
+                    </div>
+                </md-toolbar>
+                <md-card-content>
+                    <canvas id="pcuBar" class="chart chart-bar"
+                            chart-data="pcfChart.data" chart-labels="pcfChart.labels" chart-series="pcfChart.series">
+                    </canvas>
+                </md-card-content>
+            </md-card>
+        </div>
+
+        <div flex-sm="90" flex-gt-sm="45">
+
             <md-card>
                 <md-toolbar class="md-hue-1">
                     <div class="md-toolbar-tools">
                         <h2>
-                            <span>Add or update products in a day plan</span>
+                            <span>Chose day and register plan</span>
                         </h2>
                     </div>
                 </md-toolbar>
@@ -60,30 +92,13 @@
                 </md-card-content>
             </md-card>
 
-            <md-card>
-                <md-toolbar class="md-hue-1">
-                    <div class="md-toolbar-tools">
-                        <h2>
-                            <span>Your stats</span>
-                        </h2>
-                    </div>
-                </md-toolbar>
-                <md-card-content>
-                    <canvas id="line" class="chart chart-line" chart-data="chartdata"
-                            chart-labels="labels" chart-legend="true" chart-series="series"
-                            chart-click="onClick" >
-                    </canvas>
-                </md-card-content>
-            </md-card>
-        </div>
-
-        <div flex-sm="90" flex-gt-sm="45">
-            <md-card>
+            <md-card ng-show="calculatedMeals.length != 0">
                 <md-toolbar class="md-hue-1">
                     <div class="md-toolbar-tools">
                         <h2>
                             <span>Day plan</span>
-                        </h2></div>
+                        </h2>
+                    </div>
                 </md-toolbar>
                 <md-card-content>
                     <form name="editWeightForm">
@@ -102,9 +117,9 @@
                                         <div layout="column">
                                             <md-input-container class="md-block" flex style="margin:-5px 0;">
                                                 <!--<label>Actual Weight</label>-->
-                                                <input ng-model="productPlan.registeredWeight" name="weight" required type="number" min="0" aria-label="actual">
+                                                <input ng-model="productPlan.registeredWeight" name="weight" required type="number" min="0" aria-label="actual" ng-change="registerNewWeight(productPlan)">
                                                 <div class="md-caption light-gray">
-                                                    <i>{{productPlan.weight}}</i>
+                                                    <i>Planned: {{productPlan.weight}}</i>
                                                 </div>
                                                 <div ng-messages="editWeightForm.weight.$error">
                                                     <div ng-message="required">This is required field</div>
@@ -119,7 +134,7 @@
                             </md-list>
                         </div>
                         <div layout="row" layout-align="center center">
-                            <md-button class="md-raised md-warn large-button" style="margin-top: 12px" ng-click="updateDayPlan()" ng-show="calculatedMeals.length != 0" ng-disabled="editWeightForm.$invalid">
+                            <md-button class="md-raised md-warn large-button" style="margin-top: 12px" ng-click="updateDayPlan()" ng-disabled="editWeightForm.$invalid">
                                 Register Plan
                             </md-button>
                         </div>

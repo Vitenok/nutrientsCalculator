@@ -40,7 +40,8 @@
     <!-- Facebook API-->
     <script src="https://connect.facebook.net/en_US/sdk.js" async defer></script>
     <!-- Google API -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
+    <script src="https://apis.google.com/js/client.js?onload=function(){}" async defer></script>
     <!--
     <script type="text/javascript" src="../resources/scripts/socialLogin.js"></script>
     -->
@@ -51,6 +52,7 @@
     <script type="text/javascript" src="../resources/scripts/planner.js"></script>
     <script type="text/javascript" src="../resources/scripts/userProducts.js"></script>
     <script type="text/javascript" src="../resources/scripts/registrar.js"></script>
+    <script type="text/javascript" src="../resources/scripts/googleFit.js"></script>
 
     <script type="text/javascript" src="../resources/scripts/slider.js"></script>
 
@@ -89,19 +91,19 @@
 
                         <md-menu-content width="4">
                             <md-menu-item>
-                                <md-button aria-label="Settings" ng-click="location.path('/planner')"
+                                <md-button aria-label="Planner" ng-click="location.path('/planner')"
                                            class="toolbar-button">
                                     Planner
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button aria-label="Settings" ng-click="location.path('/registrar')"
+                                <md-button aria-label="Registrar" ng-click="location.path('/registrar')"
                                            class="toolbar-button">
                                     Registrar
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button aria-label="Custom Products" ng-click="location.path('/user-products')"
+                                <md-button aria-label="User Products" ng-click="location.path('/user-products')"
                                            class="toolbar-button">
                                     My Products
                                 </md-button>
@@ -124,14 +126,14 @@
                 </div>
 
                 <div hide-xs>
-                    <md-button aria-label="Settings" ng-click="location.path('/planner')" class="toolbar-button">
+                    <md-button aria-label="Planner" ng-click="location.path('/planner')" class="toolbar-button">
                         Planner
                     </md-button>
-                    <md-button aria-label="Settings" ng-click="location.path('/registrar')" class="toolbar-button">
+                    <md-button aria-label="Registrar" ng-click="location.path('/registrar')" class="toolbar-button">
                         Registrar
                     </md-button>
 
-                    <md-button aria-label="Custom Products" ng-click="location.path('/user-products')"
+                    <md-button aria-label="User Products" ng-click="location.path('/user-products')"
                                class="toolbar-button">
                         My Products
                     </md-button>

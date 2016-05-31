@@ -28,34 +28,27 @@ angular.module('kulya-pulya')
         };
 
         //Google login method
-        $scope.auth2;
         $scope.glLogin = function () {
-            if ($scope.auth2 == undefined) {
-                gapi.load('auth2', function () {
-                    $scope.auth2 = gapi.auth2.init({
-                        client_id: '518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com'
-                    });
-                    $scope.auth2.then(
-                        function onInit() {
-                            $scope.glLoginHook();
-                        },
-                        function onFailure() {
-                            console.log("Connection with Google");
+            gapi.auth.authorize({
+                client_id: '518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com',
+                scope: 'https://www.googleapis.com/auth/plus.me'
+            }, function(authResult) {
+                if (authResult && !authResult.error) {
+                    gapi.client.load('plus', 'v1', function () {
+                        var request = gapi.client.plus.people.get({
+                            userId: 'me'
                         });
-                });
-            } else {
-                console.log("Gapi loaded already");
-                $scope.glLoginHook();
-            }
-        }
-
-        $scope.glLoginHook = function () {
-            $scope.auth2.signIn().then(function (response) {
-                var profile = response.getBasicProfile();
-                console.log(profile.getName() + ' (id:' + profile.getId() + ') logged into GOOGLE');
-                $scope.login(profile.getName(), "GOOGLE", profile.getId());
+                        request.execute(function (resp) {
+                            console.log('resp:' + JSON.stringify(resp));
+                            console.log(resp.displayName + ' (id:' + resp.id + ') logged into GOOGLE');
+                            $scope.login(resp.displayName, 'GOOGLE', resp.id);
+                        });
+                    });
+                } else {
+                    console.log('Google Login is not authorised. Response: ' + JSON.stringify(authResult));
+                }
             });
-        }
+        };
 
         $scope.login = function (name, socialNetwork, userId) {
             $http.post(
