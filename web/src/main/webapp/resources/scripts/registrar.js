@@ -4,7 +4,7 @@ angular.module('kulya-pulya')
             return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
         };
     })
-    .controller('registrarController', function (ApplicationProperties, $scope, $location, $http, $cookies, $timeout) {
+    .controller('registrarController', function ($scope, $location, $http, $cookies, $timeout, constants) {
         console.log("In Registrar Controller");
 
         $scope.location = $location;
@@ -16,7 +16,7 @@ angular.module('kulya-pulya')
         }
         $scope.user = JSON.parse(u);
 
-        var mealTypes = ApplicationProperties.meals.split(',');
+        var mealTypes = constants.MEALS.split(',');
         $scope.mealType = {
             chosenMealType: {name: mealTypes[0]},
             options: [],
@@ -27,9 +27,10 @@ angular.module('kulya-pulya')
             $scope.mealType.mealsNames.push(option);
         });
 
-        var d = new Date();
-        d.setHours(d.getHours() - d.getTimezoneOffset() / 60);
-        $scope.currentDate = d;
+        //var d = new Date();
+        //d.setHours(d.getHours() - d.getTimezoneOffset() / 60);
+        //$scope.currentDate = d;
+        $scope.currentDate = new Date();
         $scope.$watch('currentDate', function (newVal, oldVal) {
             if (newVal != oldVal) {
                 var d = new Date(newVal);
@@ -57,6 +58,7 @@ angular.module('kulya-pulya')
 
         $scope.calculatedMeals = [];
         $scope.loadDayPlan = function (date) {
+            console.log('Loading Day Plan for ' + date);
             $http.post('dayPlan/get', {
                 date: date,
                 userId: $scope.user.id
@@ -68,6 +70,7 @@ angular.module('kulya-pulya')
                         $scope.updateCalculatedMeals();
                         $scope.refreshChart();
                     }
+                    $scope.updateCaloriesDataForOneDay(date);
                     console.log("Day food plan received successfully");
                 },
                 function (error) {
@@ -131,7 +134,6 @@ angular.module('kulya-pulya')
                     if (response.data != '') {
                         $scope.calculatedMeals = response.data;
                         $scope.updateCalculatedMeals();
-                        $scope.refreshChart();
                     }
                     console.log("Day food plan received successfully");
                 },
@@ -166,6 +168,8 @@ angular.module('kulya-pulya')
                 [$scope.stats.p, $scope.stats.c, $scope.stats.f],
                 [$scope.stats.rp, $scope.stats.rc, $scope.stats.rf]
             ];
+            $scope.caloriesDistChart.data[0][0] = $scope.stats.kC;
+            $scope.caloriesDistChart.data[0][1] = $scope.stats.rkC;
         };
 
         $scope.pcfChart = {
@@ -178,69 +182,134 @@ angular.module('kulya-pulya')
         };
 
         $scope.caloriesDistChart = {
-            labels : ['Calories burned from activities', 'Calories burned from BMR']
-            //,data : [$scope.caloriesFromActivities, $scope.caloriesFromBMR]
+            labels : ['Planned Calories From Meals', 'Registered Calories From Meals'],
+            series : ['Calories'],
+            data : [[]]
         };
 
-        $scope.fa = $cookies.get('FitnessApplication');
-        //$scope.showStepsCount = false;
-        //$scope.stepsCount = 0;
+        if ($scope.user.monitoringDevice != '') {
+            $scope.caloriesDistChart.labels.push('Calories burned from activities');
+            $scope.caloriesDistChart.labels.push('Calories burned from BMR');
+        }
 
-        $timeout($scope.getStepsCount, 1000);
+        $timeout($scope.updateCaloriesDataForOneDay, 1000);
 
-        $scope.getStepsCount = function(){
-            if ($scope.fa && $scope.fa == 'GoogleFit') {
-                var date = new Date();
-                date.setHours(0);date.setMinutes(0);date.setSeconds(0);
-                $scope.getStepsCountFromGoogleFit(date.getTime(), new Date().getTime());
+        $scope.updateCaloriesDataForOneDay = function(fromDate){
+            if ($scope.user.monitoringDevice == 'GoogleFit') {
+                if (fromDate == undefined) {
+                    fromDate = new Date();
+                }
+                fromDate.setHours(11);fromDate.setMinutes(0);fromDate.setSeconds(0);fromDate.setMilliseconds(0);
+                var toDate = new Date(fromDate);toDate.setHours(0); toDate.setDate(toDate.getDate()+1);
+                console.log('Updating calories from date ' + fromDate);
+                console.log('Updating calories to date ' + toDate);
+                $scope.updateCaloriesDataFromGoogleFit(fromDate.getTime(), toDate.getTime());
             }
         };
 
-        $scope.getStepsCountFromGoogleFit = function(fromDate, toDate) {
+        $scope.updateCaloriesDataFromGoogleFit = function(fromDate, toDate) {
             if (typeof gapi == 'undefined') {
                 console.error('gapi not loaded yet');
                 return;
             }
             gapi.auth.authorize({
-                client_id: '518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com',
+                client_id: constants.GOOGLE_CLIENT_ID,
                 scope: 'https://www.googleapis.com/auth/fitness.activity.read',
                 immediate: true
             }, function(authResult) {
+
+                if (authResult.error) {
+                    console.error('Google connection error: ' + authResult.error + ' : ' + authResult.error_subtype);
+                    $scope.user.monitoringDevice = '';
+                    $scope.caloriesDistChart.labels = ['Planned Calories From Meals', 'Registered Calories From Meals'];
+                    $http.post('user/update',$scope.user).then(
+                        function(response) {
+                            console.log('User saved successfully');
+                            $cookies.put('user', JSON.stringify(response.data));
+                            $scope.user = response.data;
+                        },
+                        function(error) {
+                            console.error('User not saved: ' + error);
+                        }
+                    );
+                    return;
+                }
+
                 gapi.client.load('fitness', 'v1', function () {
-                    gapi.client.fitness.users.dataSources.datasets.get({
+                    var datasetId = fromDate * 1000000 + '-' + toDate * 1000000;
+                    console.log('From date: ' + fromDate + ', to date: ' + toDate);
+                    console.log('DatasetId:' + datasetId);
+
+/*                    gapi.client.fitness.users.dataSources.datasets.get({
                         userId: 'me',
                         dataSourceId: 'derived:com.google.calories.expended:com.google.android.gms:from_activities',
-                        datasetId: (fromDate * 1000000 + '-' + toDate * 1000000),
+                        datasetId: datasetId,
                         fields: 'point/value/fpVal'
                     }).execute(function (resp) {
+                        if (resp.point == undefined) {return;}
                         $scope.$apply(function(){
                             var t = resp.point.reduce(
                                 function(total, obj){
+                                    //console.log('from_activities: ' + obj.value[0].fpVal);
                                     return total+parseFloat(obj.value[0].fpVal);
                                 },
                                 0);
                             $scope.caloriesFromActivities = Math.round(t);
-                            //console.log('$scope.caloriesFromActivities: ' + $scope.caloriesFromActivities);
+                            $scope.caloriesDistChart.data[0][2] = $scope.caloriesFromActivities;
+                            console.log('caloriesFromActivities: ' + $scope.caloriesFromActivities);
                         });
                     });
 
                     gapi.client.fitness.users.dataSources.datasets.get({
                         userId: 'me',
                         dataSourceId: 'derived:com.google.calories.expended:com.google.android.gms:from_bmr',
-                        datasetId: (fromDate * 1000000 + '-' + toDate * 1000000),
+                        datasetId: datasetId,
                         fields: 'point/value/fpVal'
                     }).execute(function (resp) {
+                        if (resp.point == undefined) {return;}
                         $scope.$apply(function(){
                             var t = resp.point.reduce(
                                 function(total, obj){
+                                    //console.log('from_bmr: ' + obj.value[0].fpVal);
                                     return total+parseFloat(obj.value[0].fpVal);
                                 },
                                 0);
                             $scope.caloriesFromBMR = Math.round(t);
-                            //console.log('$scope.caloriesFromBMR: ' + $scope.caloriesFromBMR);
+                            $scope.caloriesDistChart.data[0][3] = $scope.caloriesFromBMR;
+                            console.log('caloriesFromBMR: ' + $scope.caloriesFromBMR);
+                        });
+                    });*/
+
+
+                    gapi.client.fitness.users.dataset.aggregate({
+                        userId: 'me',
+                        aggregateBy: [
+                            {dataSourceId: 'derived:com.google.calories.expended:com.google.android.gms:from_activities'},
+                            {dataSourceId: 'derived:com.google.calories.expended:com.google.android.gms:from_bmr'}
+                            ],
+                        endTimeMillis: toDate,
+                        startTimeMillis: fromDate,
+                        bucketByTime: {durationMillis: (toDate-fromDate)},
+                        fields: 'bucket(dataset(point(originDataSourceId,value/fpVal)))'
+                    }).execute(function (resp) {
+                        if (resp.bucket == undefined) {return;}
+                        $scope.$apply(function(){
+                            resp.result.bucket.forEach(function(bucket){
+                                var dataSourceId = bucket.dataset[0].point[0].originDataSourceId;
+                                var val = Math.round(bucket.dataset[0].point[0].value[0].fpVal);
+                                if (dataSourceId == 'derived:com.google.calories.expended:com.google.android.gms:from_activities') {
+                                    $scope.caloriesDistChart.data[0][2] = val;
+                                    console.log('Aggregated FROM_ACTIVITIES: ' + val);
+                                } else if (dataSourceId == 'derived:com.google.calories.expended:com.google.android.gms:from_bmr') {
+                                    $scope.caloriesDistChart.data[0][3] = val;
+                                    console.log('Aggregated FROM_BMR: ' + val);
+                                }
+                            });
                         });
                     });
+
+
                 });
             });
-        }
+        };
     });

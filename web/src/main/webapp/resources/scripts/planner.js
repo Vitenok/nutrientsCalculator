@@ -4,7 +4,7 @@ angular.module('kulya-pulya')
             return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
         };
     })
-    .controller('plannerController', function (ApplicationProperties, $scope, $rootScope, $http, $timeout, $location, $cookies) {
+    .controller('plannerController', function ($scope, $rootScope, $http, $timeout, $location, $cookies, constants) {
             console.log("In Planner Controller");
 
             $scope.location = $location;
@@ -16,7 +16,7 @@ angular.module('kulya-pulya')
             }
             $scope.user = JSON.parse(u);
 
-            var mealTypes = ApplicationProperties.meals.split(',');
+            var mealTypes = constants.MEALS.split(',');
 
             $scope.mealType = {
                 chosenMealType: {name: mealTypes[0]},
@@ -96,7 +96,6 @@ angular.module('kulya-pulya')
                 if (product.type != 'SUPPLEMENT') {
                     return;
                 }
-                product.serving = product.serving;
                 var servings = $scope.currentServings.filter(function (serving) {
                     return serving.productId == product.id;
                 }, product);

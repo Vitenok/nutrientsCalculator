@@ -7,13 +7,16 @@
                 <md-toolbar class="md-hue-1">
                     <div class="md-toolbar-tools">
                         <h2>
-                            <span>Registered/Burned/Planned calories: {{stats.rkC}}/{{caloriesFromActivities+caloriesFromBMR}}/{{stats.kC}}</span>
+                            <span>Calories:</span>
+                            <span>Planned ({{stats.kC}})</span>
+                            <span>Registered ({{stats.rkC}})</span>
+                            <span ng-hide="user.monitoringDevice === ''">Burned ({{caloriesFromActivities+caloriesFromBMR}})</span>
                         </h2>
                     </div>
                 </md-toolbar>
                 <md-card-content>
-                    <canvas id="caloriesDist" class="chart chart-doughnut"
-                            chart-data="[caloriesFromActivities, caloriesFromBMR]" chart-labels="caloriesDistChart.labels">
+                    <canvas id="caloriesDist" class="chart chart-bar"
+                            chart-data="caloriesDistChart.data" chart-labels="caloriesDistChart.labels" chart-series="caloriesDistChart.series"> <!--[caloriesFromActivities, caloriesFromBMR]-->
                     </canvas>
                 </md-card-content>
             </md-card>

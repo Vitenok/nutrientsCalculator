@@ -31,6 +31,8 @@ public class User {
     private int fatPercent;
     private int carbohydratePercent;
 
+    private String monitoringDevice;
+
     public enum SEX {MALE, FEMALE};
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
@@ -49,7 +51,7 @@ public class User {
     @JsonManagedReference("user")
     private List<UserProductServing> servings;
 
-    public User(String name, String socialNetwork, String socialNetworkId, SEX sex, double height, int goal, int age, int weight, int activityLevel, int totalCalories, int proteinPercent, int fatPercent, int carbohydratePercent, List<DayFoodPlan> dayFoodPlans) {
+    public User(String name, String socialNetwork, String socialNetworkId, SEX sex, double height, int goal, int age, int weight, int activityLevel, int totalCalories, int proteinPercent, int fatPercent, int carbohydratePercent, List<DayFoodPlan> dayFoodPlans, String monitoringDevice) {
         this.name = name;
         this.socialNetwork = socialNetwork;
         this.socialNetworkId = socialNetworkId;
@@ -64,6 +66,7 @@ public class User {
         this.fatPercent = fatPercent;
         this.carbohydratePercent = carbohydratePercent;
         this.dayFoodPlans = dayFoodPlans;
+        this.monitoringDevice = monitoringDevice;
     }
 
     public User(String name, String socialNetwork, String socialNetworkId) {
@@ -203,6 +206,14 @@ public class User {
         this.carbohydratePercent = carbohydratePercent;
     }
 
+    public String getMonitoringDevice() {
+        return monitoringDevice;
+    }
+
+    public void setMonitoringDevice(String monitoringDevice) {
+        this.monitoringDevice = monitoringDevice;
+    }
+
     public List<Product> getProducts() {
         if (products == null) {
             products = new ArrayList<>();
@@ -285,6 +296,7 @@ public class User {
                 ", proteinPercent=" + proteinPercent +
                 ", fatPercent=" + fatPercent +
                 ", carbohydratePercent=" + carbohydratePercent +
+                ", monitoringDevice=" + monitoringDevice +
                 '}';
     }
 }

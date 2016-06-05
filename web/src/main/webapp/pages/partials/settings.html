@@ -173,11 +173,16 @@
             </md-toolbar>
 
             <md-card-content>
-                <div layout="row" layout-xs="column" layout-sm="column" data-ng-controller="googleFitController">
-                    <md-button class="md-raised  md-warn" ng-click="connectGoogleFit()">
-                        <md-icon md-svg-src="../resources/img/material_img/google-letter-logo.svg"></md-icon>
-                        Google Fit
-                    </md-button>
+                <div layout="row" layout-xs="column" layout-sm="column">
+                    <div ng-show="user.monitoringDevice === null || user.monitoringDevice === ''">
+                        <md-button class="md-raised  md-warn" ng-click="connectGoogleFit()">
+                            <md-icon md-svg-src="../resources/img/material_img/google-letter-logo.svg"></md-icon>
+                            Connect To Google Fit
+                        </md-button>
+                    </div>
+                    <div ng-hide="user.monitoringDevice === null || user.monitoringDevice === ''">
+                        You have connected {{user.monitoringDevice}}
+                    </div>
                 </div>
             </md-card-content>
         </md-card>

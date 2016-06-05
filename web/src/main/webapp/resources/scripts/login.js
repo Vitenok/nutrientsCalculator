@@ -1,5 +1,5 @@
 angular.module('kulya-pulya')
-    .controller('loginController', function ($scope, $location, $http, $cookies, $rootScope) {
+    .controller('loginController', function ($scope, $location, $http, $cookies, $rootScope, constants) {
         console.log("In Login Controller");
 
         // Facebook onload hook
@@ -30,7 +30,7 @@ angular.module('kulya-pulya')
         //Google login method
         $scope.glLogin = function () {
             gapi.auth.authorize({
-                client_id: '518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com',
+                client_id: constants.GOOGLE_CLIENT_ID,
                 scope: 'https://www.googleapis.com/auth/plus.me'
             }, function(authResult) {
                 if (authResult && !authResult.error) {
@@ -39,7 +39,7 @@ angular.module('kulya-pulya')
                             userId: 'me'
                         });
                         request.execute(function (resp) {
-                            console.log('resp:' + JSON.stringify(resp));
+                            //console.log('resp:' + JSON.stringify(resp));
                             console.log(resp.displayName + ' (id:' + resp.id + ') logged into GOOGLE');
                             $scope.login(resp.displayName, 'GOOGLE', resp.id);
                         });

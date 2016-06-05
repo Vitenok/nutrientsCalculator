@@ -1,5 +1,5 @@
 angular.module('kulya-pulya')
-    .controller('settingsController', function ($scope, $http, $timeout, $location, $cookies) {
+    .controller('settingsController', function ($scope, $http, $timeout, $location, $cookies, constants) {
         console.log("In Settings Controller");
 
         $scope.location = $location;
@@ -97,7 +97,7 @@ angular.module('kulya-pulya')
 
         $scope.percentToCalories = function(persent, k) {
             return Math.round($scope.user.totalCalories * persent / 100 / k);
-        }
+        };
 
         $scope.save = function() {
             console.log('Saving user...');
@@ -114,6 +114,20 @@ angular.module('kulya-pulya')
             if ($scope.user.isNew) {
                 $scope.location.path('/planner');
             }
-        }
+        };
+
+        $scope.connectGoogleFit = function() {
+            gapi.auth.authorize({
+                client_id: constants.GOOGLE_CLIENT_ID,
+                scope: 'https://www.googleapis.com/auth/fitness.activity.read'
+            }, function(authResult) {
+                if (authResult && !authResult.error) {
+                    $scope.user.monitoringDevice = 'GoogleFit';
+                    $scope.save();
+                } else {
+                    console.log('Google Login is not authorised. Response: ' + JSON.stringify(authResult));
+                }
+            });
+        };
 
     });

@@ -1,8 +1,9 @@
 angular
     .module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies', 'chart.js'])
 
-    .constant("ApplicationProperties", {
-        meals:'Breakfast,Lunch,Dinner,Snacks'
+    .constant("constants", {
+        MEALS:'Breakfast,Lunch,Dinner,Snacks',
+        GOOGLE_CLIENT_ID:'518156747499-cegh4ujuqfaq4v57ics5tlfvkor5h46j.apps.googleusercontent.com'
     })
 
     .config(['$routeProvider', function($routeProvider) {
