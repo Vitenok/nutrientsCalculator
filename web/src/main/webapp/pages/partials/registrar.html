@@ -10,7 +10,7 @@
                             <span>Calories:</span>
                             <span>Planned ({{stats.kC}})</span>
                             <span>Registered ({{stats.rkC}})</span>
-                            <span ng-hide="user.monitoringDevice === ''">Burned ({{caloriesFromActivities+caloriesFromBMR}})</span>
+                            <span ng-hide="user.monitoringDevice === '' || user.monitoringDevice === null">Burned ({{caloriesFromActivities+caloriesFromBMR}})</span>
                         </h2>
                     </div>
                 </md-toolbar>

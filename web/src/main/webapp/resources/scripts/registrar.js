@@ -187,7 +187,7 @@ angular.module('kulya-pulya')
             data : [[]]
         };
 
-        if ($scope.user.monitoringDevice != '') {
+        if ($scope.user.monitoringDevice != '' && $scope.user.monitoringDevice != null) {
             $scope.caloriesDistChart.labels.push('Calories burned from activities');
             $scope.caloriesDistChart.labels.push('Calories burned from BMR');
         }
