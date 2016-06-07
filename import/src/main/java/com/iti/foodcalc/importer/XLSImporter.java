@@ -1,4 +1,4 @@
-package com.iti.foodcalc.web.controller.utlity.reader;
+package com.iti.foodcalc.importer;
 
 import com.iti.foodcalc.core.dao.ProductsDAO;
 import com.iti.foodcalc.core.entity.Category;

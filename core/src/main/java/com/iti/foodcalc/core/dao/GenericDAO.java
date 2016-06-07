@@ -1,9 +1,9 @@
 package com.iti.foodcalc.core.dao;
 
-import com.iti.foodcalc.core.entity.Product;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,12 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+
 @Transactional
 @Repository
 abstract class GenericDAO<T> {
     private final Class<T> persistentClass;
     @Autowired
     private SessionFactory sessionFactory;
+
+    private int batchSize = 50;
 
     public GenericDAO() {
         this.persistentClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -36,9 +39,17 @@ abstract class GenericDAO<T> {
     }
 
     public void saveOrUpdateAll(List<T> ts) {
-        for (T t : ts) {
-            saveOrUpdate(t);
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        for (int i = 0; i < ts.size(); i++) {
+            session.save(ts.get(i));
+            if ( i % batchSize == 0 ) {
+                session.flush();
+                session.clear();
+            }
         }
+        tx.commit();
+        session.close();
     }
 
     public T findById(int id) {
