@@ -17,5 +17,9 @@
 log/
 target/
 
-
 /ROOT.war
+
+
+core/logs/
+logs/
+web/logs/

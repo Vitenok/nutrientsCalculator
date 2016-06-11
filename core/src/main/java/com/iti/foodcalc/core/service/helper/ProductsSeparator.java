@@ -25,10 +25,10 @@ public class ProductsSeparator {
     @Autowired
     ProductsDAO productsDAO;
 
-    @Value("#{'${products.fruits}'.split(',')}")
-    private List<Integer> fruitIds;
-    @Value("#{'${products.vegetables}'.split(',')}")
-    private List<Integer> vegetablesIds;
+    @Value("#{'${products.fruits}'.split(',,,')}")
+    private List<String> fruitsCategoryNames;
+    @Value("#{'${products.vegetables}'.split(',,,')}")
+    private List<String> vegetablesCategoryNames;
     @Value("${products.vegetables.gramsPerDay}")
     private int vegetablesWeightPerDay;
     @Value("${products.fruits.gramsPerDay}")
@@ -96,7 +96,7 @@ public class ProductsSeparator {
 
         fruits = nonSupplementsProducts
                 .stream()
-                .filter(p->fruitIds.contains(p.getCategory().getId()) && p.getkCal() < fruitsMaxCalories)
+                .filter(p-> fruitsCategoryNames.contains(p.getCategory().getName()) && p.getkCal() < fruitsMaxCalories)
                 .collect(Collectors.toList());
         nonSupplementsProducts.removeAll(fruits);
         LOG.debug("Including: " + fruits.size() + " fruits with kCal<" + fruitsMaxCalories);
@@ -104,7 +104,7 @@ public class ProductsSeparator {
 
         vegetables = nonSupplementsProducts
                 .stream()
-                .filter(p->vegetablesIds.contains(p.getCategory().getId()) && p.getkCal() < vegetablesMaxCalories)
+                .filter(p-> vegetablesCategoryNames.contains(p.getCategory().getName()) && p.getkCal() < vegetablesMaxCalories)
                 .collect(Collectors.toList());
         nonSupplementsProducts.removeAll(vegetables);
         LOG.debug("Including: " + vegetables.size() + " vegetables with kCal<" + vegetablesMaxCalories);
