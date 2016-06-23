@@ -1,15 +1,15 @@
 angular.module('kulya-pulya')
-    .controller('loginController', function ($scope, $location, $http, $cookies, $rootScope, constants) {
+    .controller('loginController', function ($scope, $location, $http, $cookies, $rootScope, $window, constants) {
         console.log("In Login Controller");
 
         // Facebook onload hook
-        window.fbAsyncInit = function () {
+        $window.fbAsyncInit = function () {
             FB.init({
                 appId: '549922185166119',
                 cookie: true,
                 status: true,
                 xfbml: true,
-                version: 'v2.5'
+                version: 'v2.4'
             });
         };
 
