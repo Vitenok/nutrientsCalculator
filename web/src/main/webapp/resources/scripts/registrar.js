@@ -294,9 +294,9 @@ angular.module('kulya-pulya')
                     }).execute(function (resp) {
                         if (resp.bucket == undefined) {return;}
                         $scope.$apply(function(){
-                            resp.result.bucket.forEach(function(bucket){
-                                var dataSourceId = bucket.dataset[0].point[0].originDataSourceId;
-                                var val = Math.round(bucket.dataset[0].point[0].value[0].fpVal);
+                            resp.result.bucket[0].dataset.forEach(function(bucket){
+                                var dataSourceId = bucket.point[0].originDataSourceId;
+                                var val = Math.round(bucket.point[0].value[0].fpVal);
                                 if (dataSourceId == 'derived:com.google.calories.expended:com.google.android.gms:from_activities') {
                                     $scope.caloriesDistChart.data[0][2] = val;
                                     console.log('Aggregated FROM_ACTIVITIES: ' + val);
