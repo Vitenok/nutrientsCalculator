@@ -1,5 +1,5 @@
 angular
-    .module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies', 'chart.js'])
+    .module('kulya-pulya', ['ui.slider', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies', 'chart.js', 'ngTouch'])
 
     .constant("constants", {
         MEALS:'Breakfast,Lunch,Dinner,Snacks',
